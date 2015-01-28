@@ -139,14 +139,15 @@ static NSInteger kSearchPostLimit = 10;
     dispatch_async(queue, ^()
     {
         FacebookRequest* request = [[FacebookRequest alloc] init];
-        [request markNotificationAsRead:notificationId
-                             withUserId:userId
-                              withToken:accessToken
-                             completion:^(NSError *error)
+        [request markNotificationAsRead: notificationId
+                             withUserId: userId
+                              withToken: accessToken
+                             completion: ^(NSError *error)
          {
              NSError *fetchError;
-             Notification *refetchedNotification = (Notification*)[[[WDDDataBase sharedDatabase] managedObjectContext] existingObjectWithID:objectId
-                                                                                                                                      error:&fetchError];
+             Notification *refetchedNotification = (Notification*)[[[WDDDataBase sharedDatabase] managedObjectContext]
+                                                                   existingObjectWithID: objectId
+                                                                   error: &fetchError];
              if (refetchedNotification && !fetchError)
              {
                  if (!error)
@@ -157,7 +158,7 @@ static NSInteger kSearchPostLimit = 10;
                  {
                      if (APP_DELEGATE.isInternetConnected)
                      {
-                         [self markNotificationAsRead:notification];
+                         [self markNotificationAsRead: notification];
                      }
                      else
                      {

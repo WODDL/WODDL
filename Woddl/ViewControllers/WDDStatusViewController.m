@@ -820,7 +820,6 @@ static const NSInteger kTwitterImageLinkLength =  26;
      NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
     [def setObject:[NSKeyedArchiver archivedDataWithRootObject:nil] forKey:@"curEditingMessage"];
     [def synchronize];
-    
 }
 
 const NSInteger kStatusUpdateErrorAlertTag = 4321;
@@ -835,7 +834,7 @@ const NSInteger kStatusUpdateErrorAlertTag = 4321;
     
     dispatch_async(dispatch_get_main_queue(), ^{
         
-        UserProfile *profile = (UserProfile *)[[WDDDataBase sharedDatabase].managedObjectContext objectWithID:profileID];
+        UserProfile *profile = (UserProfile *)[[WDDDataBase sharedDatabase].managedObjectContext objectWithID: profileID];
         NSString *message = [NSString stringWithFormat:NSLocalizedString(@"lskStatusUpdateError", @"Sataus change error message"), profile.name];
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"lskError", @"")
                                                         message:message

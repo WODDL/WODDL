@@ -28,13 +28,21 @@
 
 - (void)markAsRead
 {
+    NSLog(@"%@", self.socialNetwork.accessToken);
+    NSLog(@"%hhd", [self.socialNetwork respondsToSelector:@selector(markNotificationAsRead:)]);
+    NSLog(@"%hhd", self.socialNetwork.activeState.boolValue);
+    NSLog(@"%@", self.isUnread);
+    NSLog(@"%hhd", self.isMarkingAsRead);
+    
+//    self.isUnread = @1;
+    
     if ([self.socialNetwork respondsToSelector:@selector(markNotificationAsRead:)] &&
         self.socialNetwork.activeState.boolValue &&
         self.isUnread.boolValue &&
         !self.isMarkingAsRead)
     {
         self.isMarkingAsRead = YES;
-        [self.socialNetwork markNotificationAsRead:self];
+        [self.socialNetwork markNotificationAsRead: self];
     }
 }
 

@@ -85,26 +85,31 @@
 - (void)setupLocationMatager
 {
     //ROMA
-    if(IS_OS_8_OR_LATER)
-    {
+    if(IS_OS_8_OR_LATER) {
+        
         NSUInteger code = [CLLocationManager authorizationStatus];
-        if (code == kCLAuthorizationStatusNotDetermined && ([self.locationManager respondsToSelector:@selector(requestAlwaysAuthorization)] || [self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)])) {
+        if (code == kCLAuthorizationStatusNotDetermined &&
+            ([self.locationManager respondsToSelector:@selector(requestAlwaysAuthorization)] ||
+             [self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)])) {
+                
             // choose one request according to your business.
             if([[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationAlwaysUsageDescription"]){
+                
                 [self.locationManager requestAlwaysAuthorization];
-            } else if([[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationWhenInUseUsageDescription"]) {
+            }
+            else if([[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationWhenInUseUsageDescription"]) {
+                
                 [self.locationManager  requestWhenInUseAuthorization];
-            } else {
+            }
+            else {
+                
                 NSLog(@"Info.plist does not contain NSLocationAlwaysUsageDescription or NSLocationWhenInUseUsageDescription");
             }
-            
         }
-        
     }
     
     self.locationManager.delegate = self;
     self.locationManager.distanceFilter = kCLLocationAccuracyBest;
-   
 }
 
 #pragma mark - Public API
@@ -113,20 +118,23 @@ static const NSTimeInterval kActualTimeInterval = 10.0f;
 - (void)getCurrentLocationInComplition:(GetLocationBlock)resultBlock
 {
     NSTimeInterval timeIntervalSinceLastSavedLocation = [[NSDate date] timeIntervalSinceDate:self.locationManager.location.timestamp];
-    if (timeIntervalSinceLastSavedLocation > kActualTimeInterval || !self.locationManager.location)
-    {
-        [self.blocksRequestingLocation addObject:resultBlock];
+    
+    if (timeIntervalSinceLastSavedLocation > kActualTimeInterval || !self.locationManager.location) {
+        
+        [self.blocksRequestingLocation addObject: resultBlock];
         [self.locationManager startUpdatingLocation];
     }
-    else
-    {
-        WDDLocation *currentLocation = [[WDDLocation alloc] initWithCLLocation:self.locationManager.location];
+    else {
+        
+        WDDLocation *currentLocation = [[WDDLocation alloc] initWithCLLocation: self.locationManager.location];
+        
         [self.geocoder reverseGeocodeLocation:self.locationManager.location
                             completionHandler:^(NSArray *placemarks, NSError *error)
         {
             CLPlacemark *placemark = [placemarks firstObject];
-            if (placemark)
-            {
+            
+            if (placemark) {
+                
                 NSString *locationName = [NSString stringWithFormat:@"%@, %@, %@, %@", placemark.name, placemark.locality, placemark.administrativeArea, placemark.ISOcountryCode];
                 currentLocation.name = locationName;
             }

@@ -515,20 +515,27 @@ static NSInteger const kMaxCountOfPostsInUpdate = 10;
 {
     void (^completionBlk)(NSError *error) = [completionBlock copy];
     
-    NSString *urlString = [NSString stringWithFormat:@"https://graph.facebook.com/Notif_%@_%@?access_token=%@&unread=0", userId, notificationId, accessToken];
+//    NSString *urlString = [NSString stringWithFormat:@"https://graph.facebook.com/notif_%@_%@?access_token=%@&unread=0", userId, notificationId, accessToken];
+    
+    NSString *urlString = [NSString stringWithFormat:@"https://graph.facebook.com/notif_%@_%@?unread=0", userId, notificationId];
+    
+    NSLog(@"%@", urlString);
+    
     NSURL *url = [NSURL URLWithString:[urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     request.HTTPMethod = @"POST";
     
     AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject)
-    {
-        completionBlk(nil);
-    }
+                                        {
+                                            NSLog(@"%@", (NSString*)responseObject);
+                                            
+                                            completionBlk(nil);
+                                        }
                                      failure:^(AFHTTPRequestOperation *operation, NSError *error)
-    {
-        completionBlk(error);
-    }];
+                                        {
+                                            completionBlk(error);
+                                        }];
     [operation start];
 }
 
@@ -2971,9 +2978,9 @@ NSComparisonResult dateSortFunction(NSDictionary *s1, NSDictionary *s2, void *co
         {
             NSError* error = nil;
             NSDictionary* json = [NSJSONSerialization
-                                  JSONObjectWithData:data
-                                  options:kNilOptions
-                                  error:&error];
+                                  JSONObjectWithData: data
+                                  options: kNilOptions
+                                  error: &error];
             if(!error)
             {
                 if (json[@"error"])
@@ -2983,7 +2990,7 @@ NSComparisonResult dateSortFunction(NSDictionary *s1, NSDictionary *s2, void *co
                     
                     if ([errorDescription[@"code"] integerValue] == 190)
                     {
-                        [self invalidateSocialNetworkWithToken:token];
+                        [self invalidateSocialNetworkWithToken: token];
                     }
                     
                     return nil;

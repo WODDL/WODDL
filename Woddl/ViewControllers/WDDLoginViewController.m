@@ -135,7 +135,7 @@ typedef NS_ENUM(NSUInteger, LoginFacebookActionSheetButton)
             {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     
-                    [[FacebookAPI instance] loginWithDelegate:self];
+                    [[FacebookAPI instance] loginWithDelegate: self];
                 });
             }
         }
@@ -683,12 +683,14 @@ typedef NS_ENUM(NSUInteger, LoginFacebookActionSheetButton)
 {
     switch (actionSheet.tag)
     {
-            
         case LoginActionSheetTypeFacebook:
-            [self actionForFacebookWithButtonIndex:buttonIndex];
+            
+            [self actionForFacebookWithButtonIndex: buttonIndex];
             break;
+            
         case LoginActionSheetTypeTwitter:
-            [self actionForTwitterWithButtonIndex:buttonIndex];
+            
+            [self actionForTwitterWithButtonIndex: buttonIndex];
             break;
     }
     
@@ -696,7 +698,7 @@ typedef NS_ENUM(NSUInteger, LoginFacebookActionSheetButton)
     self.facebookAccountStore = nil;
 }
 
--(void)actionForTwitterWithButtonIndex:(NSInteger)buttonIndex
+- (void)actionForTwitterWithButtonIndex:(NSInteger)buttonIndex
 {
     if (  buttonIndex >= 0 && buttonIndex < self.twitterSystemAccounts.count )
     {
@@ -710,7 +712,7 @@ typedef NS_ENUM(NSUInteger, LoginFacebookActionSheetButton)
     }
 }
 
--(void)actionForFacebookWithButtonIndex:(NSInteger)buttonIndex
+- (void)actionForFacebookWithButtonIndex:(NSInteger)buttonIndex
 {
     if (  buttonIndex == LoginFacebookActionSheetButtonAccount)
     {
@@ -730,18 +732,19 @@ typedef NS_ENUM(NSUInteger, LoginFacebookActionSheetButton)
         BOOL login = [[FacebookAPI instance] loginWithToken:credential.oauthToken
                                                      expire:expireDate
                                                    delegate:self];
-        if (login)
-        {
+        if (login) {
+            
              [self showLoginHUD];
         }
-        else
-        {
+        else {
+            
             [self removeOnFailLoginHUD];
         }
     }
-    else if (buttonIndex == LoginFacebookActionSheetButtonOther)
-    {
+    else if (buttonIndex == LoginFacebookActionSheetButtonOther) {
+        
         [[FacebookAPI instance] loginWithDelegate:self];
     }
 }
+
 @end

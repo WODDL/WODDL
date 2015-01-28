@@ -4665,6 +4665,7 @@
 		};
 		972C5ABB1816C53F009AAE50 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A7A8CD7E84C5139052129BA8 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Woddl.app/Woddl";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -4694,6 +4695,7 @@
 		};
 		972C5ABC1816C53F009AAE50 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 080B7D25F9A892C74220E9E0 /* Pods.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Woddl.app/Woddl";
 				CODE_SIGN_IDENTITY = "iPhone Developer";

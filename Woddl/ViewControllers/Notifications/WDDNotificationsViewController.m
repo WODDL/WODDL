@@ -120,8 +120,9 @@
     
     for (Notification * notification in self.notificationsFRC.fetchedObjects)
     {
-        if (notification.isUnread)
+        if (notification.isUnread.boolValue)
         {
+            NSLog(@"%@", notification.isUnread);
             [notification markAsRead];
         }
     }

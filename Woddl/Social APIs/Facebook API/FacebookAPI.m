@@ -39,13 +39,13 @@ static FacebookAPI* myFacebook = nil;
     return self;
 }
 
--(void)loginWithDelegate:(id<FacebookAPIDelegate>)delegate_
+- (void)loginWithDelegate:(id<FacebookAPIDelegate>)delegate_
 {
     FacebookLoginViewController *fbController  = [[FacebookLoginViewController alloc] init];
     fbController.delegate = self;
     delegate = delegate_;
     if(delegate)
-        [delegate loginFacebookViewController:fbController];
+        [delegate loginFacebookViewController: fbController];
 }
 
 - (BOOL)loginWithToken:(NSString *)token expire:(NSDate *)expire delegate:(id<FacebookAPIDelegate>)delegate_
@@ -74,17 +74,15 @@ static FacebookAPI* myFacebook = nil;
         {
             NSError* error = nil;
             NSDictionary* json = [NSJSONSerialization
-                                  JSONObjectWithData:responseData
-                                  
-                                  options:kNilOptions
-                                  error:&error];
+                                  JSONObjectWithData: responseData
+                                  options: kNilOptions
+                                  error: &error];
             
             DLog(@"Got response on login: %@", json);
             
             if(!error && json[@"data"])
             {
                 NSDictionary *userInfo = [json[@"data"] firstObject];
-                
                 
                 NSString *userID = userInfo[@"uid"];
                 NSString* userIDStr = [NSString stringWithFormat:@"%lli",[userID longLongValue]];
@@ -104,22 +102,26 @@ static FacebookAPI* myFacebook = nil;
                 DLog(@"Got error on logging in: %@", error.localizedDescription);
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
+                    
                     if(delegate)
                         [delegate loginFailFromDeviceFacebookAccount];
+                    
                     delegate = nil;
                 });
-                
             }
         }
-        else
-        {
+        else {
+            
             dispatch_async(dispatch_get_main_queue(), ^{
+                
                 if(delegate)
                     [delegate loginFailFromDeviceFacebookAccount];
+                
                 delegate = nil;
             });
         }
     });
+    
     return YES;
 }
 
