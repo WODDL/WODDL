@@ -140,7 +140,6 @@ static const NSInteger kCountLoadMorePosts = 10;
     }
 }
 
-
 - (void)viewWillAppear:(BOOL)animated
 {
     

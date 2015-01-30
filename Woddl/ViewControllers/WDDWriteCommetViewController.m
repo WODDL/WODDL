@@ -55,7 +55,7 @@ UITableViewDelegate,
 WDDMainPostCellDelegate,
 UIGestureRecognizerDelegate,
 PullTableViewDelegate,
-OHAttributedLabelDelegate,
+UITextViewDelegate,
 WDDCommentPreviewDelegate,
 WDDWhoLikedViewControllerDelegate,
 WDDAddFriendDelegate>
@@ -1093,13 +1093,11 @@ static NSInteger const kMaxCountOfComments = 25;
     self.commentsTable.pullTableIsLoadingMore = NO;
 }
 
+#pragma mark - UITextView Delegate
 
-
-#pragma mark - OHLabel delegate
-
--(BOOL)attributedLabel:(OHAttributedLabel*)attributedLabel shouldFollowLink:(NSTextCheckingResult*)linkInfo
+- (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange
 {
-    NSString *urlString = [linkInfo.URL absoluteString];
+    NSString *urlString = [URL absoluteString];
     if ([urlString hasPrefix:kTagURLBase])
     {
         NSString *tag = [urlString substringFromIndex:kTagURLBase.length];
@@ -1130,11 +1128,18 @@ static NSInteger const kMaxCountOfComments = 25;
     }
     else
     {
-        [self openWebViewWithURL:linkInfo.URL requiresAuthorization:NO];
+        [self openWebViewWithURL: URL requiresAuthorization:NO];
     }
     
     return NO;
 }
+
+//#pragma mark - OHLabel delegate
+//
+//-(BOOL)attributedLabel:(OHAttributedLabel*)attributedLabel shouldFollowLink:(NSTextCheckingResult*)linkInfo
+//{
+//    
+//}
 
 - (void)openWebViewWithURL:(NSURL *)url requiresAuthorization:(BOOL)requiresAuthorization
 {
@@ -1217,7 +1222,7 @@ static NSInteger const kMaxCountOfComments = 25;
 {
     WDDCommentCell *cell = (WDDCommentCell *)[self.commentsTable cellForRowAtIndexPath:copyCommentIndexPath];
     
-    OHAttributedLabel *label = cell.commentPreviewView.commentLabel;
+    UITextView *label = cell.commentPreviewView.commentLabel;
     
     if (label.text)
     {
@@ -1227,12 +1232,10 @@ static NSInteger const kMaxCountOfComments = 25;
     {
         [[UIPasteboard generalPasteboard] setValue:cell.commentPreviewView.commentLabel.attributedText.string forPasteboardType:(__bridge NSString*)kUTTypeUTF8PlainText];
     }
-    
 }
 
 - (BOOL) canPerformAction:(SEL)selector withSender:(id) sender
 {
-    
     if (selector == @selector(copyAction:) || selector == @selector(copyActionTable:))
     {
         return YES;
@@ -1276,6 +1279,7 @@ static NSInteger const kMaxCountOfComments = 25;
 
 
 #pragma mark - WDDAddFriendDelegate
+
 - (void)didAddFriendWithName:(NSString *)friendName
 {
     if (friendName.length)

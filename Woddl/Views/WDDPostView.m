@@ -8,7 +8,8 @@
 
 #import "WDDPostView.h"
 
-#import <OHAttributedLabel/OHAttributedLabel.h>
+#import <OHAttributedStringAdditions.h>
+#import <CoreText/CoreText.h>
 #import <SDWebImage/SDWebImageManager.h>
 #import "UIImage+ResizeAdditions.h"
 #import "UIImageView+WebCache.h"
@@ -54,7 +55,10 @@ static const NSInteger kMediaTypeLink = 254;
     self.mediaScrollHeight.constant = 0.0f;
     self.mediaScrollBottomOffset.constant = 0.0f;
     
-    self.textMessage.automaticallyAddLinksForType = 0;
+    self.textMessage.textContainer.lineFragmentPadding = 0;
+    self.textMessage.textContainerInset = UIEdgeInsetsZero;
+//    self.textMessage.automaticallyAddLinksForType = 0;
+    self.textMessage.dataDetectorTypes = UIDataDetectorTypeNone;
     self.likesIconWidth.constant = LikesAndCommentsIconWidth;
     self.likesLabelWidth.constant = LikesAndCommentsLabelWidth;
     self.commentIconWidth.constant = LikesAndCommentsIconWidth;
@@ -77,10 +81,10 @@ static const NSInteger kMediaTypeLink = 254;
     [self updateViewContent];
 }
 
--(void)getAllLinks
+- (void)getAllLinks
 {
-    OHAttributedLabel* textMessage = [[OHAttributedLabel alloc] init];
-    textMessage.text = self.post.text;
+//    UITextView* textMessage = [[OHAttributedLabel alloc] init];
+//    textMessage.text = self.post.text;
     self.links = nil;
 }
 
@@ -572,10 +576,14 @@ static const NSInteger kMediaTypeLink = 254;
 {
     NSMutableAttributedString *postText = [self getAttribudetPostText];
     
-    self.textMessage.linkColor = [UIColor blackColor];
-    self.textMessage.linkUnderlineStyle = kCTUnderlineStyleNone | kOHBoldStyleTraitSetBold;
-    self.textMessage.automaticallyAddLinksForType = 0;
-    
+    self.textMessage.linkTextAttributes = @{NSForegroundColorAttributeName: [UIColor blackColor],
+                                            NSUnderlineStyleAttributeName: [NSNumber numberWithInt: NSUnderlineStyleNone]};
+//    self.textMessage.linkColor = [UIColor blackColor];
+//    self.textMessage.linkUnderlineStyle = kCTUnderlineStyleNone | kOHBoldStyleTraitSetBold;
+//    self.textMessage.automaticallyAddLinksForType = 0;
+    self.textMessage.dataDetectorTypes = UIDataDetectorTypeNone;
+    self.textMessage.textContainer.lineFragmentPadding = 0;
+    self.textMessage.textContainerInset = UIEdgeInsetsZero;
     self.textMessage.attributedText = postText;
     
     self.messageLabelHeight.constant = [self sizeForText:postText
@@ -619,13 +627,15 @@ static const NSInteger kMediaTypeLink = 254;
                     
                     if (self.post.subscribedBy.socialNetwork.type.integerValue != kSocialNetworkTwitter)
                     {
-                        [postText setLink:cachedLink range:range];
+//                        [postText setLink:cachedLink range:range];
+                        [postText setURL: cachedLink range: range];
                     }
                     else
                     {
                         if ([Link isURLShort:cachedLink])
                         {
-                            [postText setLink:cachedLink range:range];
+//                            [postText setLink:cachedLink range:range];
+                            [postText setURL: cachedLink range: range];
                         }
                     }
                 }
@@ -635,7 +645,8 @@ static const NSInteger kMediaTypeLink = 254;
                     
                     if (self.post.subscribedBy.socialNetwork.type.integerValue != kSocialNetworkTwitter)
                     {
-                        [postText setLink:linkURL range:range];
+//                        [postText setLink:linkURL range:range];
+                        [postText setURL: linkURL range: range];
                     }
                 }
             }
@@ -643,13 +654,15 @@ static const NSInteger kMediaTypeLink = 254;
             {
                 if (self.post.subscribedBy.socialNetwork.type.integerValue != kSocialNetworkTwitter)
                 {
-                    [postText setLink:linkURL range:range];
+//                    [postText setLink:linkURL range:range];
+                    [postText setURL: linkURL range: range];
                 }
                 else
                 {
                     if ([Link isURLShort:linkURL])
                     {
-                        [postText setLink:linkURL range:range];
+//                        [postText setLink:linkURL range:range];
+                        [postText setURL: linkURL range: range];
                     }
                 }
             }
@@ -713,13 +726,15 @@ static const NSInteger kMediaTypeLink = 254;
             
             if (self.post.subscribedBy.socialNetwork.type.integerValue != kSocialNetworkTwitter)
             {
-                [postText setLink:linkURL range:range];
+//                [postText setLink:linkURL range:range];
+                [postText setURL: linkURL range: range];
             }
             else
             {
                 if ([Link isURLShort:linkURL])
                 {
-                    [postText setLink:linkURL range:range];
+//                    [postText setLink:linkURL range:range];
+                    [postText setURL: linkURL range: range];
                 }
             }
         }
@@ -741,15 +756,15 @@ static const NSInteger kMediaTypeLink = 254;
              */
             if (self.post.subscribedBy.socialNetwork.type.integerValue != kSocialNetworkTwitter)
             {
-                [postText setLink:[NSURL URLWithString:[kTagURLBase stringByAppendingString:tagString]]
-                            range:matchRange];
+//                [postText setLink:[NSURL URLWithString:[kTagURLBase stringByAppendingString:tagString]] range:matchRange];
+                [postText setURL: [NSURL URLWithString: [kTagURLBase stringByAppendingString: tagString]] range: matchRange];
             }
             else
             {
                 if ([Link isURLStringShort:[kTagURLBase stringByAppendingString:tagString]])
                 {
-                    [postText setLink:[NSURL URLWithString:[kTagURLBase stringByAppendingString:tagString]]
-                                range:matchRange];
+//                    [postText setLink:[NSURL URLWithString:[kTagURLBase stringByAppendingString:tagString]] range:matchRange];
+                    [postText setURL: [NSURL URLWithString: [kTagURLBase stringByAppendingString: tagString]] range: matchRange];
                 }
             }
         }
@@ -775,16 +790,16 @@ static const NSInteger kMediaTypeLink = 254;
         
         if (self.post.subscribedBy.socialNetwork.type.integerValue != kSocialNetworkTwitter)
         {
-            [postText setLink:[NSURL URLWithString:[urlBase stringByAppendingString:username]]
-                        range:matchRange];
+//            [postText setLink:[NSURL URLWithString:[urlBase stringByAppendingString:username]] range:matchRange];
+            [postText setURL: [NSURL URLWithString: [urlBase stringByAppendingString: username]] range: matchRange];
         }
         else
         {
 //            if ([[urlBase stringByAppendingString:username] rangeOfString:@"t.co/"].location != NSNotFound)
             if ([Link isURLStringShort:[urlBase stringByAppendingString:username]])
             {
-                [postText setLink:[NSURL URLWithString:[urlBase stringByAppendingString:username]]
-                            range:matchRange];
+//                [postText setLink:[NSURL URLWithString:[urlBase stringByAppendingString:username]] range:matchRange];
+                [postText setURL: [NSURL URLWithString: [urlBase stringByAppendingString: username]] range: matchRange];
             }
         }
     }

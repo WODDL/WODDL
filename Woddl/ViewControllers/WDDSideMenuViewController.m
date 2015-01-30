@@ -352,7 +352,7 @@ typedef enum tagMenuButtons
                 break;
                 
             case MBLogout:
-                [self logoutButtonAction:self];
+                [self logoutButtonAction: self];
                 break;
         }
     }

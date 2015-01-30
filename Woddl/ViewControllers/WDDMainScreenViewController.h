@@ -8,10 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "PullTableView.h"
-#import <OHAttributedLabel.h>
 #import "WDDBasePostsViewController.h"
 
-@interface WDDMainScreenViewController : WDDBasePostsViewController <NSFetchedResultsControllerDelegate, UITableViewDataSource, UITableViewDelegate, PullTableViewDelegate, OHAttributedLabelDelegate>
+@interface WDDMainScreenViewController : WDDBasePostsViewController <NSFetchedResultsControllerDelegate, UITableViewDataSource, UITableViewDelegate, PullTableViewDelegate, UITextViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *menuSideButton;
 @property (weak, nonatomic) IBOutlet UINavigationItem *navigationBar;

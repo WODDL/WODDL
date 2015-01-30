@@ -19,8 +19,11 @@
 #import "WDDURLShorter.h"
 #import "Tag.h"
 
+#import <OHAttributedStringAdditions.h>
+#import <CoreText/CoreText.h>
+
 @interface WDDTwitterReplyViewController () < UITextViewDelegate,
-                                              UIImagePickerControllerDelegate,UINavigationControllerDelegate, UIActionSheetDelegate, OHAttributedLabelDelegate>
+                                              UIImagePickerControllerDelegate,UINavigationControllerDelegate, UIActionSheetDelegate, UITextViewDelegate>
 {
     UIImagePickerController *picker;
     UIImage* selectedImage;
@@ -67,19 +70,26 @@ static NSString * kPlaceholderText;
         {
             NSRange matchRange = [match range];
             NSString *tagString = [tag.tag stringByReplacingOccurrencesOfString:@" "  withString:@"."];
-            [postAtrString setLink:[NSURL URLWithString:[kTagURLBase stringByAppendingString:tagString]]
-                             range:matchRange];
+//            [postAtrString setLink:[NSURL URLWithString:[kTagURLBase stringByAppendingString:tagString]] range:matchRange];
+            [postAtrString setURL: [NSURL URLWithString: [kTagURLBase stringByAppendingString: tagString]] range: matchRange];
         }
     }
-    [self highlightNamesInText:postAtrString inPost:self.post];
+    [self highlightNamesInText: postAtrString inPost: self.post];
     
     
     self.originalPostViewHeightConstraint.constant = [self sizeForText:postAtrString withFont:[self boldMessageTextFont]].height+2*kIntendFromEdgeTextPost;
     self.originalPostViewBottomOffsetConstraint.constant = 0.0f;
     
-    self.postLabel.linkColor = [UIColor blackColor];
-    self.postLabel.linkUnderlineStyle = kCTUnderlineStyleNone | kOHBoldStyleTraitSetBold;
-    self.postLabel.extendBottomToFit=YES;
+    self.postLabel.linkTextAttributes = @{NSForegroundColorAttributeName: [UIColor blackColor],
+                                          NSUnderlineStyleAttributeName: [NSNumber numberWithInt: NSUnderlineStyleNone]};
+    
+//    self.postLabel.linkColor = [UIColor blackColor];
+//    self.postLabel.linkUnderlineStyle = kCTUnderlineStyleNone | kOHBoldStyleTraitSetBold;
+//    self.postLabel.extendBottomToFit=YES;
+    self.postLabel.textContainer.lineFragmentPadding = 0;
+    self.postLabel.textContainerInset = UIEdgeInsetsZero;
+    self.postLabel.editable = NO;
+    self.postLabel.dataDetectorTypes = UIDataDetectorTypeLink;
     self.postLabel.delegate = self;
     self.postLabel.attributedText = postAtrString;
     
@@ -87,7 +97,7 @@ static NSString * kPlaceholderText;
     
     CAGradientLayer *bgLayer = [self gradient];
     bgLayer.frame = twitterPostBackImageView.bounds;
-    [twitterPostBackImageView.layer insertSublayer:bgLayer atIndex:0];
+    [twitterPostBackImageView.layer insertSublayer: bgLayer atIndex: 0];
     if(self.additionalText)
     {
         /*if(self.additionalText.length+2>kMaxCountOfCharactersInText)
@@ -96,8 +106,8 @@ static NSString * kPlaceholderText;
         }*/
         self.inputTextview.text = [NSString stringWithFormat:@"\"%@\"",self.additionalText];
     }
-    else
-    {
+    else {
+        
         self.inputTextview.text = [NSString stringWithFormat:@"@%@ ",self.post.author.name];
     }
     
@@ -638,11 +648,12 @@ static const CGFloat MessageWidth = 300.f;
     return [UIFont boldSystemFontOfSize:kPostFontSize];
 }
 
-#pragma mark - OHLabel delegate
+#pragma mark - UITextView Delegate
 
--(BOOL)attributedLabel:(OHAttributedLabel*)attributedLabel shouldFollowLink:(NSTextCheckingResult*)linkInfo
+- (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange
 {
-    NSString *urlString = [linkInfo.URL absoluteString];
+    NSString *urlString = [URL absoluteString];
+    
     if ([urlString hasPrefix:kTagURLBase])
     {
         NSString *tag = [urlString substringFromIndex:kTagURLBase.length];
@@ -665,11 +676,18 @@ static const CGFloat MessageWidth = 300.f;
     }
     else
     {
-        [self openWebViewWithURL:linkInfo.URL];
+        [self openWebViewWithURL: URL];
     }
     
     return NO;
 }
+
+//#pragma mark - OHLabel delegate
+//
+//-(BOOL)attributedLabel:(OHAttributedLabel*)attributedLabel shouldFollowLink:(NSTextCheckingResult*)linkInfo
+//{
+//    
+//}
 
 - (void)openWebViewWithURL:(NSURL *)url
 {
@@ -711,21 +729,21 @@ static const CGFloat MessageWidth = 300.f;
         NSRange matchRange = [match range];
         NSString *username = [[text.string substringWithRange:matchRange] stringByReplacingOccurrencesOfString:@"@" withString:@""];
         NSString *urlBase = ([post isKindOfClass:[TwitterPost class]] ? kTwitterNameURLBase : kTagURLBase);
-        [text setLink:[NSURL URLWithString:[urlBase stringByAppendingString:username]]
-                range:matchRange];
+//        [text setLink:[NSURL URLWithString:[urlBase stringByAppendingString:username]] range:matchRange];
+        [text setURL: [NSURL URLWithString: [urlBase stringByAppendingString: username]] range: matchRange];
     }
 }
 
 - (void)updateCounter
 {
     NSInteger len = self.inputTextview.text.length;
-    if(!selectedImage)
-    {
-        self.counterTextField.text=[NSString stringWithFormat:@"%ld",kMaxCountOfCharactersInText-len];
+    if(!selectedImage) {
+        
+        self.counterTextField.text=[NSString stringWithFormat:@"%d", kMaxCountOfCharactersInText - len];
     }
-    else
-    {
-        self.counterTextField.text=[NSString stringWithFormat:@"%ld",kMaxCountOfCharactersInText-kCountOfCharactersForImage-len];
+    else {
+        
+        self.counterTextField.text=[NSString stringWithFormat:@"%d", kMaxCountOfCharactersInText - kCountOfCharactersForImage - len];
         [self.cameraButton setSelected:YES];
     }
 }

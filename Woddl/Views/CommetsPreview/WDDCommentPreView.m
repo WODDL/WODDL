@@ -18,8 +18,9 @@
 #import "WDDURLShorter.h"
 #import "WDDDataBase.h"
 
-#import <OHAttributedLabel/OHAttributedLabel.h>
+#import <OHAttributedStringAdditions.h>
 #import <SDWebImage/SDWebImageManager.h>
+#import <CoreText/CoreText.h>
 
 #import "UIImageView+AvatarLoading.h"
 #import "UIImage+ResizeAdditions.h"
@@ -43,7 +44,7 @@ static const CGFloat kTimeAgoLabelWidth = 100.0f;
 static const CGFloat kTimeAgoLabelHeight = 20.0f;
 
 
-@interface WDDCommentPreView() <OHAttributedLabelDelegate>
+@interface WDDCommentPreView() <UITextViewDelegate>
 
 @property (weak, nonatomic) UIImageView *separatorImageView;
 @property (strong, nonatomic) NSString *authorProfileURLString;
@@ -54,7 +55,7 @@ static const CGFloat kTimeAgoLabelHeight = 20.0f;
 
 @implementation WDDCommentPreView
 
-- (void)setMessageLabeldelegate:(id<OHAttributedLabelDelegate>)messageLabeldelegate
+- (void)setMessageLabeldelegate:(id<UITextViewDelegate>)messageLabeldelegate
 {
     _messageLabeldelegate = messageLabeldelegate;
     self.commentLabel.delegate = messageLabeldelegate;
@@ -70,7 +71,7 @@ static UIImage *placeHolderImage = nil;
         self.frame = CGRectMake(0, 0, kCommentsViewWidth, [WDDCommentPreView sizeOfViewForComment:comment].height );
         self.commentId = comment.objectID;
         
-        self.commentLabel = [self addCommetLabelForComment:comment];
+        self.commentLabel = [self addCommetLabelForComment: comment];
         UIImageView *avatarView = [self addAvatarImageViewForComment:comment];
         UILabel *authorLabel = [self addAuthorLableWithComment:comment];
         [self addTimeAgoLabelWithComment:comment];
@@ -211,7 +212,8 @@ static UIImage *placeHolderImage = nil;
                                                     }
                                                     else
                                                     {
-                                                        [commetText setLink:cachedLink range:linkRange];
+//                                                        [commetText setLink:cachedLink range:linkRange];
+                                                        [commetText setURL: cachedLink range: linkRange];
                                                     }
                                                 }
                                                 else
@@ -227,7 +229,8 @@ static UIImage *placeHolderImage = nil;
                                                              [text.mutableString replaceOccurrencesOfString:linkURL.absoluteString
                                                                                                  withString:resultURL.absoluteString options:NSCaseInsensitiveSearch range:NSMakeRange(0, text.mutableString.length)];
                                                              NSRange newRange = [text.mutableString rangeOfString:resultURL.absoluteString];
-                                                             [text setLink:resultURL range:newRange];
+//                                                             [text setLink:resultURL range:newRange];
+                                                             [text setURL: resultURL range: newRange];
                                                              
                                                              dispatch_async(dispatch_get_main_queue(), ^()
                                                              {
@@ -254,7 +257,8 @@ static UIImage *placeHolderImage = nil;
                                                 }
                                                 else
                                                 {
-                                                    [commetText setLink:[NSURL URLWithString:linkString] range:linkRange];
+//                                                    [commetText setLink:[NSURL URLWithString:linkString] range:linkRange];
+                                                    [commetText setURL: [NSURL URLWithString: linkString] range: linkRange];
                                                 }
                                             }
                                         }
@@ -313,8 +317,8 @@ static UIImage *placeHolderImage = nil;
             }
             else
             {
-                [commetText setLink:[NSURL URLWithString:[kTagURLBase stringByAppendingString:tagString]]
-                              range:matchRange];
+//                [commetText setLink:[NSURL URLWithString:[kTagURLBase stringByAppendingString:tagString]] range:matchRange];
+                [commetText setURL: [NSURL URLWithString: [kTagURLBase stringByAppendingString: tagString]] range: matchRange];
             }
         }
     }
@@ -354,13 +358,13 @@ static UIImage *placeHolderImage = nil;
         }
         else
         {
-            [commetText setLink:[NSURL URLWithString:[urlBase stringByAppendingString:username]]
-                          range:matchRange];
+//            [commetText setLink:[NSURL URLWithString:[urlBase stringByAppendingString:username]] range:matchRange];
+            [commetText setURL: [NSURL URLWithString: [urlBase stringByAppendingString: username]] range: matchRange];
         }
     }
 }
 
-- (OHAttributedLabel *)addCommetLabelForComment:(Comment *)comment
+- (UITextView *)addCommetLabelForComment:(Comment *)comment
 {
     __block NSMutableAttributedString *commetText = [[NSMutableAttributedString alloc] initWithString:comment.text
                                                                                    attributes:@{ NSFontAttributeName : [WDDCommentPreView messageTextFont],
@@ -369,19 +373,27 @@ static UIImage *placeHolderImage = nil;
     
     CGSize textSize = [WDDCommentPreView sizeForText:commetText withFont:[WDDCommentPreView messageTextFont]];
     
-    OHAttributedLabel *commentMessageLabel = [[OHAttributedLabel alloc] initWithFrame:CGRectMake(kEdgeOffset+kAvatarSize+kStandratViewOffset, kEdgeOffset + kAuthorLabelHeight + kStandratViewOffset, textSize.width, textSize.height)];
+    UITextView *commentMessageLabel = [[UITextView alloc] initWithFrame:CGRectMake(kEdgeOffset+kAvatarSize+kStandratViewOffset, kEdgeOffset + kAuthorLabelHeight + kStandratViewOffset, textSize.width, textSize.height)];
     
-    commentMessageLabel.linkColor = [UIColor blackColor];
-    commentMessageLabel.linkUnderlineStyle = kCTUnderlineStyleNone | kOHBoldStyleTraitSetBold;
+    commentMessageLabel.editable = NO;
+    commentMessageLabel.scrollEnabled = NO;
+    commentMessageLabel.textContainer.lineFragmentPadding = 0;
+    commentMessageLabel.textContainerInset = UIEdgeInsetsZero;
+    commentMessageLabel.dataDetectorTypes = UIDataDetectorTypeLink;
+    commentMessageLabel.linkTextAttributes = @{NSForegroundColorAttributeName: [UIColor blackColor],
+                                               NSUnderlineColorAttributeName: [NSNumber numberWithInt: NSUnderlineStyleNone]};
+//    commentMessageLabel.linkColor = [UIColor blackColor];
+//    commentMessageLabel.linkUnderlineStyle = kCTUnderlineStyleNone | kOHBoldStyleTraitSetBold;
     commentMessageLabel.backgroundColor = [UIColor clearColor];
     commentMessageLabel.opaque = YES;
     commentMessageLabel.attributedText = commetText;
-    [commentMessageLabel setUserInteractionEnabled:YES];
+    [commentMessageLabel setUserInteractionEnabled: YES];
+    
     if (IS_IOS7)
     {
-        [commentMessageLabel setTintColor:[UIColor clearColor]];
+        [commentMessageLabel setTintColor: [UIColor clearColor]];
     }
-    [self addSubview:commentMessageLabel];
+    [self addSubview: commentMessageLabel];
     
     return commentMessageLabel;
 }

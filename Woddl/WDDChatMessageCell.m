@@ -11,7 +11,8 @@
 #import "XMPPFramework.h"
 //#import <XMPPFramework/XMPPMessageArchiving_Message_CoreDataObject.h>
 #import <QuartzCore/CALayer.h>
-#import <OHAttributedLabel/OHAttributedLabel.h>
+#import <OHAttributedStringAdditions.h>
+#import <CoreText/CoreText.h>
 
 #import <NSDate+TimeAgo/NSDate+TimeAgo.h>
 
@@ -42,13 +43,13 @@ static CGFloat bubbleTextMaxWidth       = 200.;
 static NSInteger clockImageHeight       = 9;
 static NSInteger clockImageWidth        = 9;
 
-@interface WDDChatMessageCell () <UIGestureRecognizerDelegate, OHAttributedLabelDelegate>
+@interface WDDChatMessageCell () <UIGestureRecognizerDelegate, UITextViewDelegate>
 
 @property (nonatomic) UIImageView *baloonView;
 @property (nonatomic) UIImageView *avatarView;
 @property (nonatomic) UIImageView *clockImageView;
 
-@property (nonatomic) OHAttributedLabel *messageTextLabel;
+@property (nonatomic) UITextView *messageTextLabel;
 @property (nonatomic) UILabel *messageDateLabel;
 
 @property (nonatomic) NSString *messageDate;
@@ -117,12 +118,16 @@ static NSInteger clockImageWidth        = 9;
     }
     else
     {
-        _messageTextLabel = [OHAttributedLabel new];
-        
+        _messageTextLabel = [UITextView new];
+
+        _messageTextLabel.editable = NO;
+        _messageTextLabel.scrollEnabled = NO;
+        _messageTextLabel.textContainer.lineFragmentPadding = 0;
+        _messageTextLabel.textContainerInset = UIEdgeInsetsZero;
         self.messageTextLabel.backgroundColor = [UIColor clearColor];
         self.messageTextLabel.font = TEXT_FONT;
-        self.messageTextLabel.numberOfLines = 0;
-        self.messageTextLabel.lineBreakMode = NSLineBreakByWordWrapping;
+//        self.messageTextLabel.numberOfLines = 0;
+//        self.messageTextLabel.lineBreakMode = NSLineBreakByWordWrapping;
         self.messageTextLabel.textColor = [UIColor blackColor];
         
         self.messageTextLabel.text = NSLocalizedString(@"lskIsTyping", @"is typing...");
@@ -136,18 +141,23 @@ static NSInteger clockImageWidth        = 9;
     
     [self.contentView addSubview:self.clockImageView];
     
-    _messageTextLabel = [OHAttributedLabel new];
-    
+    _messageTextLabel = [UITextView new];
+    _messageTextLabel.scrollEnabled = NO;
+    _messageTextLabel.textContainer.lineFragmentPadding = 0;
+    _messageTextLabel.textContainerInset = UIEdgeInsetsZero;
+    _messageTextLabel.editable = NO;
+    _messageTextLabel.dataDetectorTypes = UIDataDetectorTypeLink;
     self.messageTextLabel.backgroundColor = [UIColor clearColor];
     self.messageTextLabel.font = TEXT_FONT;
-    self.messageTextLabel.numberOfLines = 0;
-    self.messageTextLabel.lineBreakMode = NSLineBreakByWordWrapping;
+//    self.messageTextLabel.numberOfLines = 0;
+//    self.messageTextLabel.lineBreakMode = NSLineBreakByWordWrapping;
     self.messageTextLabel.textColor = [UIColor darkGrayColor];
     self.messageTextLabel.delegate = self;
     
     self.messageTextLabel.text = self.message.body;
     
-    self.messageTextLabel.centerVertically = YES;
+//    self.messageTextLabel.centerVertically = YES;
+    self.messageTextLabel.textAlignment = NSTextAlignmentCenter;
     
     [self.baloonView.superview addSubview:self.messageTextLabel];
 }
@@ -302,11 +312,18 @@ static NSInteger clockImageWidth        = 9;
     }
 }
 
-#pragma mark - TTTAttributedLabelDelegate
+#pragma mark - UITextView Delegate
 
-- (BOOL)attributedLabel:(OHAttributedLabel*)attributedLabel shouldFollowLink:(NSTextCheckingResult*)linkInfo;
+- (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange
 {
     return YES;
 }
+
+//#pragma mark - TTTAttributedLabelDelegate
+//
+//- (BOOL)attributedLabel:(OHAttributedLabel*)attributedLabel shouldFollowLink:(NSTextCheckingResult*)linkInfo;
+//{
+//    return YES;
+//}
 
 @end

@@ -16,7 +16,8 @@
 #import "UITapGestureRecognizer+MediaInfo.h"
 #import "WDDCommentPreView.h"
 #import "WDDPreviewManager.h"
-
+#import <OHAttributedStringAdditions.h>
+#import <CoreText/CoreText.h>
 #import "NSString+Additions.h"
 #import "NSString+MD5.h"
 #import "UIImage+ResizeAdditions.h"
@@ -45,7 +46,7 @@ static const NSInteger kMediaTypeLink = 254;
 
 static NSMutableDictionary *st_iconsCache = nil;
 
-@interface WDDMainPostCell () <OHAttributedLabelDelegate, WDDCommentPreviewDelegate>
+@interface WDDMainPostCell () <UITextViewDelegate, WDDCommentPreviewDelegate>
 
 @property (nonatomic, strong) NSSet *medias;
 @property (nonatomic, strong) NSArray *comments;
@@ -79,11 +80,17 @@ static NSMutableDictionary *st_iconsCache = nil;
     self.commentsViewHeight.constant = 0.0f;
     self.commentsViewBottomOffSet.constant = 0.0f;
     
-    self.textMessage.linkColor = [UIColor blackColor];
-    self.textMessage.linkUnderlineStyle = kCTUnderlineStyleNone | kOHBoldStyleTraitSetBold;
-    self.textMessage.automaticallyAddLinksForType = 0;
+    self.textMessage.linkTextAttributes = @{NSForegroundColorAttributeName: [UIColor blackColor],
+                                            NSUnderlineStyleAttributeName: [NSNumber numberWithInt: NSUnderlineStyleNone]};
+//    self.textMessage.linkColor = [UIColor blackColor];
+//    self.textMessage.linkUnderlineStyle = kCTUnderlineStyleNone | kOHBoldStyleTraitSetBold;
+//    self.textMessage.automaticallyAddLinksForType = 0;
     
-    self.textMessage.extendBottomToFit = YES;
+//    self.textMessage.extendBottomToFit = YES;
+    self.textMessage.textContainer.lineFragmentPadding = 0;
+    self.textMessage.textContainerInset = UIEdgeInsetsZero;
+    self.textMessage.editable = NO;
+    self.textMessage.dataDetectorTypes = UIDataDetectorTypeLink;
     self.textMessage.delegate = self;
     
     //  Setup tap gesture
@@ -487,8 +494,7 @@ static NSMutableDictionary *st_iconsCache = nil;
         }
         length--;
         
-        NSMutableAttributedString *newText = [NSMutableAttributedString attributedStringWithAttributedString:[self.fullMessageText attributedSubstringFromRange:NSMakeRange(0, length)]];
-        
+        NSMutableAttributedString *newText = [NSMutableAttributedString attributedStringWithAttributedString: [self.fullMessageText attributedSubstringFromRange: NSMakeRange(0, length)]];
         
         BOOL isEndsWithNewLine = [newText.string isEndsWithNewlineCharacter];
         NSString *showMoreString = [NSString stringWithFormat:@"%@%@",
@@ -508,8 +514,8 @@ static NSMutableDictionary *st_iconsCache = nil;
                                   value:paragrapStyle
                                   range:NSMakeRange(newLineOffset, showMoreString.length-newLineOffset)];
         
-        [showMoreAtrString setLink:[NSURL URLWithString:kShowMoreURLBase]
-                             range:NSMakeRange(newLineOffset, showMoreString.length-newLineOffset)];
+//        [showMoreAtrString setLink:[NSURL URLWithString:kShowMoreURLBase] range:NSMakeRange(newLineOffset, showMoreString.length-newLineOffset)];
+        [showMoreAtrString setURL: [NSURL URLWithString: kShowMoreURLBase] range: NSMakeRange(newLineOffset, showMoreString.length - newLineOffset)];
         
         [newText appendAttributedString:showMoreAtrString];
         return newText;
@@ -854,12 +860,13 @@ static NSMutableDictionary *st_textSizes = nil;
     }
 }
 
-#pragma mark - OHLabel delegate
+#pragma mark - UITextView Delegate
 
--(BOOL)attributedLabel:(OHAttributedLabel*)attributedLabel shouldFollowLink:(NSTextCheckingResult*)linkInfo
+- (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange
 {
-    NSString *urlString = [linkInfo.URL absoluteString];
-    if ([urlString hasPrefix:kTagURLBase])
+    NSString *urlString = [URL absoluteString];
+    
+    if ([urlString hasPrefix: kTagURLBase])
     {
         NSString *tag = [urlString substringFromIndex:kTagURLBase.length];
 #if DEBUG
@@ -899,15 +906,22 @@ static NSMutableDictionary *st_textSizes = nil;
 #if DEBUG
         DLog(@"Show more pressed");
 #endif
-        [self.delegate shouldBeExpanded:self];
+        [self.delegate shouldBeExpanded: self];
     }
     else
     {
-        [self.delegate showLinkWithURL:linkInfo.URL fromCell:self];
+        [self.delegate showLinkWithURL: URL fromCell: self];
     }
     
     return NO;
 }
+
+//#pragma mark - OHLabel delegate
+//
+//-(BOOL)attributedLabel:(OHAttributedLabel*)attributedLabel shouldFollowLink:(NSTextCheckingResult*)linkInfo
+//{
+//    
+//}
 
 #pragma mark - Actions
 
@@ -932,22 +946,33 @@ static NSMutableDictionary *st_textSizes = nil;
 {
     NSMutableArray *linksList = [NSMutableArray new];
 
-    OHAttributedLabel *textMessage = [[OHAttributedLabel alloc] init];
+//    OHAttributedLabel *textMessage = [[OHAttributedLabel alloc] init];
+//    
+//    textMessage.text = text;
+//    
+//    if (shouldPreviewLinks && textMessage.attributedText.length)
+//    {
+//        [textMessage.linksDataDetector enumerateMatchesInString:textMessage.text
+//                                                             options:NSMatchingReportCompletion
+//                                                               range:NSMakeRange(0, textMessage.text.length)
+//                                                          usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+//                                                              if (result.resultType == NSTextCheckingTypeLink)
+//                                                              {
+//                                                                  NSString *linkString = [textMessage.text substringWithRange:result.range];
+//                                                                  [linksList addObject:[NSURL URLWithString:[linkString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
+//                                                              }
+//                                                          }];
+//    }
     
-    textMessage.text = text;
+    NSAttributedString *attributedStr = [NSAttributedString attributedStringWithString: text];
     
-    if (shouldPreviewLinks && textMessage.attributedText.length)
-    {
-        [textMessage.linksDataDetector enumerateMatchesInString:textMessage.text
-                                                             options:NSMatchingReportCompletion
-                                                               range:NSMakeRange(0, textMessage.text.length)
-                                                          usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
-                                                              if (result.resultType == NSTextCheckingTypeLink)
-                                                              {
-                                                                  NSString *linkString = [textMessage.text substringWithRange:result.range];
-                                                                  [linksList addObject:[NSURL URLWithString:[linkString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
-                                                              }
-                                                          }];
+    if (shouldPreviewLinks && attributedStr.length) {
+        
+        [attributedStr enumerateURLsInRange: NSMakeRange(0, attributedStr.length)
+                                 usingBlock:^(NSURL *link, NSRange range, BOOL *stop) {
+                                     
+                                     [linksList addObject: link];
+        }];
     }
     
     return linksList;

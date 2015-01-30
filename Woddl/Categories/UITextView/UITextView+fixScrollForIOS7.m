@@ -12,16 +12,15 @@
 
 - (void)fixSrollingToLastLineBugInIOS7withText:(NSString *)text
 {
-    
-    CGRect textRect = [self.layoutManager usedRectForTextContainer:self.textContainer];
+    CGRect textRect = [self.layoutManager usedRectForTextContainer: self.textContainer];
     CGFloat sizeAdjustment = self.font.lineHeight * [UIScreen mainScreen].scale;
     
     if (textRect.size.height >= self.frame.size.height - self.contentInset.bottom - sizeAdjustment)
     {
         if ([text isEqualToString:@"\n"])
         {
-            [UIView animateWithDuration:0.2 animations:^{
-                [self setContentOffset:CGPointMake(self.contentOffset.x, self.contentOffset.y + sizeAdjustment)];
+            [UIView animateWithDuration: 0.2 animations:^{
+                [self setContentOffset: CGPointMake(self.contentOffset.x, self.contentOffset.y + sizeAdjustment)];
             }];
         }
     }

@@ -10,7 +10,6 @@
 #import "WDDMainPostCell.h"
 
 @class Post;
-@class OHAttributedLabel;
 
 @interface WDDPostView : UIView
 
@@ -18,7 +17,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *socialNetworkIcon;
 @property (weak, nonatomic) IBOutlet UILabel *authorNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *timeAgoLabel;
-@property (weak, nonatomic) IBOutlet OHAttributedLabel *textMessage;
+@property (weak, nonatomic) IBOutlet UITextView *textMessage;
 @property (weak, nonatomic) IBOutlet UILabel *commentsCountLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *commentsIconImageView;
 @property (weak, nonatomic) IBOutlet UILabel *likesCountLabel;

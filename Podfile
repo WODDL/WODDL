@@ -1,13 +1,13 @@
 source 'https://github.com/CocoaPods/Specs.git'
 
-platform :ios, '6.0'
+platform :ios, '7.0'
 
 pod 'google-plus-ios-sdk'
 pod 'AFNetworking', '~> 1.3.3'
 pod 'SDWebImage'
 pod 'NSDate+TimeAgo'
 pod 'FlurrySDK'
-pod 'OHAttributedLabel'
+pod 'OHAttributedStringAdditions'
 pod 'Reachability', '~> 3.1.1'
 pod 'Objective-C-HMTL-Parser', '~> 0.0.1'
 pod 'WYPopoverController'

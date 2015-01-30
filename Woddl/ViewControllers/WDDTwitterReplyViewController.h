@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <OHAttributedLabel.h>
 
 #import "WDDLinkShorterViewController.h"
 
@@ -17,7 +16,7 @@
 
 @property(nonatomic,strong) IBOutlet UIImageView* myAvatarImageView;
 @property(nonatomic,strong) IBOutlet UIImageView* commentBackImageView;
-@property (weak, nonatomic) IBOutlet OHAttributedLabel *postLabel;
+@property (weak, nonatomic) IBOutlet UITextView *postLabel;
 @property(nonatomic,strong) IBOutlet UITextView* postTextView;
 @property(nonatomic,strong) IBOutlet UIView* twitterPostView;
 @property(nonatomic,strong) IBOutlet UIImageView* twitterPostBackImageView;

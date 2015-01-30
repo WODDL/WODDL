@@ -1,11 +1,12 @@
 //
-//  OHAttributedLabel+Autolayout.m
+//  UITextView+Autolayout.m
 //  Woddl
 //
 
-#import "OHAttributedLabel+Autolayout.h"
+#import "UITextView+Autolayout.h"
+#import <CoreText/CoreText.h>
 
-@implementation OHAttributedLabel (Autolayout)
+@implementation UITextView (Autolayout)
 
 - (CGSize)systemLayoutSizeFittingSize:(CGSize)targetSize
 {

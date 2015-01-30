@@ -24,7 +24,6 @@
 		4B410104184CD56D00BD4309 /* NSDate+fromDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B410103184CD56D00BD4309 /* NSDate+fromDate.m */; };
 		4B410107184CEB7800BD4309 /* FacebookFetchInboxOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B410106184CEB7800BD4309 /* FacebookFetchInboxOperation.m */; };
 		4B41010A184F40A100BD4309 /* WDDXMPPChatNotifier.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B410109184F40A100BD4309 /* WDDXMPPChatNotifier.m */; };
-		4B9177C0193CE29A00B2136D /* OHAttributedLabel+Autolayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B9177BF193CE29A00B2136D /* OHAttributedLabel+Autolayout.m */; };
 		4B9177DC193F2A8200B2136D /* WDDTwitterStreamURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B9177DB193F2A8200B2136D /* WDDTwitterStreamURLConnection.m */; };
 		4BB034901920D9F100545036 /* UIViewController+NavbarLogo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BB0348F1920D9F100545036 /* UIViewController+NavbarLogo.m */; };
 		4BB034941920E93100545036 /* WDDNotificationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BB034931920E93100545036 /* WDDNotificationsViewController.m */; };
@@ -440,6 +439,7 @@
 		B6C90A511A138BE600A16432 /* linkedin-pre@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B6C90A4E1A138BE600A16432 /* linkedin-pre@2x.png */; };
 		B6C90A551A1394B600A16432 /* trash.png in Resources */ = {isa = PBXBuildFile; fileRef = B6C90A541A1394B600A16432 /* trash.png */; };
 		B6D6503F1A0CD6A900469B79 /* scheduler.png in Resources */ = {isa = PBXBuildFile; fileRef = B6D6503E1A0CD6A900469B79 /* scheduler.png */; };
+		BF0E04CC1A7A8A4400C5C0E8 /* UITextView+Autolayout.m in Sources */ = {isa = PBXBuildFile; fileRef = BF0E04CB1A7A8A4400C5C0E8 /* UITextView+Autolayout.m */; };
 		D80E5FBA19AFA058009478D7 /* Guide Screen 1.png in Resources */ = {isa = PBXBuildFile; fileRef = D860B0EF19AF8C8F00BD98EB /* Guide Screen 1.png */; };
 		D80E5FBB19AFA058009478D7 /* Guide Screen 1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D860B0F219AF8C9400BD98EB /* Guide Screen 1@2x.png */; };
 		D80E5FBC19AFA058009478D7 /* Guide Screen 1-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D860B0EC19AF8C8C00BD98EB /* Guide Screen 1-568h@2x.png */; };
@@ -504,8 +504,6 @@
 		4B410106184CEB7800BD4309 /* FacebookFetchInboxOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FacebookFetchInboxOperation.m; path = CoreData/Classes/SocialNetworks/Facebook/FacebookFetchInboxOperation.m; sourceTree = "<group>"; };
 		4B410108184F40A100BD4309 /* WDDXMPPChatNotifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WDDXMPPChatNotifier.h; sourceTree = "<group>"; };
 		4B410109184F40A100BD4309 /* WDDXMPPChatNotifier.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WDDXMPPChatNotifier.m; sourceTree = "<group>"; };
-		4B9177BE193CE29A00B2136D /* OHAttributedLabel+Autolayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "OHAttributedLabel+Autolayout.h"; sourceTree = "<group>"; };
-		4B9177BF193CE29A00B2136D /* OHAttributedLabel+Autolayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "OHAttributedLabel+Autolayout.m"; sourceTree = "<group>"; };
 		4B9177DA193F2A8200B2136D /* WDDTwitterStreamURLConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WDDTwitterStreamURLConnection.h; sourceTree = "<group>"; };
 		4B9177DB193F2A8200B2136D /* WDDTwitterStreamURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WDDTwitterStreamURLConnection.m; sourceTree = "<group>"; };
 		4BB0348E1920D9F100545036 /* UIViewController+NavbarLogo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIViewController+NavbarLogo.h"; path = "Categories/UIViewController+NavbarLogo.h"; sourceTree = "<group>"; };
@@ -1312,6 +1310,8 @@
 		B6C90A4E1A138BE600A16432 /* linkedin-pre@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "linkedin-pre@2x.png"; sourceTree = "<group>"; };
 		B6C90A541A1394B600A16432 /* trash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = trash.png; sourceTree = "<group>"; };
 		B6D6503E1A0CD6A900469B79 /* scheduler.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = scheduler.png; sourceTree = "<group>"; };
+		BF0E04CA1A7A8A4400C5C0E8 /* UITextView+Autolayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UITextView+Autolayout.h"; path = "Categories/UITextView/UITextView+Autolayout.h"; sourceTree = "<group>"; };
+		BF0E04CB1A7A8A4400C5C0E8 /* UITextView+Autolayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UITextView+Autolayout.m"; path = "Categories/UITextView/UITextView+Autolayout.m"; sourceTree = "<group>"; };
 		D81182DC18C1BC5C00B36D26 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		D85E6E7518B3CBF50004F220 /* WDDURLShorter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WDDURLShorter.h; sourceTree = "<group>"; };
 		D85E6E7618B3CBF50004F220 /* WDDURLShorter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WDDURLShorter.m; sourceTree = "<group>"; };
@@ -1510,16 +1510,6 @@
 			path = BaseClasses;
 			sourceTree = "<group>";
 		};
-		4B9177BD193CE28000B2136D /* OHAttributedLabel */ = {
-			isa = PBXGroup;
-			children = (
-				4B9177BE193CE29A00B2136D /* OHAttributedLabel+Autolayout.h */,
-				4B9177BF193CE29A00B2136D /* OHAttributedLabel+Autolayout.m */,
-			);
-			name = OHAttributedLabel;
-			path = Categories/OHAttributedLabel;
-			sourceTree = "<group>";
-		};
 		4BB034911920E8AE00545036 /* Notifications */ = {
 			isa = PBXGroup;
 			children = (
@@ -1708,6 +1698,8 @@
 		971BEF211871B18A003D308C /* UITextView */ = {
 			isa = PBXGroup;
 			children = (
+				BF0E04CA1A7A8A4400C5C0E8 /* UITextView+Autolayout.h */,
+				BF0E04CB1A7A8A4400C5C0E8 /* UITextView+Autolayout.m */,
 				971BEF1E1871B186003D308C /* UITextView+fixScrollForIOS7.h */,
 				971BEF1F1871B186003D308C /* UITextView+fixScrollForIOS7.m */,
 			);
@@ -1935,7 +1927,6 @@
 			isa = PBXGroup;
 			children = (
 				5B6DFC66193F975A00994AEA /* NSDate */,
-				4B9177BD193CE28000B2136D /* OHAttributedLabel */,
 				4B3B36E9192DFC8F00AD2E28 /* WYPopoverController */,
 				9747EA9D187B08AE007EFBCC /* NSString */,
 				D8F72D6A1878595B006D78B9 /* NSManagedObject+setValuesFromDataDictionary.h */,
@@ -4003,7 +3994,6 @@
 				7CB7434218E1DB0D00A58389 /* WDDAccountSelectorCell.m in Sources */,
 				9D6088CD18377E72006A7E19 /* InstagramLikeOperation.m in Sources */,
 				971A90BE1844AE880047613B /* WDDCommentPreView.m in Sources */,
-				4B9177C0193CE29A00B2136D /* OHAttributedLabel+Autolayout.m in Sources */,
 				9DE3916F186B115400BAB481 /* FoursquareRefreshFriendsOperation.m in Sources */,
 				7C54561418DB2AD40098200C /* WDDAccountSelectionView.m in Sources */,
 				975B8D9A1872E2C40066F390 /* NSXMLElement+XEP_0059.m in Sources */,
@@ -4050,6 +4040,7 @@
 				9DE39175186B2A7600BAB481 /* InstagramRefreshFriendsOperation.m in Sources */,
 				97FF372219192C1400DE1805 /* SAMHUDView.m in Sources */,
 				9D471DF41836140D00914845 /* LinkedinLikeOperation.m in Sources */,
+				BF0E04CC1A7A8A4400C5C0E8 /* UITextView+Autolayout.m in Sources */,
 				9D12D28D187F02CA00B69972 /* LinkedinLoadMoreGroupsPostOperation.m in Sources */,
 				9750CAA018633208009DFEA8 /* UIViewController+BackArrow.m in Sources */,
 				975B8D5E1872E2C40066F390 /* NSData+XMPP.m in Sources */,
@@ -4544,8 +4535,8 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Woddl ApS (6JUT93LALV)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Woddl ApS (6JUT93LALV)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Louis Hinault (ZGXUR8U2NJ)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Louis Hinault (ZGXUR8U2NJ)";
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -4566,7 +4557,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-lxml2";
-				PROVISIONING_PROFILE = "6b8afb3d-76b3-4c20-81d4-5f24d23b77b0";
+				PROVISIONING_PROFILE = "19ebc160-15e8-42f9-b79b-ff8e2696f6c5";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -4589,8 +4580,8 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Woddl ApS (6JUT93LALV)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Woddl ApS (6JUT93LALV)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Louis Hinault (ZGXUR8U2NJ)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Louis Hinault (ZGXUR8U2NJ)";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
@@ -4604,7 +4595,7 @@
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				OTHER_LDFLAGS = "-lxml2";
-				PROVISIONING_PROFILE = "6b8afb3d-76b3-4c20-81d4-5f24d23b77b0";
+				PROVISIONING_PROFILE = "19ebc160-15e8-42f9-b79b-ff8e2696f6c5";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -4616,8 +4607,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Lars Ege Henriksen (LZVX78896M)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Lars Ege Henriksen (LZVX78896M)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Louis Hinault (ZGXUR8U2NJ)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Louis Hinault (ZGXUR8U2NJ)";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Woddl/Woddl-Prefix.pch";
@@ -4630,7 +4621,7 @@
 					"Woddl/Social\\ APIs/GoogleAPI/GoogleAnalytics",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "6e7f5100-5fa3-47ca-aadf-58d48f700ab8";
+				PROVISIONING_PROFILE = "19ebc160-15e8-42f9-b79b-ff8e2696f6c5";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -4641,8 +4632,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Lars Ege Henriksen (LZVX78896M)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Lars Ege Henriksen (LZVX78896M)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Louis Hinault (ZGXUR8U2NJ)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Louis Hinault (ZGXUR8U2NJ)";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Woddl/Woddl-Prefix.pch";
@@ -4655,7 +4646,7 @@
 					"Woddl/Social\\ APIs/GoogleAPI/GoogleAnalytics",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "6e7f5100-5fa3-47ca-aadf-58d48f700ab8";
+				PROVISIONING_PROFILE = "19ebc160-15e8-42f9-b79b-ff8e2696f6c5";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "arm64 armv7 armv7s";

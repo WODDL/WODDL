@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <OHAttributedLabel.h>
 
 @interface WDDEventsSideMenuCell : UITableViewCell
-@property (weak, nonatomic) IBOutlet OHAttributedLabel *eventInformationLabel;
+
+@property (weak, nonatomic) IBOutlet UITextView *eventInformationLabel;
 
 + (CGFloat)calculateCellHeightForText:(NSString *)text;
 @end

@@ -1,8 +1,8 @@
 //
 //  WDDBasePostsViewController.m
-//  Woddl
+//  Woddl*-2590
 //
-//  Created by Oleg Komaristov on 06.12.13.
+//  Created by 7Oleg Komaristov on 06.12.13.
 //  Copyright (c) 2013 IDS. All rights reserved.
 //
 
@@ -14,7 +14,7 @@
 #import "WDDPhotoPreviewControllerViewController.h"
 #import "WDDMapViewController.h"
 
-#import "NSAttributedString+Attributes.h"
+#import <OHAttributedStringAdditions.h>
 #import "WDDMainPostCell.h"
 #import "WDDEllipseMenuFactory.h"
 #import "ActionSheetStringPicker.h"
@@ -761,7 +761,8 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
                                                                    withString:cachedLink.absoluteString
                                                                       options:NSCaseInsensitiveSearch
                                                                         range:NSMakeRange(0, postMessage.mutableString.length)];
-                        [postMessage setLink:cachedLink range:[postMessage.mutableString rangeOfString:cachedLink.absoluteString]];
+//                        [postMessage setLink:cachedLink range:[postMessage.mutableString rangeOfString:cachedLink.absoluteString]];
+                        [postMessage setURL: cachedLink range: [postMessage.mutableString rangeOfString: cachedLink.absoluteString]];
                     }
                     else
                     {
@@ -912,8 +913,8 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
     
         for (NSTextCheckingResult *link in linksRanges)
         {
-            [postMessage setLink:[NSURL URLWithString:[postMessage.string substringWithRange:link.range]]
-                        range:link.range];
+//            [postMessage setLink:[NSURL URLWithString:[postMessage.string substringWithRange:link.range]] range:link.range];
+            [postMessage setURL: [NSURL URLWithString: [postMessage.string substringWithRange: link.range]] range: link.range];
         }
         for (Tag *tag in post.tags)
         {
@@ -924,8 +925,8 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
             {
                 NSRange matchRange = [match range];
                 NSString *tagString = [tag.tag stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-                [postMessage setLink:[NSURL URLWithString:[kTagURLBase stringByAppendingString:tagString]]
-                            range:matchRange];
+//                [postMessage setLink:[NSURL URLWithString:[kTagURLBase stringByAppendingString:tagString]] range:matchRange];
+                [postMessage setURL: [NSURL URLWithString: [kTagURLBase stringByAppendingString: tagString]] range: matchRange];
             }
         }
         for (Place *place in post.places)
@@ -938,7 +939,8 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
                 NSRange matchRange = [match range];
                 NSString *placeLink = [NSString stringWithFormat:@"%@%@_%@", kPlaceURLBase, place.networkType.stringValue, place.placeId];
                 NSURL *placeURL = [NSURL URLWithString:placeLink];
-                [postMessage setLink:placeURL range:matchRange];
+//                [postMessage setLink:placeURL range:matchRange];
+                [postMessage setURL: placeURL range: matchRange];
             }
         }
         
@@ -1046,8 +1048,8 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
         {
             urlBase = kTagURLBase;
         }
-        [text setLink:[NSURL URLWithString:[urlBase stringByAppendingString:username]]
-                range:matchRange];
+//        [text setLink:[NSURL URLWithString:[urlBase stringByAppendingString:username]] range:matchRange];
+        [text setURL: [NSURL URLWithString: [urlBase stringByAppendingString: username]] range: matchRange];
     }
 }
 

@@ -16,7 +16,10 @@ static const CGFloat kVerticalOffset = 4.0f;
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    self.eventInformationLabel.extendBottomToFit = YES;
+//    self.eventInformationLabel.extendBottomToFit = YES;
+    
+    self.eventInformationLabel.textContainer.lineFragmentPadding = 0;
+    self.eventInformationLabel.textContainerInset = UIEdgeInsetsZero;
 }
 
 - (void)prepareForReuse

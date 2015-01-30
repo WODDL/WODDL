@@ -6,7 +6,6 @@
 //  Copyright (c) 2013 IDS. All rights reserved.
 //
 #import <UIKit/UIKit.h>
-#import <OHAttributedLabel.h>
 #import "WDDMainPostCell.h"
 #import "IDSEllipseMenu.h"
 #import <MessageUI/MessageUI.h>
@@ -14,7 +13,7 @@
 static NSString * const kPostMessagesCache              = @"PostMessagesCache";
 extern NSString * const kPostTimeKey;
 
-@interface WDDBasePostsViewController : UIViewController <NSFetchedResultsControllerDelegate, UITableViewDataSource, UITableViewDelegate, OHAttributedLabelDelegate, WDDMainPostCellDelegate, IDSEllipseMenuDelegate, MFMailComposeViewControllerDelegate>
+@interface WDDBasePostsViewController : UIViewController <NSFetchedResultsControllerDelegate, UITableViewDataSource, UITableViewDelegate, UITextViewDelegate, WDDMainPostCellDelegate, IDSEllipseMenuDelegate, MFMailComposeViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *postsTable;
 

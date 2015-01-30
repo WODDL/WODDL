@@ -24,9 +24,9 @@
 @interface WDDCommentPreView : UIView
 
 @property (weak, nonatomic) id<WDDCommentPreviewDelegate> delegate;
-@property (weak, nonatomic) id<OHAttributedLabelDelegate> messageLabeldelegate;
+@property (weak, nonatomic) id<UITextViewDelegate> messageLabeldelegate;
 
-@property (strong, nonatomic) OHAttributedLabel *commentLabel;
+@property (strong, nonatomic) UITextView *commentLabel;
 
 - (void)hideSeparator;
 
