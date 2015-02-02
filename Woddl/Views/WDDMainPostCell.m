@@ -11,6 +11,7 @@
 #import "SocialNetwork.h"
 #import "Media.h"
 #import "Post.h"
+#import "UITextView+DisableCopyPaste.h"
 
 #import <SDWebImage/SDWebImageManager.h>
 #import "UITapGestureRecognizer+MediaInfo.h"
@@ -717,9 +718,8 @@ static NSMutableDictionary *st_textSizes = nil;
     }
     else
     {
-        string = [NSMutableAttributedString attributedStringWithString:text];
-        [(NSMutableAttributedString *)string setAttributes:@{UITextAttributeFont : font}
-                                                     range:NSMakeRange(0, [text length])];
+        string = [NSMutableAttributedString attributedStringWithString: text];
+//        [(NSMutableAttributedString *)string setAttributes:@{UITextAttributeFont : font} range:NSMakeRange(0, [text length])];
     }
     
     NSValue *size = [st_textSizes objectForKey:[[string string] MD5]];

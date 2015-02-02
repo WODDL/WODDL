@@ -23,7 +23,7 @@
 #import "UserProfile.h"
 #import "Group.h"
 #import "Link+Additions.h"
-
+#import "WDDMainPostCell.h"
 #import "WDDPreviewManager.h"
 #import "WDDURLShorter.h"
 #import "WDDDataBase.h"
@@ -58,7 +58,8 @@ static const NSInteger kMediaTypeLink = 254;
     self.textMessage.textContainer.lineFragmentPadding = 0;
     self.textMessage.textContainerInset = UIEdgeInsetsZero;
 //    self.textMessage.automaticallyAddLinksForType = 0;
-    self.textMessage.dataDetectorTypes = UIDataDetectorTypeNone;
+    self.textMessage.scrollEnabled = NO;
+    self.textMessage.dataDetectorTypes = UIDataDetectorTypeLink;
     self.likesIconWidth.constant = LikesAndCommentsIconWidth;
     self.likesLabelWidth.constant = LikesAndCommentsLabelWidth;
     self.commentIconWidth.constant = LikesAndCommentsIconWidth;
@@ -85,7 +86,7 @@ static const NSInteger kMediaTypeLink = 254;
 {
 //    UITextView* textMessage = [[OHAttributedLabel alloc] init];
 //    textMessage.text = self.post.text;
-    self.links = nil;
+    self.links = [NSSet setWithArray: [NSMutableArray new]];
 }
 
 - (void)updateViewContent
@@ -530,8 +531,12 @@ static const NSInteger kMediaTypeLink = 254;
     CGSize textSize = CGSizeZero;
     CGFloat height = 0;
     
-    textSize = [self sizeForText:[self getAttribudetPostText]
-                        withFont:self.messageTextFont];
+//    NSMutableAttributedString *orgPostText = [[NSMutableAttributedString alloc] initWithString:self.post.text attributes:@{NSFontAttributeName : [self messageTextFont]}];
+    
+    NSMutableAttributedString *attributedStr = [NSMutableAttributedString attributedStringWithString: self.post.text];
+    
+    textSize = [self sizeForText: attributedStr withFont: self.messageTextFont];
+    
     
     CGFloat sizeToExpad = (self.post.media.count || self.links.count) ? ExpandedMediaSize : 0;
     CGFloat textHeight = ceilf(textSize.height) + 1;
@@ -549,6 +554,7 @@ static const NSInteger kMediaTypeLink = 254;
 
 - (CGSize)sizeForText:(NSAttributedString *)text withFont:(UIFont *)font
 {
+    NSLog(@"%f", font.pointSize);
     CGSize fitSize = CGSizeZero;
     CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)text);
     if (framesetter)
@@ -581,18 +587,23 @@ static const NSInteger kMediaTypeLink = 254;
 //    self.textMessage.linkColor = [UIColor blackColor];
 //    self.textMessage.linkUnderlineStyle = kCTUnderlineStyleNone | kOHBoldStyleTraitSetBold;
 //    self.textMessage.automaticallyAddLinksForType = 0;
-    self.textMessage.dataDetectorTypes = UIDataDetectorTypeNone;
+    self.textMessage.dataDetectorTypes = UIDataDetectorTypeLink;
+    self.textMessage.scrollEnabled = NO;
     self.textMessage.textContainer.lineFragmentPadding = 0;
     self.textMessage.textContainerInset = UIEdgeInsetsZero;
     self.textMessage.attributedText = postText;
     
-    self.messageLabelHeight.constant = [self sizeForText:postText
-                                                withFont:self.messageTextFont].height + ([self.post.group.type isEqual:@(kGroupTypeGroup)] ? 8.0f : 0.0f);
+//    NSMutableAttributedString *orgPostText = [[NSMutableAttributedString alloc] initWithString:self.post.text attributes:@{NSFontAttributeName : [self messageTextFont]}];
+    
+    NSMutableAttributedString *attributedStr = [NSMutableAttributedString attributedStringWithString: self.post.text];
+    
+    self.messageLabelHeight.constant = [self sizeForText: attributedStr
+                                                withFont: self.messageTextFont].height
+                                        + ([self.post.group.type isEqual:@(kGroupTypeGroup)] ? 8.0f : 0.0f);
 }
 
 - (NSMutableAttributedString *)getAttribudetPostText
 {
-    
     static NSDataDetector *dataDetector = nil;
     if (!dataDetector)
     {

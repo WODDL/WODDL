@@ -734,7 +734,7 @@
                                             <constraints>
                                                 <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="LQV-Qk-1vw"/>
                                             </constraints>
-                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                         </textView>
                                         <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QuA-0B-eyN">
@@ -859,6 +859,7 @@
                                         <outlet property="mediaScrollHeight" destination="ZCS-C6-Y9X" id="aQK-zA-dp5"/>
                                         <outlet property="mediaScrollView" destination="QuA-0B-eyN" id="OfR-QR-38s"/>
                                         <outlet property="mediaTriangleHeight" destination="7kp-xY-77f" id="ecW-RB-0rq"/>
+                                        <outlet property="messageLabelHeight" destination="LQV-Qk-1vw" id="3WY-4g-AVx"/>
                                         <outlet property="retweetsCountLabel" destination="ItT-KU-Vbp" id="AMK-uc-vKy"/>
                                         <outlet property="retweetsIcon" destination="za0-GI-pen" id="nE4-lH-uEG"/>
                                         <outlet property="retweetsLabelWidth" destination="vBw-9D-f6p" id="oRx-Mg-e04"/>
@@ -1785,7 +1786,7 @@
                                             <constraint firstAttribute="height" constant="25" id="vnn-BX-IAQ"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                        <state key="normal" image="0FF36C20-7360-4DD7-81D9-F78A58F75D44">
+                                        <state key="normal" image="2AA0721E-DBB4-4773-B2C7-D56A7A85088B">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
@@ -1824,7 +1825,7 @@
                                         <constraints>
                                             <constraint firstAttribute="width" constant="29" id="UyN-94-JIo"/>
                                         </constraints>
-                                        <state key="normal" image="FA5DA886-D097-4A5B-B147-564E7930AD57" backgroundImage="schedule-clock.png">
+                                        <state key="normal" image="2B1C5923-A909-413A-845D-3037494BCA9E" backgroundImage="schedule-clock.png">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
@@ -3346,7 +3347,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="0FF36C20-7360-4DD7-81D9-F78A58F75D44" width="35" height="25">
+        <image name="2AA0721E-DBB4-4773-B2C7-D56A7A85088B" width="35" height="25">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGOzxYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK0HCBEW
 GxwgISksLzU4VSRudWxs1AkKCwwNDg8QViRjbGFzc1xOU0ltYWdlRmxhZ3NWTlNSZXBzV05TQ29sb3KA
@@ -3474,13 +3475,7 @@ AKIApACmAKgArQDEAMYAyBuGG4sblhufG7IbthvJG9Qb3RviG+ob7RvyHAEcBRwMHBQcIRwmHCgcKhwv
 HDccOhw/HEccShxcHF8cZAAAAAAAAAIBAAAAAAAAAD8AAAAAAAAAAAAAAAAAABxmA
 </mutableData>
         </image>
-        <image name="AccountRemoveButton" width="24" height="24"/>
-        <image name="ArrowDown" width="15" height="15"/>
-        <image name="ArrowRight" width="15" height="15"/>
-        <image name="AvatarComment" width="32" height="33"/>
-        <image name="AvatarMask" width="32" height="32"/>
-        <image name="ContactOnlineIcon" width="15" height="15"/>
-        <image name="FA5DA886-D097-4A5B-B147-564E7930AD57" width="9" height="9">
+        <image name="2B1C5923-A909-413A-845D-3037494BCA9E" width="9" height="9">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGOzxYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK0HCBEW
 GxwgISksLzU4VSRudWxs1AkKCwwNDg8QViRjbGFzc1xOU0ltYWdlRmxhZ3NWTlNSZXBzV05TQ29sb3KA
@@ -3555,6 +3550,12 @@ AJ0AoACiAKQApgCoAK0AxADGAMgPHg8jDy4PNw9KD04PYQ9sD3UPeg+CD4UPig+ZD50PpA+sD7kPvg/A
 D8IPxw/PD9IP1w/fD+IP9A/3D/wAAAAAAAACAQAAAAAAAAA/AAAAAAAAAAAAAAAAAAAP/g
 </mutableData>
         </image>
+        <image name="AccountRemoveButton" width="24" height="24"/>
+        <image name="ArrowDown" width="15" height="15"/>
+        <image name="ArrowRight" width="15" height="15"/>
+        <image name="AvatarComment" width="32" height="33"/>
+        <image name="AvatarMask" width="32" height="32"/>
+        <image name="ContactOnlineIcon" width="15" height="15"/>
         <image name="FieldComment" width="263" height="33"/>
         <image name="IM.png" width="103" height="30"/>
         <image name="MainScreen_IM_icon" width="13" height="13"/>

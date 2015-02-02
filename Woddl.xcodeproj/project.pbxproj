@@ -440,6 +440,7 @@
 		B6C90A551A1394B600A16432 /* trash.png in Resources */ = {isa = PBXBuildFile; fileRef = B6C90A541A1394B600A16432 /* trash.png */; };
 		B6D6503F1A0CD6A900469B79 /* scheduler.png in Resources */ = {isa = PBXBuildFile; fileRef = B6D6503E1A0CD6A900469B79 /* scheduler.png */; };
 		BF0E04CC1A7A8A4400C5C0E8 /* UITextView+Autolayout.m in Sources */ = {isa = PBXBuildFile; fileRef = BF0E04CB1A7A8A4400C5C0E8 /* UITextView+Autolayout.m */; };
+		BFD3D79B1A7F2F9B00AA2C87 /* UITextView+DisableCopyPaste.m in Sources */ = {isa = PBXBuildFile; fileRef = BFD3D79A1A7F2F9B00AA2C87 /* UITextView+DisableCopyPaste.m */; };
 		D80E5FBA19AFA058009478D7 /* Guide Screen 1.png in Resources */ = {isa = PBXBuildFile; fileRef = D860B0EF19AF8C8F00BD98EB /* Guide Screen 1.png */; };
 		D80E5FBB19AFA058009478D7 /* Guide Screen 1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D860B0F219AF8C9400BD98EB /* Guide Screen 1@2x.png */; };
 		D80E5FBC19AFA058009478D7 /* Guide Screen 1-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D860B0EC19AF8C8C00BD98EB /* Guide Screen 1-568h@2x.png */; };
@@ -1312,6 +1313,8 @@
 		B6D6503E1A0CD6A900469B79 /* scheduler.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = scheduler.png; sourceTree = "<group>"; };
 		BF0E04CA1A7A8A4400C5C0E8 /* UITextView+Autolayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UITextView+Autolayout.h"; path = "Categories/UITextView/UITextView+Autolayout.h"; sourceTree = "<group>"; };
 		BF0E04CB1A7A8A4400C5C0E8 /* UITextView+Autolayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UITextView+Autolayout.m"; path = "Categories/UITextView/UITextView+Autolayout.m"; sourceTree = "<group>"; };
+		BFD3D7991A7F2F9B00AA2C87 /* UITextView+DisableCopyPaste.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextView+DisableCopyPaste.h"; sourceTree = "<group>"; };
+		BFD3D79A1A7F2F9B00AA2C87 /* UITextView+DisableCopyPaste.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextView+DisableCopyPaste.m"; sourceTree = "<group>"; };
 		D81182DC18C1BC5C00B36D26 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		D85E6E7518B3CBF50004F220 /* WDDURLShorter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WDDURLShorter.h; sourceTree = "<group>"; };
 		D85E6E7618B3CBF50004F220 /* WDDURLShorter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WDDURLShorter.m; sourceTree = "<group>"; };
@@ -1702,6 +1705,8 @@
 				BF0E04CB1A7A8A4400C5C0E8 /* UITextView+Autolayout.m */,
 				971BEF1E1871B186003D308C /* UITextView+fixScrollForIOS7.h */,
 				971BEF1F1871B186003D308C /* UITextView+fixScrollForIOS7.m */,
+				BFD3D7991A7F2F9B00AA2C87 /* UITextView+DisableCopyPaste.h */,
+				BFD3D79A1A7F2F9B00AA2C87 /* UITextView+DisableCopyPaste.m */,
 			);
 			name = UITextView;
 			sourceTree = "<group>";
@@ -4084,6 +4089,7 @@
 				7CE02CCE1859C4DA00B4D6B0 /* PullLoadPrevTableView.m in Sources */,
 				975B8D8D1872E2C40066F390 /* XMPPvCard.xcdatamodeld in Sources */,
 				975B8DB81872E2C40066F390 /* XMPPAutoTime.m in Sources */,
+				BFD3D79B1A7F2F9B00AA2C87 /* UITextView+DisableCopyPaste.m in Sources */,
 				97165A811817ED670054F008 /* WDDLoginViewController.m in Sources */,
 				975B8DAE1872E2C40066F390 /* XMPPMessageArchiving_Message_CoreDataObject.m in Sources */,
 				975B8DB21872E2C40066F390 /* XMPPMessage+XEP_0172.m in Sources */,

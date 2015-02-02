@@ -51,7 +51,7 @@ NSMutableDictionary *observerMap;
     [badgeView setShine:NO];
     [badgeView setFont:[UIFont boldSystemFontOfSize:8.0f]];
     
-    [self setupNotificationsBadgeValue:badgeView withImageWidth:image.size.width shouldUpdateAfter:NO];
+    [self setupNotificationsBadgeValue: badgeView withImageWidth: image.size.width shouldUpdateAfter: NO];
     
     [titleView addSubview:button];
     [titleView addSubview:badgeView];
@@ -129,7 +129,7 @@ NSMutableDictionary *observerMap;
         __weak typeof (self) weakSelf   = self;
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^()
         {
-           [weakSelf setupNotificationsBadgeValue:badge withImageWidth:width];
+           [weakSelf setupNotificationsBadgeValue: badge withImageWidth: width];
         });
     }
 }
@@ -137,8 +137,8 @@ NSMutableDictionary *observerMap;
 - (NSUInteger)countUnreadNotifications
 {
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([Notification class])];
-    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"isUnread == TRUE"];
-    return [[[WDDDataBase sharedDatabase] managedObjectContext] countForFetchRequest:fetchRequest error:nil];
+    fetchRequest.predicate = [NSPredicate predicateWithFormat: @"isUnread == TRUE"];
+    return [[[WDDDataBase sharedDatabase] managedObjectContext] countForFetchRequest: fetchRequest error:nil];
 }
 
 @end
