@@ -10,14 +10,14 @@
 
 @implementation UITextView (DisableCopyPaste)
 
-- (BOOL)canPerformAction:(SEL)action withSender:(id)sender
-{
-    return NO;
-}
-
-- (BOOL)canBecomeFirstResponder
-{
-    return NO;
-}
+//- (BOOL)canPerformAction:(SEL)action withSender:(id)sender
+//{
+//    return NO;
+//}
+//
+//- (BOOL)canBecomeFirstResponder
+//{
+//    return NO;
+//}
 
 @end

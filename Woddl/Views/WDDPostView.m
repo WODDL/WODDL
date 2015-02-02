@@ -102,8 +102,8 @@ static const NSInteger kMediaTypeLink = 254;
     [self setupRetweetIcon];
     [self setupMediaScrollView];
     
-    [self setupShowProfileTapForView:self.avatarImageView];
-    [self setupShowProfileTapForView:self.authorNameLabel];
+    [self setupShowProfileTapForView: self.avatarImageView];
+    [self setupShowProfileTapForView: self.authorNameLabel];
     
     [self setupShowEventButton];
 }
@@ -117,8 +117,8 @@ static const NSInteger kMediaTypeLink = 254;
         self.mediaScrollBottomOffset.constant = 0.0f;
         self.showEventInfoButtonHeight.constant = ShowEventButtonHeight;
     }
-    else
-    {
+    else {
+        
         self.showEventInfoButtonHeight.constant = 0.0f;
     }
 }

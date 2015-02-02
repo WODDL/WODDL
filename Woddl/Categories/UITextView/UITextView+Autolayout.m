@@ -12,6 +12,7 @@
 {
     CGSize fitSize = CGSizeZero;
     CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)[self attributedText]);
+    
     if (framesetter)
     {
         CGSize targetSize = CGSizeMake(300.0f, INFINITY);

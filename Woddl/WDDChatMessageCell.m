@@ -111,10 +111,10 @@ static NSInteger clockImageWidth        = 9;
         self.messageDateLabel.font = DATE_TEXT_FONT;
         self.messageDateLabel.textColor = dateTextColor;
         self.messageDateLabel.text = self.messageDate;
-        self.messageDateLabel.text = [NSString stringWithFormat:@"%@ %@", self.messageDateLabel.text, [self.message.timestamp timeAgoFromToday]];
+        self.messageDateLabel.text = [NSString stringWithFormat: @"%@ %@", self.messageDateLabel.text, [self.message.timestamp timeAgoFromToday]];
         
         //[self.baloonView addSubview:self.messageDateLabel];
-        [self.contentView addSubview:self.messageDateLabel];
+        [self.contentView addSubview: self.messageDateLabel];
     }
     else
     {

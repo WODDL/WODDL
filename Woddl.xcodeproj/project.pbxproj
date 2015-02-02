@@ -440,7 +440,7 @@
 		B6C90A551A1394B600A16432 /* trash.png in Resources */ = {isa = PBXBuildFile; fileRef = B6C90A541A1394B600A16432 /* trash.png */; };
 		B6D6503F1A0CD6A900469B79 /* scheduler.png in Resources */ = {isa = PBXBuildFile; fileRef = B6D6503E1A0CD6A900469B79 /* scheduler.png */; };
 		BF0E04CC1A7A8A4400C5C0E8 /* UITextView+Autolayout.m in Sources */ = {isa = PBXBuildFile; fileRef = BF0E04CB1A7A8A4400C5C0E8 /* UITextView+Autolayout.m */; };
-		BFD3D79B1A7F2F9B00AA2C87 /* UITextView+DisableCopyPaste.m in Sources */ = {isa = PBXBuildFile; fileRef = BFD3D79A1A7F2F9B00AA2C87 /* UITextView+DisableCopyPaste.m */; };
+		BFD3D79E1A7FA17800AA2C87 /* UITextView+DisableCopyPaste.m in Sources */ = {isa = PBXBuildFile; fileRef = BFD3D79D1A7FA17800AA2C87 /* UITextView+DisableCopyPaste.m */; };
 		D80E5FBA19AFA058009478D7 /* Guide Screen 1.png in Resources */ = {isa = PBXBuildFile; fileRef = D860B0EF19AF8C8F00BD98EB /* Guide Screen 1.png */; };
 		D80E5FBB19AFA058009478D7 /* Guide Screen 1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D860B0F219AF8C9400BD98EB /* Guide Screen 1@2x.png */; };
 		D80E5FBC19AFA058009478D7 /* Guide Screen 1-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D860B0EC19AF8C8C00BD98EB /* Guide Screen 1-568h@2x.png */; };
@@ -1313,8 +1313,8 @@
 		B6D6503E1A0CD6A900469B79 /* scheduler.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = scheduler.png; sourceTree = "<group>"; };
 		BF0E04CA1A7A8A4400C5C0E8 /* UITextView+Autolayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UITextView+Autolayout.h"; path = "Categories/UITextView/UITextView+Autolayout.h"; sourceTree = "<group>"; };
 		BF0E04CB1A7A8A4400C5C0E8 /* UITextView+Autolayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UITextView+Autolayout.m"; path = "Categories/UITextView/UITextView+Autolayout.m"; sourceTree = "<group>"; };
-		BFD3D7991A7F2F9B00AA2C87 /* UITextView+DisableCopyPaste.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextView+DisableCopyPaste.h"; sourceTree = "<group>"; };
-		BFD3D79A1A7F2F9B00AA2C87 /* UITextView+DisableCopyPaste.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextView+DisableCopyPaste.m"; sourceTree = "<group>"; };
+		BFD3D79C1A7FA17800AA2C87 /* UITextView+DisableCopyPaste.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UITextView+DisableCopyPaste.h"; path = "Categories/UITextView/UITextView+DisableCopyPaste.h"; sourceTree = "<group>"; };
+		BFD3D79D1A7FA17800AA2C87 /* UITextView+DisableCopyPaste.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UITextView+DisableCopyPaste.m"; path = "Categories/UITextView/UITextView+DisableCopyPaste.m"; sourceTree = "<group>"; };
 		D81182DC18C1BC5C00B36D26 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		D85E6E7518B3CBF50004F220 /* WDDURLShorter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WDDURLShorter.h; sourceTree = "<group>"; };
 		D85E6E7618B3CBF50004F220 /* WDDURLShorter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WDDURLShorter.m; sourceTree = "<group>"; };
@@ -1701,12 +1701,12 @@
 		971BEF211871B18A003D308C /* UITextView */ = {
 			isa = PBXGroup;
 			children = (
+				BFD3D79C1A7FA17800AA2C87 /* UITextView+DisableCopyPaste.h */,
+				BFD3D79D1A7FA17800AA2C87 /* UITextView+DisableCopyPaste.m */,
 				BF0E04CA1A7A8A4400C5C0E8 /* UITextView+Autolayout.h */,
 				BF0E04CB1A7A8A4400C5C0E8 /* UITextView+Autolayout.m */,
 				971BEF1E1871B186003D308C /* UITextView+fixScrollForIOS7.h */,
 				971BEF1F1871B186003D308C /* UITextView+fixScrollForIOS7.m */,
-				BFD3D7991A7F2F9B00AA2C87 /* UITextView+DisableCopyPaste.h */,
-				BFD3D79A1A7F2F9B00AA2C87 /* UITextView+DisableCopyPaste.m */,
 			);
 			name = UITextView;
 			sourceTree = "<group>";
@@ -1760,21 +1760,21 @@
 		972C5A8E1816C53F009AAE50 /* Woddl */ = {
 			isa = PBXGroup;
 			children = (
-				B6A3AFCC1A0A28E800F898C7 /* Scheduler */,
-				D85E6E7418B3CBCE0004F220 /* URLShorter */,
-				7CBF3DB01869BFDA00093426 /* Main.storyboard */,
-				972C5AA01816C53F009AAE50 /* Images.xcassets */,
-				9D86AE6D181EA55C00158720 /* Social APIs */,
+				9734737818292F4200211DD2 /* Categories */,
 				9753D932181A6FC300A2C46B /* CoreData */,
-				4B584D2318192A4B0069712F /* Model */,
-				972C5AC01816C8B6009AAE50 /* ViewControllers */,
 				97550251184A100200A8BE52 /* External */,
+				7CBF3D7C1869B49F00093426 /* Localization */,
+				4B584D2318192A4B0069712F /* Model */,
+				B6A3AFCC1A0A28E800F898C7 /* Scheduler */,
+				9D86AE6D181EA55C00158720 /* Social APIs */,
+				972C5A8F1816C53F009AAE50 /* Supporting Files */,
+				D85E6E7418B3CBCE0004F220 /* URLShorter */,
 				9732462F1821523E00C79C52 /* Views */,
+				972C5AC01816C8B6009AAE50 /* ViewControllers */,
 				972C5A971816C53F009AAE50 /* WDDAppDelegate.h */,
 				972C5A981816C53F009AAE50 /* WDDAppDelegate.m */,
-				7CBF3D7C1869B49F00093426 /* Localization */,
-				972C5A8F1816C53F009AAE50 /* Supporting Files */,
-				9734737818292F4200211DD2 /* Categories */,
+				972C5AA01816C53F009AAE50 /* Images.xcassets */,
+				7CBF3DB01869BFDA00093426 /* Main.storyboard */,
 			);
 			path = Woddl;
 			sourceTree = "<group>";
@@ -1931,29 +1931,29 @@
 		9734737818292F4200211DD2 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				97758B141906B30F00C8225B /* NSCharacterSet */,
 				5B6DFC66193F975A00994AEA /* NSDate */,
-				4B3B36E9192DFC8F00AD2E28 /* WYPopoverController */,
 				9747EA9D187B08AE007EFBCC /* NSString */,
-				D8F72D6A1878595B006D78B9 /* NSManagedObject+setValuesFromDataDictionary.h */,
-				D8F72D6B1878595B006D78B9 /* NSManagedObject+setValuesFromDataDictionary.m */,
 				975079A81837725D008AAA0A /* UIAlertView */,
 				975079A718377255008AAA0A /* UIImage */,
+				971BEF211871B18A003D308C /* UITextView */,
 				4B410102184CD56D00BD4309 /* NSDate+fromDate.h */,
 				4B410103184CD56D00BD4309 /* NSDate+fromDate.m */,
-				4BB0348E1920D9F100545036 /* UIViewController+NavbarLogo.h */,
-				4BB0348F1920D9F100545036 /* UIViewController+NavbarLogo.m */,
-				9750CA9E18633208009DFEA8 /* UIViewController+BackArrow.h */,
-				9750CA9F18633208009DFEA8 /* UIViewController+BackArrow.m */,
-				7C07A2041864857500C5FE2A /* NSMutableDictionary+NilLogging.h */,
-				7C07A2051864857500C5FE2A /* NSMutableDictionary+NilLogging.m */,
-				971BEF211871B18A003D308C /* UITextView */,
-				9774E13B188455F0001F1051 /* UIView+ScrollToTopDisabler.h */,
-				9774E13C188455F0001F1051 /* UIView+ScrollToTopDisabler.m */,
-				973FDE181887EEBA005A995E /* UIView+AnimationEnabledTracking.h */,
-				973FDE191887EEBA005A995E /* UIView+AnimationEnabledTracking.m */,
-				97758B141906B30F00C8225B /* NSCharacterSet */,
 				5BE05CCB1933927C00ECF810 /* NSLocale+Hack.h */,
 				5BE05CCC1933927C00ECF810 /* NSLocale+Hack.m */,
+				D8F72D6A1878595B006D78B9 /* NSManagedObject+setValuesFromDataDictionary.h */,
+				D8F72D6B1878595B006D78B9 /* NSManagedObject+setValuesFromDataDictionary.m */,
+				7C07A2041864857500C5FE2A /* NSMutableDictionary+NilLogging.h */,
+				7C07A2051864857500C5FE2A /* NSMutableDictionary+NilLogging.m */,
+				973FDE181887EEBA005A995E /* UIView+AnimationEnabledTracking.h */,
+				973FDE191887EEBA005A995E /* UIView+AnimationEnabledTracking.m */,
+				9774E13B188455F0001F1051 /* UIView+ScrollToTopDisabler.h */,
+				9774E13C188455F0001F1051 /* UIView+ScrollToTopDisabler.m */,
+				9750CA9E18633208009DFEA8 /* UIViewController+BackArrow.h */,
+				9750CA9F18633208009DFEA8 /* UIViewController+BackArrow.m */,
+				4BB0348E1920D9F100545036 /* UIViewController+NavbarLogo.h */,
+				4BB0348F1920D9F100545036 /* UIViewController+NavbarLogo.m */,
+				4B3B36E9192DFC8F00AD2E28 /* WYPopoverController */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -4089,7 +4089,7 @@
 				7CE02CCE1859C4DA00B4D6B0 /* PullLoadPrevTableView.m in Sources */,
 				975B8D8D1872E2C40066F390 /* XMPPvCard.xcdatamodeld in Sources */,
 				975B8DB81872E2C40066F390 /* XMPPAutoTime.m in Sources */,
-				BFD3D79B1A7F2F9B00AA2C87 /* UITextView+DisableCopyPaste.m in Sources */,
+				BFD3D79E1A7FA17800AA2C87 /* UITextView+DisableCopyPaste.m in Sources */,
 				97165A811817ED670054F008 /* WDDLoginViewController.m in Sources */,
 				975B8DAE1872E2C40066F390 /* XMPPMessageArchiving_Message_CoreDataObject.m in Sources */,
 				975B8DB21872E2C40066F390 /* XMPPMessage+XEP_0172.m in Sources */,

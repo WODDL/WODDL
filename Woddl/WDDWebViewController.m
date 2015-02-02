@@ -73,9 +73,7 @@ static const NSInteger tag_AuthentificationProposal = 2048;
     openInSafari.frame = (CGRect){CGPointZero, CGSizeMake(buttonSize, buttonSize)};
     [openInSafari setImage:[UIImage imageNamed:@"SafariIcon"] forState:UIControlStateNormal];
     [openInSafari addTarget:self action:@selector(openInSafari) forControlEvents:UIControlEventTouchUpInside];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:openInSafari];
-    
-    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:openInSafari];        
     
     [self setupNavigationBarTitle];
     
@@ -83,12 +81,12 @@ static const NSInteger tag_AuthentificationProposal = 2048;
     
     UIBarButtonItem *backButton = self.navigationItem.leftBarButtonItem;
     
-    UIButton *homeButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [homeButton setFrame:(CGRect){CGPointZero, CGSizeMake(54.f, 44.f)}];
-    [homeButton setImage:[UIImage imageNamed:@"home-icon"] forState:UIControlStateNormal];
-    [homeButton addTarget:self action:@selector(dismissSelf) forControlEvents:UIControlEventTouchUpInside];
-    [homeButton setImageEdgeInsets:UIEdgeInsetsMake(10, 11, 12, 11)];
-    UIBarButtonItem *homeButtonItem = [[UIBarButtonItem alloc] initWithCustomView:homeButton];
+    UIButton *homeButton = [UIButton buttonWithType: UIButtonTypeCustom];
+    [homeButton setFrame: (CGRect){CGPointMake(0, 5), CGSizeMake(45.f, 57.f)}];
+    [homeButton setImage: [UIImage imageNamed:@"close_btn"] forState: UIControlStateNormal];
+    [homeButton addTarget: self action: @selector(dismissSelf) forControlEvents: UIControlEventTouchUpInside];
+    [homeButton setImageEdgeInsets: UIEdgeInsetsMake(10, 11, 12, 11)];
+    UIBarButtonItem *homeButtonItem = [[UIBarButtonItem alloc] initWithCustomView: homeButton];
     
     self.navigationItem.leftItemsSupplementBackButton = YES;
     self.navigationItem.leftBarButtonItems = @[ backButton, homeButtonItem ];
