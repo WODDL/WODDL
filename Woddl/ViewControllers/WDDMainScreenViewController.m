@@ -69,7 +69,6 @@ static const NSInteger kCountLoadMorePosts = 10;
 }
 -(void)displayPoweredByScreen
 {
-    
     WDDPoweredByViewController* infoController = [self.storyboard instantiateViewControllerWithIdentifier:@"PoweredByScreen"];
     [self.navigationController pushViewController:infoController animated:NO];
     
@@ -236,8 +235,6 @@ static const NSInteger kCountLoadMorePosts = 10;
     self.fetchedResultsController.fetchRequest.predicate = [self formPredicate];
     [self.fetchedResultsController performFetch:nil];
     [self.postsTable reloadData];
-    
-    
 }
 
 - (void)updateStatusChanged:(NSNotification *)notification
@@ -383,6 +380,7 @@ static const NSUInteger kIMIconFrames = 14;
 - (NSFetchedResultsController *)fetchedResultsController
 {
     if (super.fetchedResultsController != nil) {
+        
         return super.fetchedResultsController;
     }
     
@@ -390,9 +388,9 @@ static const NSUInteger kIMIconFrames = 14;
     NSManagedObjectContext *context = [WDDDataBase sharedDatabase].managedObjectContext;
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:NSStringFromClass([Post class]) inManagedObjectContext:context];
+    NSEntityDescription *entity = [NSEntityDescription entityForName: NSStringFromClass([Post class]) inManagedObjectContext: context];
     [fetchRequest setEntity:entity];
-    [fetchRequest setFetchBatchSize:20];
+    [fetchRequest setFetchBatchSize: 20];
     
     //  Sort descriptors
     NSSortDescriptor *sortDescriptorByTime = [[NSSortDescriptor alloc] initWithKey:kPostTimeKey ascending:NO];
@@ -403,7 +401,7 @@ static const NSUInteger kIMIconFrames = 14;
     [fetchRequest setSortDescriptors:sortDescriptors];
     
     NSPredicate *predicate = [self formPredicate];//[NSPredicate predicateWithFormat:@"SELF.author.isBlocked == %@", @NO];
-    [fetchRequest setPredicate:predicate];
+    [fetchRequest setPredicate: predicate];
     
     
     NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
@@ -480,7 +478,7 @@ static const NSUInteger kIMIconFrames = 14;
         self.slidingViewController.underRightViewController = navVC;
     }
     
-    [self.navigationController.view addGestureRecognizer:self.slidingViewController.panGesture];
+    [self.navigationController.view addGestureRecognizer: self.slidingViewController.panGesture];
     [self setAnchorForSlideMenu];
     
     // setup shadow for top view contoller
@@ -493,20 +491,19 @@ static const NSUInteger kIMIconFrames = 14;
 
 - (void)setupNavigationBarButtons
 {
+    UIImage *hamburgerButtonImage = [UIImage imageNamed: @"MainScreen_hamburger_icon"];
+    UIImage *readLaterButtonImage = [UIImage imageNamed: @"MainScreen_readlater_icon"];
     
-    UIImage *hamburgerButtonImage = [UIImage imageNamed:@"MainScreen_hamburger_icon"];
-    UIImage *readLaterButtonImage = [UIImage imageNamed:@"MainScreen_readlater_icon"];
-    
-    UIButton *sideButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    UIButton *readLaterButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIButton *sideButton = [UIButton buttonWithType: UIButtonTypeCustom];
+    UIButton *readLaterButton = [UIButton buttonWithType: UIButtonTypeCustom];
     
     sideButton.bounds = CGRectMake( 0, 0, hamburgerButtonImage.size.width, hamburgerButtonImage.size.height );
     readLaterButton.bounds = CGRectMake( 0, 0, readLaterButtonImage.size.width, readLaterButtonImage.size.height );
     
-    [sideButton setImage:hamburgerButtonImage forState:UIControlStateNormal];
-    [readLaterButton setImage:readLaterButtonImage forState:UIControlStateNormal];
+    [sideButton setImage: hamburgerButtonImage forState: UIControlStateNormal];
+    [readLaterButton setImage: readLaterButtonImage forState: UIControlStateNormal];
     
-    [sideButton addTarget:self action:@selector(showSideMenuAction:) forControlEvents:UIControlEventTouchUpInside];
+    [sideButton addTarget:self action:@selector(showSideMenuAction:) forControlEvents: UIControlEventTouchUpInside];
     [readLaterButton addTarget:self action:@selector(showReadLaterAction:) forControlEvents:UIControlEventTouchUpInside];
     
     [menuSideButton setCustomView:sideButton];
@@ -518,14 +515,14 @@ static const CGFloat kSlideMenuRightAnchor = 240.0f;
 
 - (void)setAnchorForSlideMenu
 {
-    [self.slidingViewController setAnchorLeftRevealAmount:kSlideMenuLeftAnchor];
-    [self.slidingViewController setAnchorRightRevealAmount:kSlideMenuRightAnchor];
+    [self.slidingViewController setAnchorLeftRevealAmount: kSlideMenuLeftAnchor];
+    [self.slidingViewController setAnchorRightRevealAmount: kSlideMenuRightAnchor];
 }
 
 - (void)removeAnchorForSlideMenu
 {
-    [self.slidingViewController setAnchorLeftRevealAmount:0.0f];
-    [self.slidingViewController setAnchorRightRevealAmount:0.0f];
+    [self.slidingViewController setAnchorLeftRevealAmount: 0.0f];
+    [self.slidingViewController setAnchorRightRevealAmount: 0.0f];
 }
 
 - (IBAction)showSideMenuAction:(UIBarButtonItem *)sender
@@ -562,8 +559,8 @@ static const CGFloat kSlideMenuRightAnchor = 240.0f;
 
 - (void)pullTableViewDidTriggerRefresh:(PullTableView *)pullTableView
 {
-    
     DLog(@"Refresh posts will be requested");
+    
     if (![SocialNetworkManager sharedManager].isApplicationReady)
     {
         double delayInSeconds = 0.1;
@@ -578,6 +575,7 @@ static const CGFloat kSlideMenuRightAnchor = 240.0f;
     
     
     __weak WDDMainScreenViewController *wSelf = self;
+    
     BOOL updating = [[SocialNetworkManager sharedManager] updatePostsWithComplationBlock:^{
         
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -638,11 +636,11 @@ static const CGFloat kSlideMenuRightAnchor = 240.0f;
         
         for (NSInteger socialNwtworkType = 1; socialNwtworkType <= kSocialNetworkFoursquare; ++socialNwtworkType)
         {
-            if ([[WDDDataBase sharedDatabase] activeSocialNetworkOfType:socialNwtworkType])
+            if ([[WDDDataBase sharedDatabase] activeSocialNetworkOfType: socialNwtworkType])
             {
                 NSPredicate *predicate = [NSCompoundPredicate andPredicateWithSubpredicates:@[[NSPredicate predicateWithFormat:@"SELF.type == %@", @(socialNwtworkType)],
                                                                                               [NSPredicate predicateWithFormat:@"SELF.activeState == %@", @YES]]];
-                [predicates addObject:predicate];
+                [predicates addObject: predicate];
             }
         }
         NSPredicate *availableNetworksPredicate = [NSCompoundPredicate orPredicateWithSubpredicates:predicates];
@@ -694,7 +692,7 @@ static const CGFloat kSlideMenuRightAnchor = 240.0f;
         NSArray *objects = [[WDDDataBase sharedDatabase].managedObjectContext executeFetchRequest:lastPostTimestampRequest error:&error];
         NSNumber *oldestPostId = [objects.firstObject valueForKey:@"postID"];
         
-        NSMutableArray *groupsToLoad = [[NSMutableArray alloc] initWithCapacity:network.groups.count];
+        NSMutableArray *groupsToLoad = [[NSMutableArray alloc] initWithCapacity: network.groups.count];
         NSSet *groupsToProcess = nil;
         
         if (self.groupIDFilter)

@@ -68,30 +68,49 @@ static const NSInteger tag_AuthentificationProposal = 2048;
     self.isLoggingInToTwitter = NO;
     self.isLoggingInToLinkedIn = NO;
     
-    CGFloat buttonSize = CGRectGetHeight(self.navigationController.navigationBar.frame);
-    UIButton *openInSafari = [UIButton buttonWithType:UIButtonTypeCustom];
-    openInSafari.frame = (CGRect){CGPointZero, CGSizeMake(buttonSize, buttonSize)};
-    [openInSafari setImage:[UIImage imageNamed:@"SafariIcon"] forState:UIControlStateNormal];
-    [openInSafari addTarget:self action:@selector(openInSafari) forControlEvents:UIControlEventTouchUpInside];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:openInSafari];        
+//    CGFloat buttonSize = CGRectGetHeight(self.navigationController.navigationBar.frame);
+//    UIButton *openInSafari = [UIButton buttonWithType:UIButtonTypeCustom];
+//    openInSafari.frame = (CGRect){CGPointZero, CGSizeMake(buttonSize, buttonSize)};
+//    [openInSafari setImage:[UIImage imageNamed:@"SafariIcon"] forState:UIControlStateNormal];
+//    [openInSafari addTarget:self action:@selector(openInSafari) forControlEvents:UIControlEventTouchUpInside];
+//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:openInSafari];        
     
     [self setupNavigationBarTitle];
     
     [self customizeBackButton];
     
-    UIBarButtonItem *backButton = self.navigationItem.leftBarButtonItem;
+//    UIBarButtonItem *backButton = self.navigationItem.leftBarButtonItem;
     
-    UIButton *homeButton = [UIButton buttonWithType: UIButtonTypeCustom];
-    [homeButton setFrame: (CGRect){CGPointMake(0, 5), CGSizeMake(45.f, 57.f)}];
-    [homeButton setImage: [UIImage imageNamed:@"close_btn"] forState: UIControlStateNormal];
-    [homeButton addTarget: self action: @selector(dismissSelf) forControlEvents: UIControlEventTouchUpInside];
-    [homeButton setImageEdgeInsets: UIEdgeInsetsMake(10, 11, 12, 11)];
-    UIBarButtonItem *homeButtonItem = [[UIBarButtonItem alloc] initWithCustomView: homeButton];
+//    UIImage *backButtonImage = [UIImage imageNamed: kBackButtonArrowImageName];
+//    UIButton *customBackButton = [UIButton buttonWithType:UIButtonTypeCustom];
+//    customBackButton.bounds = CGRectMake( 0, 0, backButtonImage.size.width, backButtonImage.size.height );
+//    [customBackButton setImage:backButtonImage forState:UIControlStateNormal];
+//    SEL backActionSelector = ([self.navigationController.viewControllers indexOfObject:self] ? @selector(popBackViewController) : @selector(dismissViewController) );
+//    [customBackButton addTarget:self action:backActionSelector forControlEvents:UIControlEventTouchUpInside];
+//    
+//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:customBackButton];
     
-    self.navigationItem.leftItemsSupplementBackButton = YES;
-    self.navigationItem.leftBarButtonItems = @[ backButton, homeButtonItem ];
+    UIImage *closeBtnImg = [UIImage imageNamed: @"close_btn"];
+    UIButton *closeBtn = [UIButton buttonWithType: UIButtonTypeCustom];
+    closeBtn.bounds = CGRectMake(0, 0, closeBtnImg.size.width, closeBtnImg.size.height);
+    [closeBtn setImage: closeBtnImg forState: UIControlStateNormal];
+    [closeBtn addTarget: self action: @selector(dismissSelf) forControlEvents: UIControlEventTouchUpInside];
+//    [closeBtn setImageEdgeInsets: UIEdgeInsetsMake(10, 11, 12, 11)];
+    UIBarButtonItem *closeBtnItem = [[UIBarButtonItem alloc] initWithCustomView: closeBtn];
+    
+    self.navigationItem.rightBarButtonItem = closeBtnItem;
+    
+//    self.navigationItem.leftItemsSupplementBackButton = YES;
+//    self.navigationItem.leftBarButtonItems = @[ backButton, homeButtonItem ];
     
     self.prepared = NO;
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear: animated];
+    
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible: NO];
 }
 
 - (void)dismissSelf
@@ -230,13 +249,13 @@ static const NSInteger tag_AuthentificationProposal = 2048;
 - (void)webViewDidStartLoad:(UIWebView *)webView
 {
     DLog(@"webViewDidStartLoad");
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible: YES];
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
     DLog(@"webViewDidFinishLoad");
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible: NO];
 }
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
@@ -258,7 +277,7 @@ static const NSInteger tag_AuthentificationProposal = 2048;
         }
         
         [self registerCookie];
-        [[WDDCookiesManager sharedManager] activateCookieForSocialNetwork:self.sourceNetwork];
+        [[WDDCookiesManager sharedManager] activateCookieForSocialNetwork: self.sourceNetwork];
         self.titleLabel.text = self.sourceNetwork.profile.name;
         
         BOOL result = NO;

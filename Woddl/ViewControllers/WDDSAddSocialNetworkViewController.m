@@ -257,15 +257,15 @@
     }
     else
     {
-        [[WDDDataBase sharedDatabase] addNewSocialNetworkWithType:kSocialNetworkFacebook
-                                                        andUserID:userID
-                                                         andToken:accessToken
-                                                   andDisplayName:name
-                                                      andImageURL:imageURL
-                                                        andExpire:expire
-                                                     andFollowers:nil
-                                                    andProfileURL:profileURLString
-                                                        andGroups:groups];
+        [[WDDDataBase sharedDatabase] addNewSocialNetworkWithType: kSocialNetworkFacebook
+                                                        andUserID: userID
+                                                         andToken: accessToken
+                                                   andDisplayName: name
+                                                      andImageURL: imageURL
+                                                        andExpire: expire
+                                                     andFollowers: nil
+                                                    andProfileURL: profileURLString
+                                                        andGroups: groups];
         
         [self dismissViewControllerAnimated:YES completion:^{
             

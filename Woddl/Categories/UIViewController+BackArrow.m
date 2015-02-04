@@ -12,7 +12,7 @@
 
 - (void)customizeBackButton
 {
-    UIImage *backButtonImage = [UIImage imageNamed:kBackButtonArrowImageName];
+    UIImage *backButtonImage = [UIImage imageNamed: kBackButtonArrowImageName];
     UIButton *customBackButton = [UIButton buttonWithType:UIButtonTypeCustom];
     customBackButton.bounds = CGRectMake( 0, 0, backButtonImage.size.width, backButtonImage.size.height );
     [customBackButton setImage:backButtonImage forState:UIControlStateNormal];

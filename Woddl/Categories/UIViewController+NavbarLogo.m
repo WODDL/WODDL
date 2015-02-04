@@ -42,19 +42,19 @@ NSMutableDictionary *observerMap;
                                                                            NOTIFICATIONS_BADGE_WIDTH * 0.75,
                                                                            NOTIFICATIONS_BADGE_HEIGHT)];
     
-    [badgeView setStrokeColor:[UIColor whiteColor]];
-    [badgeView setFillColor:[UIColor redColor]];
-    [badgeView setTextColor:[UIColor whiteColor]];
-    [badgeView setStrokeWidth:1.0f];
-    [badgeView setHideWhenEmpty:YES];
-    [badgeView setShadow:NO];
-    [badgeView setShine:NO];
-    [badgeView setFont:[UIFont boldSystemFontOfSize:8.0f]];
+    [badgeView setStrokeColor: [UIColor whiteColor]];
+    [badgeView setFillColor: [UIColor redColor]];
+    [badgeView setTextColor: [UIColor whiteColor]];
+    [badgeView setStrokeWidth: 1.0f];
+    [badgeView setHideWhenEmpty: YES];
+    [badgeView setShadow: NO];
+    [badgeView setShine: NO];
+    [badgeView setFont: [UIFont boldSystemFontOfSize: 8.0f]];
     
     [self setupNotificationsBadgeValue: badgeView withImageWidth: image.size.width shouldUpdateAfter: NO];
     
-    [titleView addSubview:button];
-    [titleView addSubview:badgeView];
+    [titleView addSubview: button];
+    [titleView addSubview: badgeView];
     
     [titleView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(navbarLogoTapped:)]];
     
@@ -63,10 +63,10 @@ NSMutableDictionary *observerMap;
     __weak typeof (self) weakSelf = self;
     NSString *uuid = [[NSUUID UUID] UUIDString];
     
-    id observer = [[NSNotificationCenter defaultCenter] addObserverForName:kNotificationNotificationsDidUpdate
-                                                                    object:nil
-                                                                     queue:[NSOperationQueue mainQueue]
-                                                                usingBlock:^(NSNotification *note)
+    id observer = [[NSNotificationCenter defaultCenter] addObserverForName: kNotificationNotificationsDidUpdate
+                                                                    object: nil
+                                                                     queue: [NSOperationQueue mainQueue]
+                                                                usingBlock: ^(NSNotification *note)
     {
         if (!weakSelf)
         {
@@ -83,7 +83,7 @@ NSMutableDictionary *observerMap;
 
 - (void)navbarLogoTapped:(id)sender
 {
-    [WDDNotificationsViewController showOnViewController:self];
+    [WDDNotificationsViewController showOnViewController: self];
 }
 
 #pragma mark - setter/getter

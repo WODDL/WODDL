@@ -486,7 +486,7 @@ void uncaughtExceptionHandler(NSException *exception) {
     @synchronized(self)
     {
         _networkActivityIndicatorCounter = networkActivityIndicatorCounter;
-        if(self.networkActivityIndicatorCounter<=0)
+        if(self.networkActivityIndicatorCounter <= 0)
         {
             _networkActivityIndicatorCounter = 0;
             dispatch_async(dispatch_get_main_queue(), ^{

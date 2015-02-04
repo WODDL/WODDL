@@ -8,6 +8,7 @@
 
 #import "WDDMainPostCell.h"
 #import "WDDConstants.h"
+#import "WDDTextView.h"
 #import "SocialNetwork.h"
 #import "Media.h"
 #import "Post.h"
@@ -97,6 +98,8 @@ static NSMutableDictionary *st_iconsCache = nil;
     //  Setup tap gesture
     [self setupShowProfileTapForView:self.authorNameLabel];
     [self setupShowProfileTapForView:self.avatarImageView];
+    
+//    [self setupTapGestureForTextView: self.textMessage];
 }
 
 - (void)setupShowProfileTapForView:(UIView *)view
@@ -231,8 +234,8 @@ static NSMutableDictionary *st_iconsCache = nil;
             
             UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showFullMedia:)];
             tapRecognizer.mediaType = mediaObj.type;
-            tapRecognizer.mediaURL = [NSURL URLWithString:mediaObj.mediaURLString];
-            tapRecognizer.previewURL = [NSURL URLWithString:mediaObj.previewURLString];
+            tapRecognizer.mediaURL = [NSURL URLWithString: mediaObj.mediaURLString];
+            tapRecognizer.previewURL = [NSURL URLWithString: mediaObj.previewURLString];
             
             [imageView addGestureRecognizer:tapRecognizer];
             imageView.userInteractionEnabled = YES;
@@ -505,15 +508,15 @@ static NSMutableDictionary *st_iconsCache = nil;
         
         NSDictionary *attributes = @{ NSFontAttributeName : [WDDMainPostCell messageTextFont],
                                       NSForegroundColorAttributeName : [UIColor blackColor] };
-        NSMutableAttributedString *showMoreAtrString = [[NSMutableAttributedString alloc] initWithString:showMoreString
-                                                                                           attributes:attributes];
+        NSMutableAttributedString *showMoreAtrString = [[NSMutableAttributedString alloc] initWithString: showMoreString
+                                                                                           attributes: attributes];
         
         NSMutableParagraphStyle *paragrapStyle = [[NSMutableParagraphStyle alloc] init];
         paragrapStyle.alignment = NSTextAlignmentRight;
         
-        [showMoreAtrString addAttribute:NSParagraphStyleAttributeName
-                                  value:paragrapStyle
-                                  range:NSMakeRange(newLineOffset, showMoreString.length-newLineOffset)];
+        [showMoreAtrString addAttribute: NSParagraphStyleAttributeName
+                                  value: paragrapStyle
+                                  range: NSMakeRange(newLineOffset, showMoreString.length-newLineOffset)];
         
 //        [showMoreAtrString setLink:[NSURL URLWithString:kShowMoreURLBase] range:NSMakeRange(newLineOffset, showMoreString.length-newLineOffset)];
         [showMoreAtrString setURL: [NSURL URLWithString: kShowMoreURLBase] range: NSMakeRange(newLineOffset, showMoreString.length - newLineOffset)];
@@ -529,7 +532,7 @@ static NSMutableDictionary *st_iconsCache = nil;
     NSAttributedString *newText = [self.fullMessageText attributedSubstringFromRange:NSMakeRange(0, newSearchRange.location+newSearchRange.length)];
     
 
-    return [self formShortMessageStringWithMessageText:newText searchRange:newSearchRange];
+    return [self formShortMessageStringWithMessageText: newText searchRange: newSearchRange];
 }
 
 - (BOOL)isExpandable

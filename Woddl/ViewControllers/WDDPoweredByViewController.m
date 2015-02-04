@@ -277,7 +277,7 @@ const NSTimeInterval kPresentPoweredByDelay = 2.5f;
 {
     WDDAppDelegate * appDelegate = (WDDAppDelegate *)[[UIApplication sharedApplication] delegate];
     [SocialNetworkManager sharedManager].applicationReady = NO;
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible: NO];
     [appDelegate performSelector:@selector(dismissHUD) withObject:nil afterDelay:3.0f];
 }
 

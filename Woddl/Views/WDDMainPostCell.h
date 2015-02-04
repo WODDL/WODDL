@@ -17,7 +17,7 @@ typedef enum tagMode
 
 typedef void(^WDDPostCellReuseBlock)(NSIndexPath *indexpath);
 
-@class WDDMainPostCell, Post;
+@class WDDMainPostCell, Post, WDDTextView;
 
 @protocol WDDMainPostCellDelegate <NSObject>
 

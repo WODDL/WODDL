@@ -440,6 +440,7 @@
 		B6C90A551A1394B600A16432 /* trash.png in Resources */ = {isa = PBXBuildFile; fileRef = B6C90A541A1394B600A16432 /* trash.png */; };
 		B6D6503F1A0CD6A900469B79 /* scheduler.png in Resources */ = {isa = PBXBuildFile; fileRef = B6D6503E1A0CD6A900469B79 /* scheduler.png */; };
 		BF0E04CC1A7A8A4400C5C0E8 /* UITextView+Autolayout.m in Sources */ = {isa = PBXBuildFile; fileRef = BF0E04CB1A7A8A4400C5C0E8 /* UITextView+Autolayout.m */; };
+		BF25BE451A80635E00D3CB9C /* WDDTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = BF25BE441A80635E00D3CB9C /* WDDTextView.m */; };
 		BFD3D79E1A7FA17800AA2C87 /* UITextView+DisableCopyPaste.m in Sources */ = {isa = PBXBuildFile; fileRef = BFD3D79D1A7FA17800AA2C87 /* UITextView+DisableCopyPaste.m */; };
 		D80E5FBA19AFA058009478D7 /* Guide Screen 1.png in Resources */ = {isa = PBXBuildFile; fileRef = D860B0EF19AF8C8F00BD98EB /* Guide Screen 1.png */; };
 		D80E5FBB19AFA058009478D7 /* Guide Screen 1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D860B0F219AF8C9400BD98EB /* Guide Screen 1@2x.png */; };
@@ -1313,6 +1314,8 @@
 		B6D6503E1A0CD6A900469B79 /* scheduler.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = scheduler.png; sourceTree = "<group>"; };
 		BF0E04CA1A7A8A4400C5C0E8 /* UITextView+Autolayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UITextView+Autolayout.h"; path = "Categories/UITextView/UITextView+Autolayout.h"; sourceTree = "<group>"; };
 		BF0E04CB1A7A8A4400C5C0E8 /* UITextView+Autolayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UITextView+Autolayout.m"; path = "Categories/UITextView/UITextView+Autolayout.m"; sourceTree = "<group>"; };
+		BF25BE431A80635E00D3CB9C /* WDDTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WDDTextView.h; sourceTree = "<group>"; };
+		BF25BE441A80635E00D3CB9C /* WDDTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WDDTextView.m; sourceTree = "<group>"; };
 		BFD3D79C1A7FA17800AA2C87 /* UITextView+DisableCopyPaste.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UITextView+DisableCopyPaste.h"; path = "Categories/UITextView/UITextView+DisableCopyPaste.h"; sourceTree = "<group>"; };
 		BFD3D79D1A7FA17800AA2C87 /* UITextView+DisableCopyPaste.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UITextView+DisableCopyPaste.m"; path = "Categories/UITextView/UITextView+DisableCopyPaste.m"; sourceTree = "<group>"; };
 		D81182DC18C1BC5C00B36D26 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
@@ -1858,39 +1861,40 @@
 		9732462F1821523E00C79C52 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				4BB034951920FD4400545036 /* NotificationCell */,
-				9744ADD318FE998E00219E40 /* LocationCell */,
-				9D68F37018FBE487002364BB /* PostCell */,
+				BF25BE421A80634600D3CB9C /* TextView */,
 				7CB7434818E2D75300A58389 /* AccountSelector */,
+				97FBF63B183BC82800E7134D /* ActionSheetPicker */,
+				970C6FE41846265600812DAA /* CommentCell */,
+				971A90BF1844AE980047613B /* CommentPreview */,
+				970DF1F118353E2F00A1F4B5 /* EllipseMenu */,
+				9744ADD318FE998E00219E40 /* LocationCell */,
+				4BB034951920FD4400545036 /* NotificationCell */,
+				9D68F37018FBE487002364BB /* PostCell */,
 				975B983C186C6B9B00D7E9B7 /* StatusAddFriendCell */,
 				9740047C1860AFEC008A3EAC /* StatusSNAccountCell */,
 				4B4100FC184CA35C00BD4309 /* UIPlaceholderTextView.h */,
 				4B4100FD184CA35C00BD4309 /* UIPlaceholderTextView.m */,
-				970C6FE81846491900812DAA /* WDDPostView.h */,
-				970C6FE91846491900812DAA /* WDDPostView.m */,
-				970C6FE41846265600812DAA /* CommentCell */,
-				97FBF63B183BC82800E7134D /* ActionSheetPicker */,
-				970DF1F118353E2F00A1F4B5 /* EllipseMenu */,
-				9721612B182D2AED00821E2C /* WDDMainPostCell.h */,
-				9721612C182D2AED00821E2C /* WDDMainPostCell.m */,
-				9732462C1821522F00C79C52 /* WDDSocialNetworkCell.h */,
-				9732462D1821522F00C79C52 /* WDDSocialNetworkCell.m */,
 				973246301821553800C79C52 /* WDDAccountCheckBox.h */,
 				973246311821553800C79C52 /* WDDAccountCheckBox.m */,
-				971A90BF1844AE980047613B /* CommentPreview */,
+				7C54561218DB2AD40098200C /* WDDAccountSelectionView.h */,
+				7C54561318DB2AD40098200C /* WDDAccountSelectionView.m */,
+				7C54561018DB2AC10098200C /* WDDAccountSelectionView.xib */,
 				7CEB015F184A39AD00582206 /* WDDChatContactCell.h */,
 				7CEB0160184A39AD00582206 /* WDDChatContactCell.m */,
 				7CEB0162184A4FD700582206 /* WDDChatContactTitle.h */,
 				7CEB0163184A4FD700582206 /* WDDChatContactTitle.m */,
 				4B4100FF184CB99300BD4309 /* WDDChatMessageCell.h */,
 				4B410100184CB99300BD4309 /* WDDChatMessageCell.m */,
-				7C07A2011863661900C5FE2A /* WDDSwitchButton.h */,
-				7C07A2021863661900C5FE2A /* WDDSwitchButton.m */,
-				7C54561018DB2AC10098200C /* WDDAccountSelectionView.xib */,
-				7C54561218DB2AD40098200C /* WDDAccountSelectionView.h */,
-				7C54561318DB2AD40098200C /* WDDAccountSelectionView.m */,
 				9DD08A5218EC621600AC2464 /* WDDChatMessageTypingCell.h */,
 				9DD08A5318EC621600AC2464 /* WDDChatMessageTypingCell.m */,
+				9721612B182D2AED00821E2C /* WDDMainPostCell.h */,
+				9721612C182D2AED00821E2C /* WDDMainPostCell.m */,
+				970C6FE81846491900812DAA /* WDDPostView.h */,
+				970C6FE91846491900812DAA /* WDDPostView.m */,
+				9732462C1821522F00C79C52 /* WDDSocialNetworkCell.h */,
+				9732462D1821522F00C79C52 /* WDDSocialNetworkCell.m */,
+				7C07A2011863661900C5FE2A /* WDDSwitchButton.h */,
+				7C07A2021863661900C5FE2A /* WDDSwitchButton.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -3696,6 +3700,16 @@
 			path = JSON;
 			sourceTree = "<group>";
 		};
+		BF25BE421A80634600D3CB9C /* TextView */ = {
+			isa = PBXGroup;
+			children = (
+				BF25BE431A80635E00D3CB9C /* WDDTextView.h */,
+				BF25BE441A80635E00D3CB9C /* WDDTextView.m */,
+			);
+			name = TextView;
+			path = Views/TextView;
+			sourceTree = "<group>";
+		};
 		D85E6E7418B3CBCE0004F220 /* URLShorter */ = {
 			isa = PBXGroup;
 			children = (
@@ -4001,6 +4015,7 @@
 				971A90BE1844AE880047613B /* WDDCommentPreView.m in Sources */,
 				9DE3916F186B115400BAB481 /* FoursquareRefreshFriendsOperation.m in Sources */,
 				7C54561418DB2AD40098200C /* WDDAccountSelectionView.m in Sources */,
+				BF25BE451A80635E00D3CB9C /* WDDTextView.m in Sources */,
 				975B8D9A1872E2C40066F390 /* NSXMLElement+XEP_0059.m in Sources */,
 				975B983B186C6B9700D7E9B7 /* WDDAddFriendCell.m in Sources */,
 				975B8DC01872E2C40066F390 /* NSXMLElement+XEP_0335.m in Sources */,

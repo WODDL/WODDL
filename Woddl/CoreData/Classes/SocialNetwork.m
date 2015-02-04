@@ -573,10 +573,10 @@ static NSDictionary *static_syncResources;
 
 - (void)updateLinksForPost:(Post *)post
 {
-    NSArray *links = [self linksForText:post.text];
+    NSArray *links = [self linksForText: post.text];
     if (post.links.count)
     {
-        [post removeLinks:post.links];
+        [post removeLinks: post.links];
     }
     
     for (NSString *link in links)

@@ -104,6 +104,8 @@ static UIImage *placeHolderImage = nil;
     self.cellCache = [NSMutableDictionary new];
 #endif
     self.isFirstLoad=NO;
+    
+//    [self setupLongTapGestureForTable];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -126,7 +128,6 @@ static UIImage *placeHolderImage = nil;
 {
     //ROMA
     self.isFirstLoad=YES;
-    
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -141,7 +142,7 @@ static UIImage *placeHolderImage = nil;
            // [self showProcessHUDWithText:NSLocalizedString(@"lskUpdating", @"Updating message on main screen HUD")];
         }
         self.fetchedResultsController.delegate = self;
-        [self.fetchedResultsController performFetch:nil];
+        [self.fetchedResultsController performFetch: nil];
         [self.postsTable reloadData];
         if (showHUD)
         {
@@ -159,7 +160,6 @@ static UIImage *placeHolderImage = nil;
     {
         self.isAppeared = YES;
     }
-    
 }
 
 - (void)reloadTableContent1
@@ -172,11 +172,12 @@ static UIImage *placeHolderImage = nil;
             [self showProcessHUDWithText:NSLocalizedString(@"lskUpdating", @"Updating message on main screen HUD")];
         }
         self.fetchedResultsController.delegate = self;
-        [self.fetchedResultsController performFetch:nil];
+        [self.fetchedResultsController performFetch: nil];
         [self.postsTable reloadData];
+    
         if (showHUD)
         {
-            [self removeProcessHUDOnSuccessLoginHUDWithText:NSLocalizedString(@"lskUpdated", @"Updated message on main screen HUD")];
+            [self removeProcessHUDOnSuccessLoginHUDWithText: NSLocalizedString(@"lskUpdated", @"Updated message on main screen HUD")];
         }
         self.needProcessUpdates = NO;
     
@@ -190,7 +191,6 @@ static UIImage *placeHolderImage = nil;
     {
         self.isAppeared = YES;
     }
-
 }
 
 - (void)didReceiveMemoryWarning
@@ -216,10 +216,11 @@ static UIImage *placeHolderImage = nil;
     NSLog(@"Posts updated");
 
 }
--(void)checkingForNewPosts
+
+- (void)checkingForNewPosts
 {
-   
     __weak WDDBasePostsViewController *wSelf = self;
+    
     BOOL updating = [[SocialNetworkManager sharedManager] updatePostsWithComplationBlock:^{
         
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -236,20 +237,20 @@ static UIImage *placeHolderImage = nil;
         TF_CHECKPOINT(@"Update using pull to refresh started");
         DLog(@"Update using pull to refresh started");
     }
-
-   
-    
-
 }
--(void)startUpdateView
+
+- (void)startUpdateView
 {
 
-    [NSTimer scheduledTimerWithTimeInterval:120.f target:self
-                                   selector:@selector(checkingForNewPosts)
-                                   userInfo:nil repeats:YES];
+    [NSTimer scheduledTimerWithTimeInterval: 120.f
+                                     target: self
+                                   selector: @selector(checkingForNewPosts)
+                                   userInfo: nil
+                                    repeats: YES];
 
 }
-- (void)showProcessHUDWithText:(NSString *)text
+
+- (void)showProcessHUDWithText: (NSString *)text
 {
     if (!self.progressHUD)
     {
@@ -266,7 +267,7 @@ static UIImage *placeHolderImage = nil;
 {
     if (self.progressHUD)
     {
-        [self.progressHUD completeAndDismissWithTitle:text];
+        [self.progressHUD completeAndDismissWithTitle: text];
         self.progressHUD = nil;
     }
 }
@@ -321,14 +322,11 @@ static UIImage *placeHolderImage = nil;
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
-    if(self.isFirstLoad==YES)
+    if( self.isFirstLoad == YES)
     {
-        if(![self datesComparator:[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"time"]])
+        if(![self datesComparator: [[self.fetchedResultsController objectAtIndexPath: indexPath] valueForKey:@"time"]])
         {
-            
             return 0.f;
-            
         }
     }
     
@@ -342,10 +340,10 @@ static UIImage *placeHolderImage = nil;
     WDDMainPostCell *cell = [tableView dequeueReusableCellWithIdentifier:[self cellIdentifier]];
     if (!cell)
     {
-        cell = [[[NSBundle mainBundle] loadNibNamed:NSStringFromClass([WDDMainPostCell class]) owner:nil options:nil] firstObject];
+        cell = [[[NSBundle mainBundle] loadNibNamed: NSStringFromClass([WDDMainPostCell class]) owner: nil options: nil] firstObject];
     }
     
-    [self configureCell:cell atIndexPath:indexPath];
+    [self configureCell: cell atIndexPath: indexPath];
     
 #ifdef CACHE_CELLS
     self.cellCache[indexPath] = cell;
@@ -390,8 +388,8 @@ static UIImage *placeHolderImage = nil;
         {
             if (!link.isShortLink)
             {
-                NSURL *linkURL = [NSURL URLWithString:link.url];
-                NSURL *cachedLink = [[WDDURLShorter defaultShorter] cachedLinkForURL:linkURL];
+                NSURL *linkURL = [NSURL URLWithString: link.url];
+                NSURL *cachedLink = [[WDDURLShorter defaultShorter] cachedLinkForURL: linkURL];
 
                 if (cachedLink)
                 {
@@ -435,7 +433,7 @@ static UIImage *placeHolderImage = nil;
         {
             if (link.url)
             {
-                [links addObject:link.url];
+                [links addObject: link.url];
             }
         }
     }
@@ -543,17 +541,17 @@ static UIImage *placeHolderImage = nil;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    Post *post = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    Post *post = [self.fetchedResultsController objectAtIndexPath: indexPath];
 //    if ([post isKindOfClass:[TwitterPost class]])
 //    {
 //        [self goToTwitterReplyWithPost:post shouldQoute:NO];
 //    }
 //    else
 //    {
-        [self goToCommentScreenWithPost:post];
+        [self goToCommentScreenWithPost: post];
 //    }
     
-    [tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    [tableView scrollToRowAtIndexPath: indexPath atScrollPosition: UITableViewScrollPositionTop animated: YES];
 }
 
 #pragma mark - Fetched results controller
@@ -749,9 +747,9 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
                     }
                     else
                     {
-                        if ([Link isURLShort:cachedLink])
+                        if ([Link isURLShort: cachedLink])
                         {
-                            [links addObject:cachedLink.absoluteString];
+                            [links addObject: cachedLink.absoluteString];
                         }
                     }
                     
@@ -1015,9 +1013,13 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
     
     [cell deleteButtonEnable:[self shouldShowCellDeleteButton]];
     
+    cell.textMessage.tag = 1000 + indexPath.row;
+    
     //  Long pressed gesture
-    NSLog(@"postMessage = %@",postMessage);
-    [self setupLongTapGestureForCell:cell];
+    NSLog(@"postMessage = %@", postMessage);
+    [self setupLongTapGestureForCell: cell];
+    [self setupTapGestureForTextView: cell.textMessage];
+    
 }
 
 - (void)highlightNamesInText:(NSMutableAttributedString *)text inPost:(Post *)post
@@ -1071,11 +1073,38 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
     return comments;
 }
 
-#pragma mark - Long press gesture recognizer
+#pragma mark - Press Gesture Recognizer
+
+- (void)setupLongTapGestureForTable
+{
+    UILongPressGestureRecognizer *longPressGR = [[UILongPressGestureRecognizer alloc] initWithTarget: self action: @selector(didLongPressOnTable:)];
+    self.postsTable.gestureRecognizers = @[longPressGR];
+}
+
 - (void)setupLongTapGestureForCell:(UITableViewCell *)cell
 {
     UILongPressGestureRecognizer * longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(didLongPressedOnCell:)];
     cell.gestureRecognizers = @[longPressGestureRecognizer];
+}
+
+- (void)didLongPressOnTable: (UILongPressGestureRecognizer*)gesture
+{
+    CGPoint pt = [gesture locationInView: self.postsTable];
+    
+    NSIndexPath *indexPath = [self.postsTable indexPathForRowAtPoint: pt];
+    
+    if (indexPath == nil) {
+        
+        NSLog(@"long press on table view but not on a row");
+    }
+    else if (gesture.state == UIGestureRecognizerStateBegan) {
+        
+        NSLog(@"long press on table view at row %d", indexPath.row);
+    }
+    else {
+        
+        NSLog(@"gestureRecognizer.state = %d", gesture.state);
+    }
 }
 
 - (void)didLongPressedOnCell:(UILongPressGestureRecognizer*)sender
@@ -1099,7 +1128,7 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
 //        NSSet *images = [post.media filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"type == %@", @(kMediaPhoto)]];
         menu.saveAvailable = NO;//(images.count > 0);
         
-        CGRect cellFrame = [self.postsTable rectForRowAtIndexPath:indexPath];
+        CGRect cellFrame = [self.postsTable rectForRowAtIndexPath: indexPath];
         cellFrame = CGRectOffset(cellFrame, -self.postsTable.contentOffset.x, -self.postsTable.contentOffset.y - 6.f /*  cells separator height */);
         menu.clearAreaRect = cellFrame;
         menu.startPosition = CGPointMake(CGRectGetMidX(cellFrame), CGRectGetMidY(cellFrame));
@@ -1108,8 +1137,119 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
         menu.availableSocialNetworks = [[WDDDataBase sharedDatabase] availableSocialNetworks];
         [self.view addSubview:menu];
         
-        [menu showMenuForView:self.postsTable];
+        [menu showMenuForView: self.postsTable];
     }
+}
+
+- (void)didLongPressedOnTextView: (UIGestureRecognizer*)gesture
+{
+    UIView *superView = gesture.view.superview;
+    
+    if (gesture.state == UIGestureRecognizerStateBegan) {
+        
+        NSLog(@"long press on Text View");
+    }
+    else {
+        
+        NSLog(@"gestureRecognizer.state = %d", gesture.state);
+    }
+}
+
+- (void)setupTapGestureForTextView: (UITextView *)textView
+{
+    for (UIGestureRecognizer *gesture in textView.gestureRecognizers) {
+        //
+        if ([gesture isKindOfClass: [UITapGestureRecognizer class]] || [gesture isKindOfClass: [UILongPressGestureRecognizer class]]) {
+            
+            [textView removeGestureRecognizer: gesture];
+        }
+    }
+    
+    //    UILongPressGestureRecognizer * longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget: self action: @selector(didLongPressedOnTextView:)];
+    //
+    //    [textView addGestureRecognizer: longPressGestureRecognizer];
+    
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget: self action: @selector(didTapOnTextView:)];
+    [textView addGestureRecognizer: tapGesture];
+}
+
+- (void)didTapOnTextView: (UITapGestureRecognizer*)gesture
+{
+    if (gesture.state != UIGestureRecognizerStateEnded) {
+        
+        return;
+    }
+    
+    NSLog(@"TextView is tapped.");
+    
+    UITextView *textView = (UITextView *)gesture.view;
+    CGPoint tapLocation = [gesture locationInView: textView];
+    
+    UITextPosition *textPosition1 = [textView closestPositionToPoint: tapLocation];
+    UITextPosition *textPosition2 = [textView positionFromPosition: textPosition1 offset: 1];
+    
+    NSIndexPath *path = [NSIndexPath indexPathForRow: (textView.tag - 1000) inSection: 0];
+    
+    if (!textPosition2) {
+        
+        textPosition1 = [textView positionFromPosition: textPosition1 offset: -1];
+        textPosition2 = [textView positionFromPosition: textPosition1 offset: 1];
+    }
+    
+    if (!textPosition2) {
+        
+        [self tableView: self.postsTable didSelectRowAtIndexPath: path];
+        return;
+    }
+    
+    UITextRange *range = [textView textRangeFromPosition: textPosition1 toPosition: textPosition2];
+    NSInteger startOffset = [textView offsetFromPosition: textView.beginningOfDocument toPosition: range.start];
+    NSInteger endOffset = [textView offsetFromPosition: textView.beginningOfDocument toPosition: range.end];
+    NSRange offsetRange = NSMakeRange(startOffset, endOffset - startOffset);
+    
+    if (offsetRange.location == NSNotFound || offsetRange.length == 0) {
+        
+        [self tableView: self.postsTable didSelectRowAtIndexPath: path];
+        return;
+    }
+    
+    if (NSMaxRange(offsetRange) > textView.attributedText.length) {
+        
+        [self tableView: self.postsTable didSelectRowAtIndexPath: path];
+        return;
+    }
+    
+    NSAttributedString *attributedSubstring = [textView.attributedText attributedSubstringFromRange: offsetRange];
+    //    NSString *link = [attributedSubstring attribute: NSLinkAttributeName atIndex: 0 effectiveRange: nil];
+    
+    NSURL *URL = [attributedSubstring attribute: NSLinkAttributeName atIndex: 0 effectiveRange: nil];
+    
+    
+    if (!URL) {
+        
+        [self tableView: self.postsTable didSelectRowAtIndexPath: path];
+        return;
+    }
+    
+    //    if (!link) {
+    
+    //        return;
+    //    }
+    
+    //    NSURL *URL = [NSURL URLWithString: link];
+    
+    NSLog(@"%@", URL.absoluteString);
+    
+    if (textView.delegate && [textView.delegate respondsToSelector:@selector(textView:shouldInteractWithURL:inRange:)]) {
+        
+        if (![textView.delegate textView: textView shouldInteractWithURL:URL inRange:offsetRange]) {
+            
+            return;
+        }
+    }
+    
+//    [[UIApplication sharedApplication] openURL: URL];
+    [self tableView: self.postsTable didSelectRowAtIndexPath: path];
 }
 
 #pragma mark - Ellipse menu delegate
@@ -1117,37 +1257,34 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
 - (void)didPressedButtonWithTag:(NSInteger)tag inMenu:(IDSEllipseMenu *)menu
 {
     [menu hideMenu];
-    [self menuActionForButtonWithTag:tag];
-    
+    [self menuActionForButtonWithTag: tag];
 }
 
 #pragma mark - Ellipse menu logic
-
 
 - (void)menuActionForButtonWithTag:(NSInteger)tag
 {
     if (tag < 1000)
     {
-        [self rightSideMenuActionForButtonWithTag:tag];
+        [self rightSideMenuActionForButtonWithTag: tag];
     }
     else
     {
-        [self leftSideMenuActionForButtonWithTag:tag];
+        [self leftSideMenuActionForButtonWithTag: tag];
     }
-    
 }
 
 - (void)rightSideMenuActionForButtonWithTag:(NSInteger)tag
 {
     switch (tag) {
         case kSocialNetworkFacebook:
-            [self postMessageToSocialNetworksWithType:kSocialNetworkFacebook];
+            [self postMessageToSocialNetworksWithType: kSocialNetworkFacebook];
             break;
         case kSocialNetworkTwitter:
-            [self postMessageToSocialNetworksWithType:kSocialNetworkTwitter];
+            [self postMessageToSocialNetworksWithType: kSocialNetworkTwitter];
             break;
         case kSocialNetworkLinkedIN:
-            [self postMessageToSocialNetworksWithType:kSocialNetworkLinkedIN];
+            [self postMessageToSocialNetworksWithType: kSocialNetworkLinkedIN];
             break;
         case kSocialNetworkGooglePlus:
             DLog(@"G+ qoute");
@@ -1172,29 +1309,29 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
             [self likePost:self.postForMenu];
             break;
         case kEllipseMenuCommentButtonTag:
-            [self goToCommentScreenWithPost:self.postForMenu];
+            [self goToCommentScreenWithPost: self.postForMenu];
             break;
         case kEllipseMenuShareButtonTag:
             [self sharePost:self.postForMenu];
             break;
         case kEllipseMenuMailButtonTag:
-            [self showMailViewControllerForPost:self.postForMenu];
+            [self showMailViewControllerForPost: self.postForMenu];
             break;
         case kEllipseMenuCopyLinkButtonTag:
-            [self copyToClipboardURLFromPost:self.postForMenu];
+            [self copyToClipboardURLFromPost: self.postForMenu];
             break;
         case kEllipseMenuTwitterReplyButtonTag:
-            [self goToCommentScreenWithPost:self.postForMenu];
-            //[self goToTwitterReplyWithPost:self.postForMenu shouldQoute:NO];
+            [self goToCommentScreenWithPost: self.postForMenu];
+            //[self goToTwitterReplyWithPost: self.postForMenu shouldQoute: NO];
             break;
         case kEllipseMenuTwitterRetweetButtonTag:
-            [self retweet:self.postForMenu];
+            [self retweet: self.postForMenu];
             break;
         case kEllipseMenuTwitterQouteButtonTag:
-            [self goToTwitterReplyWithPost:self.postForMenu shouldQoute:YES];
+            [self goToTwitterReplyWithPost: self.postForMenu shouldQoute: YES];
             break;
         case kEllipseMenuBlockButtonTag:
-            [self blockActionForPost:self.postForMenu];
+            [self blockActionForPost: self.postForMenu];
             break;
         case kEllipseMenuReadLaterButtonTag:
             [self addToReadLaterListPost:self.postForMenu];
@@ -1213,7 +1350,7 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
     AccountsSelected selectedBlock = ^(NSArray *accounts, NSArray *groups, WDDAccountSelector *selector) {
         
         [selector hide];
-        [self showProcessHUDWithText:NSLocalizedString(@"lskSending", @"")];
+        [self showProcessHUDWithText: NSLocalizedString(@"lskSending", @"")];
         
         __block NSInteger cOperations = accounts.count + groups.count;
         __block BOOL isSuccess = YES;
@@ -1223,7 +1360,7 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
           
             if (error)
             {
-                [self showSharingErrorForAcccountWithID:userId];
+                [self showSharingErrorForAcccountWithID: userId];
             }
             
             isSuccess &= !error;
@@ -1233,11 +1370,11 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
                 
                 if (!isSuccess)
                 {
-                    [self removeProcessHUDOnFailLoginHUDWithText:NSLocalizedString(@"lskFail", @"")];
+                    [self removeProcessHUDOnFailLoginHUDWithText: NSLocalizedString(@"lskFail", @"")];
                 }
                 else
                 {
-                    [self removeProcessHUDOnSuccessLoginHUDWithText:NSLocalizedString(@"lskSuccess", @"")];
+                    [self removeProcessHUDOnSuccessLoginHUDWithText: NSLocalizedString(@"lskSuccess", @"")];
                 }
             }
         };
@@ -1245,9 +1382,10 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
         for (SocialNetwork *socialNetwork in accounts)
         {
             userId = socialNetwork.profile.objectID;
-            [socialNetwork postToWallWithMessage:nil andPost:self.postForMenu withCompletionBlock:postComplition];
+            [socialNetwork postToWallWithMessage: nil andPost: self.postForMenu withCompletionBlock: postComplition];
            
         }
+        
         for (Group *group in groups)
         {
             userId = [group.managedBy.anyObject objectID];
@@ -1261,9 +1399,9 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
         [selector hide];
     };
     
-    WDDAccountSelector *selector = [WDDAccountSelector selectorWithSocialNetworkType:type
-                                                              selectionCompleteBlock:selectedBlock
-                                                              selectionCanceledBlock:canceledBlock];
+    WDDAccountSelector *selector = [WDDAccountSelector selectorWithSocialNetworkType: type
+                                                              selectionCompleteBlock: selectedBlock
+                                                              selectionCanceledBlock: canceledBlock];
     selector.title = NSLocalizedString(@"lskSelectNetwork", @"Social network selector on Base controller");
     [selector show];
 }
@@ -1289,7 +1427,6 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
     });
 }
 
-
 - (void)showMailViewControllerForPost:(Post *)post
 {
     if ([MFMailComposeViewController canSendMail])
@@ -1308,7 +1445,8 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
     }
     
     else {
-        [UIAlertView showAlertWithMessage:NSLocalizedString(@"lskNoOneEmailAccountExist", @"On fail send e-mail")];
+        
+        [UIAlertView showAlertWithMessage: NSLocalizedString(@"lskNoOneEmailAccountExist", @"On fail send e-mail")];
         DLog(@"Device is unable to send email in its current state");
     }
 }
@@ -1367,13 +1505,14 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
     [self showProcessHUDWithText:NSLocalizedString(@"lskProcessing", @"Progress hud info")];
     
     [post shareWithCompletionBlock:^(NSError *error) {
+        
         if(!error)
         {
-            [self removeProcessHUDOnSuccessLoginHUDWithText:NSLocalizedString(@"lskShared", @"Progress hud info")];
+            [self removeProcessHUDOnSuccessLoginHUDWithText: NSLocalizedString(@"lskShared", @"Progress hud info")];
         }
-        else
-        {
-            [self removeProcessHUDOnSuccessLoginHUDWithText:NSLocalizedString(@"lskFail", @"Progress hud info")];
+        else {
+            
+            [self removeProcessHUDOnSuccessLoginHUDWithText: NSLocalizedString(@"lskFail", @"Progress hud info")];
         }
     }];
 }
@@ -1428,19 +1567,19 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
     
     for (Media *media in images)
     {
-        [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:[NSURL URLWithString:media.mediaURLString]
-                                                              options:SDWebImageDownloaderHighPriority
-                                                             progress:nil
-                                                            completed:^(UIImage *image, NSData *data, NSError *error, BOOL finished) {
+        [[SDWebImageDownloader sharedDownloader] downloadImageWithURL: [NSURL URLWithString:media.mediaURLString]
+                                                              options: SDWebImageDownloaderHighPriority
+                                                             progress: nil
+                                                            completed: ^(UIImage *image, NSData *data, NSError *error, BOOL finished) {
                                                                 
                                                                 if (finished && !error)
                                                                 {
-                                                                    [WDDBasePostsViewController addPhotoToGallery:image];
+                                                                    [WDDBasePostsViewController addPhotoToGallery: image];
                                                                 }
                                                                 
                                                                 if (!--imagesToSave)
                                                                 {
-                                                                    [w_self removeProcessHUDOnSuccessLoginHUDWithText:NSLocalizedString(@"lskDone", @"")];
+                                                                    [w_self removeProcessHUDOnSuccessLoginHUDWithText: NSLocalizedString(@"lskDone", @"")];
                                                                 }
                                                             }];
     }
@@ -1470,9 +1609,9 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
 {
     if (result == MFMailComposeResultFailed)
     {
-        [UIAlertView showAlertWithMessage:NSLocalizedString(@"lskFailedEmail", @"Send e-mail error on base controller")];
+        [UIAlertView showAlertWithMessage: NSLocalizedString(@"lskFailedEmail", @"Send e-mail error on base controller")];
     }
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewControllerAnimated: YES completion: nil];
 }
 
 #pragma mark - Message cell delegate protocol implementation
@@ -1481,7 +1620,7 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
 {
     WDDPhotoPreviewControllerViewController *previewController = [[WDDPhotoPreviewControllerViewController alloc] initWithImageURL:url previewURL:previewURL];
     previewController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-    [self.navigationController presentViewController:previewController animated:YES completion:nil];
+    [self.navigationController presentViewController: previewController animated: YES completion: nil];
 }
 
 - (void)showVideoInWebWithURL:(NSURL *)url
@@ -1493,9 +1632,9 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
         url = [[WDDURLShorter defaultShorter] fullLinkForURL:url];
     }
     webController.url = url;
-    [self presentViewController:[[UINavigationController alloc] initWithRootViewController:webController]
-                       animated:YES
-                     completion:nil];
+    [self presentViewController: [[UINavigationController alloc] initWithRootViewController:webController]
+                       animated: YES
+                     completion: nil];
 }
 
 - (void)showFullVideoWithURL:(NSURL *)url fromCell:(WDDMainPostCell *)cell
@@ -1510,10 +1649,10 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
         player.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
         
         self.videoURL2OpenInWebView = url;
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(playbackFinished:)
-                                                     name:MPMoviePlayerPlaybackDidFinishNotification
-                                                   object:player.moviePlayer];
+        [[NSNotificationCenter defaultCenter] addObserver: self
+                                                 selector: @selector(playbackFinished:)
+                                                     name: MPMoviePlayerPlaybackDidFinishNotification
+                                                   object: player.moviePlayer];
         
         [self.navigationController presentViewController:player animated:YES completion:nil];
     }
@@ -1582,7 +1721,7 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
     
     if (self.expandedCellIndexPath)
     {
-        WDDMainPostCell *expandedCell = (WDDMainPostCell *)[self.postsTable cellForRowAtIndexPath:self.expandedCellIndexPath];
+        WDDMainPostCell *expandedCell = (WDDMainPostCell *)[self.postsTable cellForRowAtIndexPath: self.expandedCellIndexPath];
         [self.postsTable beginUpdates];
         expandedCell.isExpanded = NO;
         expandedCell.textMessage.attributedText = expandedCell.shortMessageText;
@@ -1623,15 +1762,15 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
 //  Storyboard
 - (void)goToCommentScreenWithPost:(Post *)post
 {
-    [self performSegueWithIdentifier:[self goToCommentsScreenSegueIdentifier]
-                              sender:post];
+    [self performSegueWithIdentifier: [self goToCommentsScreenSegueIdentifier]
+                              sender: post];
 }
 
 - (void)goToTwitterReplyWithPost:(Post *)post shouldQoute:(BOOL)shouldQoute
 {
     self.postForMenu = post;
-    [self performSegueWithIdentifier:[self goToTwitterReplyScreenSegueIdentifier]
-                              sender:[NSNumber numberWithBool:shouldQoute]];
+    [self performSegueWithIdentifier: [self goToTwitterReplyScreenSegueIdentifier]
+                              sender: [NSNumber numberWithBool:shouldQoute]];
 }
 
 - (void)goToSearchWithTag:(NSString *)tag
@@ -1665,7 +1804,7 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
             replyVC.additionalText = self.postForMenu.text;
         }
     }
-    else if ([segue.identifier isEqualToString:kStoryboardSegueIDSearch])
+    else if ([segue.identifier isEqualToString: kStoryboardSegueIDSearch])
     {
         self.fetchedResultsController.delegate = nil;
     }

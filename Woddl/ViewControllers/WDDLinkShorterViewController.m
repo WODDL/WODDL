@@ -28,8 +28,8 @@
     static NSDataDetector *dataDetector = nil;
     if (!dataDetector)
     {
-        dataDetector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink
-                                                       error:nil];
+        dataDetector = [NSDataDetector dataDetectorWithTypes: NSTextCheckingTypeLink
+                                                       error: nil];
         
     }
     __block NSInteger requestsCount = 0;
@@ -60,25 +60,25 @@
                                             return;
                                         }
                                         
-                                        if (![Link isURLStringShort:linkString])
+                                        if (![Link isURLStringShort: linkString])
                                         {
-                                            NSURL *linkURL = [NSURL URLWithString:linkString];
-                                            NSURL *cachedLink = [[WDDURLShorter defaultShorter] cachedLinkForURL:linkURL];
+                                            NSURL *linkURL = [NSURL URLWithString: linkString];
+                                            NSURL *cachedLink = [[WDDURLShorter defaultShorter] cachedLinkForURL: linkURL];
                                             
                                             if (cachedLink)
                                             {
-                                                [processedText.mutableString replaceOccurrencesOfString:linkString
-                                                                                             withString:cachedLink.absoluteString
-                                                                                                options:NSCaseInsensitiveSearch
-                                                                                                  range:NSMakeRange(0, processedText.mutableString.length)];
+                                                [processedText.mutableString replaceOccurrencesOfString: linkString
+                                                                                             withString: cachedLink.absoluteString
+                                                                                                options: NSCaseInsensitiveSearch
+                                                                                                  range: NSMakeRange(0, processedText.mutableString.length)];
                                             }
                                             else
                                             {
                                                 __weak WDDLinkShorterViewController *wSelf = self;
                                                 ++requestsCount;
                                                 
-                                                [[WDDURLShorter defaultShorter] getLinkForURL:linkURL
-                                                                                 withCallback:^(NSURL *resultURL) {
+                                                [[WDDURLShorter defaultShorter] getLinkForURL: linkURL
+                                                                                 withCallback: ^(NSURL *resultURL) {
                                                                                      
                                                                                      if (resultURL)
                                                                                      {
@@ -105,7 +105,6 @@
                                                                                          {
                                                                                              complition(YES, string);
                                                                                          }
-                                                                                         
                                                                                      }
                                                                                  }];
                                             }

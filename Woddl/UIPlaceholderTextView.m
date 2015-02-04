@@ -22,7 +22,9 @@
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
     self = [super initWithCoder:aDecoder];
+    
     if (self) {
+        
         [self doCustomInitialization];
     }
     return self;
@@ -54,15 +56,15 @@
     
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
     
-    [nc addObserver:self
-           selector:@selector(textChanged:)
-               name:UITextViewTextDidChangeNotification
-             object:nil];
+    [nc addObserver: self
+           selector: @selector(textChanged:)
+               name: UITextViewTextDidChangeNotification
+             object: nil];
     
-    [nc addObserver:self
-           selector:@selector(textChanged:)
-               name:UITextViewTextDidEndEditingNotification
-             object:nil];
+    [nc addObserver: self
+           selector: @selector(textChanged:)
+               name: UITextViewTextDidEndEditingNotification
+             object: nil];
     
 //    self.font = [UIFont helveticaNeueWithTypeface:kFontTypefaceLight size:kMessageInputFontSize];
 }

@@ -202,11 +202,10 @@ static const NSInteger kMediaTypeLink = 254;
         __weak WDDPostView *w_self = self;
         [self.post refreshLikesAndCommentsCountWithComplitionBlock:^(BOOL success) {
             
-            [w_self setNumberOfComments:(w_self.post.isCommentable ? w_self.post.commentsCount : nil)];
-            [w_self setNumberOfLikes:(w_self.post.isLikable ? w_self.post.likesCount : nil)];
+            [w_self setNumberOfComments: (w_self.post.isCommentable ? w_self.post.commentsCount : nil)];
+            [w_self setNumberOfLikes: (w_self.post.isLikable ? w_self.post.likesCount : nil)];
         }];
     }
-
 }
 
 - (void)setNumberOfComments:(NSNumber *)commentsCount
@@ -430,23 +429,23 @@ static const NSInteger kMediaTypeLink = 254;
          
          [self.mediaScrollView addSubview:imageView];
          
-         NSLayoutConstraint *widthConstraint = [NSLayoutConstraint constraintWithItem:imageView
-                                                                            attribute:NSLayoutAttributeWidth
-                                                                            relatedBy:NSLayoutRelationEqual
-                                                                               toItem:nil
-                                                                            attribute:NSLayoutAttributeNotAnAttribute
-                                                                           multiplier:1
-                                                                             constant:imageWidth];
+         NSLayoutConstraint *widthConstraint = [NSLayoutConstraint constraintWithItem: imageView
+                                                                            attribute: NSLayoutAttributeWidth
+                                                                            relatedBy: NSLayoutRelationEqual
+                                                                               toItem: nil
+                                                                            attribute: NSLayoutAttributeNotAnAttribute
+                                                                           multiplier: 1
+                                                                             constant: imageWidth];
          
-         [imageView addConstraint:widthConstraint];
+         [imageView addConstraint: widthConstraint];
          
          positionX += CGRectGetWidth(imageView.frame);
          
-         UIImage *image = [[SDWebImageManager sharedManager].imageCache imageFromMemoryCacheForKey:[obj absoluteString]];
+         UIImage *image = [[SDWebImageManager sharedManager].imageCache imageFromMemoryCacheForKey: [obj absoluteString]];
          
          if (!image)
          {
-             image = [[SDWebImageManager sharedManager].imageCache imageFromDiskCacheForKey:[obj absoluteString]];
+             image = [[SDWebImageManager sharedManager].imageCache imageFromDiskCacheForKey: [obj absoluteString]];
          }
          
          if (image)
