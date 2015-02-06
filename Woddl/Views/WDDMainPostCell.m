@@ -474,8 +474,8 @@ static NSMutableDictionary *st_iconsCache = nil;
     {
         @autoreleasepool
         {
-            _shortMessageText = [self formShortMessageStringWithMessageText:self.fullMessageText
-                                                                searchRange:NSMakeRange(0, self.fullMessageText.length)];
+            _shortMessageText = [self formShortMessageStringWithMessageText: self.fullMessageText
+                                                                searchRange: NSMakeRange(0, self.fullMessageText.length)];
         }
      }
     return _shortMessageText;
@@ -522,6 +522,7 @@ static NSMutableDictionary *st_iconsCache = nil;
         [showMoreAtrString setURL: [NSURL URLWithString: kShowMoreURLBase] range: NSMakeRange(newLineOffset, showMoreString.length - newLineOffset)];
         
         [newText appendAttributedString:showMoreAtrString];
+        
         return newText;
     }
     else if (textSize.height > SixStringsTextSize)
@@ -537,7 +538,7 @@ static NSMutableDictionary *st_iconsCache = nil;
 
 - (BOOL)isExpandable
 {
-    CGSize postSize = [WDDMainPostCell sizeForText:self.fullMessageText withFont:self.textMessage.font];
+    CGSize postSize = [WDDMainPostCell sizeForText: self.fullMessageText withFont: self.textMessage.font];
     BOOL textExpandable = (postSize.height > SixStringsTextSize);
     
     return textExpandable;

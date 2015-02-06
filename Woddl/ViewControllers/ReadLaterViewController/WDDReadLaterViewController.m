@@ -110,8 +110,7 @@
     [fetchRequest setSortDescriptors:sortDescriptors];
     
     NSPredicate *predicate = [self formPredicate];
-    [fetchRequest setPredicate:predicate];
-    
+    [fetchRequest setPredicate: predicate];
     
     NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                                                                                 managedObjectContext:context

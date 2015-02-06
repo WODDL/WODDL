@@ -515,9 +515,9 @@ static NSInteger const kMaxCountOfPostsInUpdate = 10;
 {
     void (^completionBlk)(NSError *error) = [completionBlock copy];
     
-//    NSString *urlString = [NSString stringWithFormat:@"https://graph.facebook.com/notif_%@_%@?access_token=%@&unread=0", userId, notificationId, accessToken];
+    NSString *urlString = [NSString stringWithFormat:@"https://graph.facebook.com/notif_%@_%@?access_token=%@&unread=0", userId, notificationId, accessToken];
     
-    NSString *urlString = [NSString stringWithFormat:@"https://graph.facebook.com/notif_%@_%@?unread=0", userId, notificationId];
+//    NSString *urlString = [NSString stringWithFormat:@"https://graph.facebook.com/notif_%@_%@?unread=0", userId, notificationId];
     
     NSLog(@"%@", urlString);
     

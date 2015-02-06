@@ -120,7 +120,7 @@ static const NSInteger tag_AuthentificationProposal = 2048;
                                                 
 - (void)openInSafari
 {
-    [[UIApplication sharedApplication] openURL:_webView.request.URL];
+    [[UIApplication sharedApplication] openURL: _webView.request.URL];
 }
 
 - (void)viewDidAppear:(BOOL)animated

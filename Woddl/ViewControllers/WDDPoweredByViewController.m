@@ -204,8 +204,8 @@ const NSTimeInterval kPresentPoweredByDelay = 2.5f;
                  dispatch_async(bgQueue, ^{
                      [objects enumerateObjectsUsingBlock:^(PFObject *parseSocialNetwork, NSUInteger idx, BOOL *stop)
                       {
-                          [[WDDDataBase sharedDatabase] updateSocialNetworkFromParse:parseSocialNetwork
-                                                                        withDelegate:nil];
+                          [[WDDDataBase sharedDatabase] updateSocialNetworkFromParse: parseSocialNetwork
+                                                                        withDelegate: nil];
                       }];
                  
                      [Flurry setUserID:[PFUser currentUser].objectId];

@@ -317,7 +317,7 @@ typedef NS_ENUM(NSUInteger, LoginFacebookActionSheetButton)
         [self removeLoginHUD];
 //        [self performSegueWithIdentifier:kStoryboardSegueIDMainSlidingScreenAfterLogin sender:nil];
 #warning Add check for first start here
-        [self performSegueWithIdentifier:kStoryboardSegueIDGuideScreenAfterLogin sender:nil];
+        [self performSegueWithIdentifier: kStoryboardSegueIDGuideScreenAfterLogin sender: nil];
         [PrivateMessagesModel sharedModel];
     });
 }

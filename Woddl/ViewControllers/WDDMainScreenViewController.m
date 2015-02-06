@@ -67,16 +67,18 @@ static const NSInteger kCountLoadMorePosts = 10;
                                                  name:@"displayPoweredByScreen"
                                                object:nil];
 }
+
 -(void)displayPoweredByScreen
 {
     WDDPoweredByViewController* infoController = [self.storyboard instantiateViewControllerWithIdentifier:@"PoweredByScreen"];
     [self.navigationController pushViewController:infoController animated:NO];
     
 }
+
 - (void)viewDidLoad
 {
-    
     [super viewDidLoad];
+    
     [self setupSliding];
     
     [[WDDNotificationsManager sharedManager] notificationsFRC];     // This is final init of notificatins manager after DB is 100% connected
@@ -105,7 +107,7 @@ static const NSInteger kCountLoadMorePosts = 10;
                                                       object:nil
                                                        queue:[NSOperationQueue mainQueue]
                                                   usingBlock:^(NSNotification *note) {
-                                                      [self startUnreadMessageAnimationWithCount:++self.unreadMessagesCount];
+                                                      [self startUnreadMessageAnimationWithCount: ++self.unreadMessagesCount];
                                                   }];
     
     
@@ -229,11 +231,10 @@ static const NSInteger kCountLoadMorePosts = 10;
 
 - (void)reloadTableContent
 {
-    [NSFetchedResultsController deleteCacheWithName:kPostMessagesCache];
-    
+    [NSFetchedResultsController deleteCacheWithName: kPostMessagesCache];
     
     self.fetchedResultsController.fetchRequest.predicate = [self formPredicate];
-    [self.fetchedResultsController performFetch:nil];
+    [self.fetchedResultsController performFetch: nil];
     [self.postsTable reloadData];
 }
 

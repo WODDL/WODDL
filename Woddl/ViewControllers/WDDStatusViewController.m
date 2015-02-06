@@ -1037,7 +1037,6 @@ const NSInteger kStatusUpdateErrorAlertTag = 4321;
 
 - (IBAction)addSharp:(id)sender
 {
-    
     NSRange cursorPostion = self.inputTextview.selectedRange;
     self.inputTextview.text = [self.inputTextview.text stringByReplacingCharactersInRange:cursorPostion withString:@"#"];
     cursorPostion.location += 1;

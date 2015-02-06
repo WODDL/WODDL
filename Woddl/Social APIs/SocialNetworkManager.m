@@ -279,7 +279,7 @@ static SocialNetworkManager* mySocialNetworkManager = nil;
                         --networksCount;
                         if (self.isGoogleInProgress)
                         {
-                            [objectsToRemove addObject:obj];
+                            [objectsToRemove addObject: obj];
                         }
                         else
                         {
@@ -298,7 +298,7 @@ static SocialNetworkManager* mySocialNetworkManager = nil;
                     [(NSMutableArray *)socialNateworks removeObjectsInArray:objectsToRemove];
                 }
 
-                DLog(@"Internet connection is up. Perform update for %ld networks", socialNateworks.count);
+                DLog(@"Internet connection is up. Perform update for %ld networks", (unsigned long)socialNateworks.count);
                 if (networksCount > 0)
                 {
                     for (SocialNetwork* socNetwork in socialNateworks)

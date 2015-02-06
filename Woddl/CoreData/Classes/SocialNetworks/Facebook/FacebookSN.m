@@ -91,7 +91,7 @@ static NSInteger kSearchPostLimit = 10;
         return ;
     }
      */
-    [self facebookLoadMorePostDidFinishWithPosts:posts];
+    [self facebookLoadMorePostDidFinishWithPosts: posts];
 }
 
 - (void)fetchNotifications
@@ -114,14 +114,14 @@ static NSInteger kSearchPostLimit = 10;
              FacebookSN *bgSelf = (FacebookSN*)[[WDDDataBase sharedDatabase].managedObjectContext existingObjectWithID:objectId error:&error];
              if (bgSelf && !error)
              {
-                 [bgSelf facebookRefreshGroupsDidFinishWithGroups:resultDictionary[@"groups"]];
-                 [bgSelf facebookGetPostDidFinishWithPosts:resultDictionary[@"posts"]];
-                 [bgSelf saveMedia:resultDictionary[@"photos"]];
-                 [bgSelf saveUsers:resultDictionary[@"users"]];
-                 [bgSelf saveNotificationsToDataBase:resultDictionary[@"notifications"]];
+                 [bgSelf facebookRefreshGroupsDidFinishWithGroups: resultDictionary[@"groups"]];
+                 [bgSelf facebookGetPostDidFinishWithPosts: resultDictionary[@"posts"]];
+                 [bgSelf saveMedia: resultDictionary[@"photos"]];
+                 [bgSelf saveUsers: resultDictionary[@"users"]];
+                 [bgSelf saveNotificationsToDataBase: resultDictionary[@"notifications"]];
              }
          }
-                           completionQueue:queue
+                           completionQueue: queue
          ];
     });
 }
@@ -218,9 +218,9 @@ static NSInteger kSearchPostLimit = 10;
 - (void)searchPostsWithText:(NSString *)searchText
 {
     FacebookRequest* request = [[FacebookRequest alloc] init];
-    NSArray *posts = [request searchPostsWithSearchText:searchText
-                                                  token:self.accessToken
-                                                  limit:kSearchPostLimit];
+    NSArray *posts = [request searchPostsWithSearchText: searchText
+                                                  token: self.accessToken
+                                                  limit: kSearchPostLimit];
     [self savePostsToDataBase:posts];
     
     //WDDAppDelegate* delegate = [[UIApplication sharedApplication] delegate];

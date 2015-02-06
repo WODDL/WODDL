@@ -121,45 +121,50 @@ static NSInteger clockImageWidth        = 9;
         _messageTextLabel = [UITextView new];
 
         _messageTextLabel.editable = NO;
-        _messageTextLabel.scrollEnabled = NO;
+        _messageTextLabel.scrollEnabled = YES;
         _messageTextLabel.textContainer.lineFragmentPadding = 0;
+        _messageTextLabel.textContainer.lineBreakMode = NSLineBreakByWordWrapping;
         _messageTextLabel.textContainerInset = UIEdgeInsetsZero;
-        self.messageTextLabel.backgroundColor = [UIColor clearColor];
-        self.messageTextLabel.font = TEXT_FONT;
+        _messageTextLabel.backgroundColor = [UIColor clearColor];
+//        _messageTextLabel.font = TEXT_FONT;
 //        self.messageTextLabel.numberOfLines = 0;
 //        self.messageTextLabel.lineBreakMode = NSLineBreakByWordWrapping;
-        self.messageTextLabel.textColor = [UIColor blackColor];
+        _messageTextLabel.textColor = [UIColor blackColor];
         
-        self.messageTextLabel.text = NSLocalizedString(@"lskIsTyping", @"is typing...");
+        _messageTextLabel.text = NSLocalizedString(@"lskIsTyping", @"is typing...");
         
-        [self.baloonView.superview addSubview:self.messageTextLabel];
+        [self.baloonView.superview addSubview: _messageTextLabel];
         
         return;
     }
     
     self.clockImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ClockImage"]];
     
-    [self.contentView addSubview:self.clockImageView];
+    [self.contentView addSubview: self.clockImageView];
     
     _messageTextLabel = [UITextView new];
     _messageTextLabel.scrollEnabled = NO;
     _messageTextLabel.textContainer.lineFragmentPadding = 0;
+    _messageTextLabel.textContainer.lineBreakMode = NSLineBreakByWordWrapping;
     _messageTextLabel.textContainerInset = UIEdgeInsetsZero;
     _messageTextLabel.editable = NO;
     _messageTextLabel.dataDetectorTypes = UIDataDetectorTypeLink;
-    self.messageTextLabel.backgroundColor = [UIColor clearColor];
-    self.messageTextLabel.font = TEXT_FONT;
+    _messageTextLabel.backgroundColor = [UIColor clearColor];
+    _messageTextLabel.font = [UIFont systemFontOfSize: 13];
 //    self.messageTextLabel.numberOfLines = 0;
 //    self.messageTextLabel.lineBreakMode = NSLineBreakByWordWrapping;
-    self.messageTextLabel.textColor = [UIColor darkGrayColor];
-    self.messageTextLabel.delegate = self;
+    _messageTextLabel.textColor = [UIColor darkGrayColor];
+    _messageTextLabel.delegate = self;
+    _messageTextLabel.linkTextAttributes = @{NSForegroundColorAttributeName: [UIColor blueColor],
+                                            NSUnderlineStyleAttributeName: [NSNumber numberWithInt: NSUnderlineStyleNone]};
     
-    self.messageTextLabel.text = self.message.body;
+//    _messageTextLabel.attributedText = [WDDChatMessageCell attributedStringForString: self.message.body]; //self.message.body;
+    _messageTextLabel.text = self.message.body;
     
 //    self.messageTextLabel.centerVertically = YES;
-    self.messageTextLabel.textAlignment = NSTextAlignmentCenter;
+    _messageTextLabel.textAlignment = NSTextAlignmentLeft;
     
-    [self.baloonView.superview addSubview:self.messageTextLabel];
+    [self.baloonView.superview addSubview: _messageTextLabel];
 }
 
 - (void)layoutSubviews
@@ -170,7 +175,7 @@ static NSInteger clockImageWidth        = 9;
     
     NSString *messageText = self.message.isComposing ? NSLocalizedString(@"lskIsTyping", @"is typing...") : self.message.body;
     
-    CGSize textSize = [WDDChatMessageCell sizeForMessageText:messageText];
+    CGSize textSize = [WDDChatMessageCell sizeForMessageText: messageText];
     CGFloat dateLabelWidth = [WDDChatMessageCell widthForOneLineText:self.messageDateLabel.text withFont:DATE_TEXT_FONT];
     
 //    CGFloat bottomLineWidth = [WDDChatMessageCell widthForOneLineText:self.messageDate withFont:DATE_TEXT_FONT];
@@ -223,12 +228,12 @@ static NSInteger clockImageWidth        = 9;
     }
 #endif
     
-    //self.messageTextLabel.frame = [self.baloonView.superview convertRect:(CGRect){ textMarginHorizontal, textMarginVertical, textSize } fromView:self.baloonView];
+    self.messageTextLabel.frame = [self.baloonView.superview convertRect:(CGRect){ textMarginHorizontal, textMarginVertical, textSize } fromView: self.baloonView];
     
-    self.messageTextLabel.frame = [self.baloonView.superview convertRect:(CGRect){ horizontalTextMargin, textMarginVertical, textSize.width, self.baloonView.frame.size.height - textMarginVertical*2} fromView:self.baloonView];
+//    self.messageTextLabel.frame = [self.baloonView.superview convertRect:(CGRect){ horizontalTextMargin, textMarginVertical, textSize.width, self.baloonView.frame.size.height - textMarginVertical*2} fromView:self.baloonView];
+    
     if (!self.message.isOutgoing)
     {
-        
         self.clockImageView.frame = (CGRect){ self.baloonView.frame.origin.x + self.baloonView.frame.size.width - dateLabelWidth - 17, self.baloonView.frame.origin.y + self.baloonView.frame.size.height + 1, clockImageWidth, clockImageHeight};
         self.messageDateLabel.frame = (CGRect){ self.baloonView.frame.origin.x + self.baloonView.frame.size.width - dateLabelWidth - 5, self.baloonView.frame.origin.y + self.baloonView.frame.size.height, dateLabelWidth, DATE_TEXT_FONT.lineHeight};
     }
@@ -245,8 +250,10 @@ static NSInteger clockImageWidth        = 9;
     self.messageTextLabel.delegate = nil;
     self.message = nil;
     [self.contentView.subviews enumerateObjectsUsingBlock:^(UIView *subview, NSUInteger idx, BOOL *stop) {
+        
         [subview removeFromSuperview];
     }];
+    
     [super prepareForReuse];
 }
 
@@ -255,8 +262,8 @@ static NSInteger clockImageWidth        = 9;
 + (NSAttributedString*)attributedStringForString:(NSString*)text
 {
     NSMutableAttributedString *attributedString
-    = [[NSMutableAttributedString alloc] initWithString:text attributes:@{NSFontAttributeName:TEXT_FONT}];
-        
+    = [[NSMutableAttributedString alloc] initWithString: text attributes: @{NSFontAttributeName: TEXT_FONT}];
+    
     NSError *error;
     
     NSDataDetector *detector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink error:&error];
@@ -265,7 +272,7 @@ static NSInteger clockImageWidth        = 9;
     
     [links enumerateObjectsUsingBlock:^(NSTextCheckingResult *link, NSUInteger idx, BOOL *stop)
      {
-         [attributedString addAttribute:NSLinkAttributeName value:[NSURL URLWithString:[text substringWithRange:link.range]] range:link.range];
+         [attributedString addAttribute: NSLinkAttributeName value: [NSURL URLWithString:[text substringWithRange:link.range]] range:link.range];
      }];
     
     return attributedString;
@@ -274,7 +281,7 @@ static NSInteger clockImageWidth        = 9;
 + (CGSize)sizeForMessageText:(NSString *)text
 {
     CGSize size = CGSizeZero;
-    NSAttributedString *string = [self attributedStringForString:text];
+    NSAttributedString *string = [self attributedStringForString: text];
     CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)string);
     if (framesetter)
     {
@@ -304,10 +311,11 @@ static NSInteger clockImageWidth        = 9;
     }
     else
     {
-        CGSize textSize = [WDDChatMessageCell sizeForMessageText:text];
+        CGSize textSize = [WDDChatMessageCell sizeForMessageText: text];
         DLog(@"Text size: %f, %f", textSize.width, textSize.height);
         
         CGFloat height = textSize.height + textMarginVertical * 2 + verticalContentIndent * 2 + DATE_TEXT_FONT.lineHeight;
+        
         return height;
     }
 }

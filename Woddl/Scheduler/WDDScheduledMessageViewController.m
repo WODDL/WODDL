@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 IDS. All rights reserved.
 //
 
+#import <OHAttributedStringAdditions.h>
 #import "WDDScheduledMessageViewController.h"
 #import "WDDScheduledMessageTableViewCell.h"
 #import "WDDSchedulerHelper.h"
@@ -316,7 +317,7 @@ NSString * const WDDScheduledMessageViewControllerIdentifier = @"ScheduledMessag
         [cell.messageLabel setNumberOfLines:3];
     }
     
-    cell.messageLabel.text = post;
+    cell.messageLabel.attributedText = [self getTagHighlightedText: post];
     cell.messageTime.text = [NSString stringWithFormat:@"Time: %@",[self convertUnixTimestamtToHRString:[[self.allMessages valueForKey:@"time"] objectAtIndex:indexPath.row]]];
     cell.messageStatus.text = [NSString stringWithFormat:@"Status: %@",[[self.allMessages valueForKey:@"status"] objectAtIndex:indexPath.row]];
     cell.messageDelete.tag = indexPath.row;
@@ -354,15 +355,39 @@ NSString * const WDDScheduledMessageViewControllerIdentifier = @"ScheduledMessag
     return cell;
 }
 
+- (NSMutableAttributedString*)getTagHighlightedText: (NSString *)text
+{
+    NSString *regexString = [NSString stringWithFormat:@"(?:(?<=\\s)|^)(#|@)(\\w*[0-9A-Za-z_]+\\w*)"];
+    NSRegularExpression * regex = [NSRegularExpression regularExpressionWithPattern: regexString
+                                                                            options: NSRegularExpressionCaseInsensitive
+                                                                              error: nil];
+    NSArray *matches = [regex matchesInString: text
+                                      options: 0
+                                        range: NSMakeRange(0, [text length])];
+    
+    NSMutableAttributedString *highlitedText = [NSMutableAttributedString attributedStringWithString: text];
+    
+    for (NSTextCheckingResult *match in matches)
+    {
+        NSRange matchRange = [match range];
+        [highlitedText setAttributes: @{ NSFontAttributeName: [UIFont boldSystemFontOfSize: kPostFontSize ],
+                              NSForegroundColorAttributeName: [UIColor blackColor] }
+                               range: matchRange];
+    }
+    
+    return highlitedText;
+}
+
 #pragma mark - UITableView delegate
 #pragma mark
 
-const CGFloat kRowHeightMessages = 120.0f;
+const CGFloat kRowHeightMessages = 111.0f;
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return kRowHeightMessages;
 }
+
 -(IBAction)editMessage:(UIButton*)sender
 {
 
@@ -375,6 +400,7 @@ const CGFloat kRowHeightMessages = 120.0f;
     [self popBackViewController];
 
 }
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
