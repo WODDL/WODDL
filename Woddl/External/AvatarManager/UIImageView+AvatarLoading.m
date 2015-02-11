@@ -13,13 +13,13 @@
 
 - (void)setAvatarWithURL:(NSURL *)avatarURL
 {
-    [self setAvatarWithURL:avatarURL completed:nil];
+    [self setAvatarWithURL: avatarURL completed: nil];
 }
 
 - (void)setAvatarWithURL:(NSURL *)avatarURL
                completed:(AvatarLoadedBlock)block
 {
-    UIImage *chachedImage = [[AvatarManager sharedManager] imageFromInMemoryCacheForURL:avatarURL];
+    UIImage *chachedImage = [[AvatarManager sharedManager] imageFromInMemoryCacheForURL: avatarURL];
     self.image = chachedImage ? : [AvatarManager sharedManager].placeholderImage;
     
     __weak UIImageView *w_self = self;
@@ -32,7 +32,7 @@
         
         if (cacheType != ICTypeNone)
         {
-            image = [[AvatarManager sharedManager] imageForURL:avatarURL];
+            image = [[AvatarManager sharedManager] imageForURL: avatarURL];
             
             if (image)
             {

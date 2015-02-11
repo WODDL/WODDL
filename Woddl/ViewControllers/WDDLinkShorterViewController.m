@@ -38,7 +38,7 @@
                                    options:NSMatchingReportCompletion
                                      range:NSMakeRange(0, text.length)
                                 usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop)
-    {
+                                {
                                     
                                     if (result.resultType == NSTextCheckingTypeLink)
                                     {
@@ -111,6 +111,7 @@
                                         }
                                     }
                                 }];
+    
     if (!requestsCount && complition)
     {
         complition(![text isEqual:processedText], processedText);

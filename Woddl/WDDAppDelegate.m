@@ -363,13 +363,13 @@ BOOL isDeviceJailbroken()
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
     
     
-    [self observeKeyboard:NO];
+    [self observeKeyboard: NO];
     [self stopKeyboardDismissOnSwipe];
 
     if ([PFUser currentUser])
     {
         
-        [[PFInstallation currentInstallation] setObject:[PFUser currentUser] forKey:@"user"];
+        [[PFInstallation currentInstallation] setObject: [PFUser currentUser] forKey: @"user"];
         [[PFInstallation currentInstallation] saveEventually];
         //        NSDate *currentTime = [NSDate date];
         

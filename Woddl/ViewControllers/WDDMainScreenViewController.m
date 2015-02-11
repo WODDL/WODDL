@@ -79,6 +79,8 @@ static const NSInteger kCountLoadMorePosts = 10;
 {
     [super viewDidLoad];
     
+//    [NSFetchedResultsController deleteCacheWithName: kPostMessagesCache];
+    
     [self setupSliding];
     
     [[WDDNotificationsManager sharedManager] notificationsFRC];     // This is final init of notificatins manager after DB is 100% connected
@@ -128,6 +130,7 @@ static const NSInteger kCountLoadMorePosts = 10;
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
+    
     if (!IS_IOS7)
     {
         if ([[UIScreen mainScreen] bounds].size.height <= 480.0)
@@ -149,7 +152,8 @@ static const NSInteger kCountLoadMorePosts = 10;
       //  [self showProcessHUDWithText:NSLocalizedString(@"lskUpdating", @"Updating message on main screen HUD")];
     }
 
-    [super viewWillAppear:animated];
+    [super viewWillAppear: animated];
+    
     self.postsTable.scrollsToTop = YES;
    // [[SocialNetworkManager sharedManager] updatePosts];
    // [self.postsTable reloadData];
@@ -168,7 +172,7 @@ static const NSInteger kCountLoadMorePosts = 10;
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 
-                [super viewDidAppear:animated];
+                [super viewDidAppear: animated];
                 self.fetchedResultsController.delegate = self;
                 
                 [self reloadTableContent];
@@ -801,6 +805,7 @@ static const CGFloat kSlideMenuRightAnchor = 240.0f;
 }
 
 static NSString * const kPostCellIdentifier = @"PostCell";
+
 - (NSString *)cellIdentifier
 {
     return kPostCellIdentifier;

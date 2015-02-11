@@ -32,11 +32,14 @@
 
 - (id)initWithFrame:(CGRect)frame delegate:(id)delegate
 {
-    self = [super initWithFrame:frame];
+    self = [super initWithFrame: frame];
+    
     if (self) {
+        
         self.delegate = delegate;
         [self doCustomInitialization];
     }
+    
     return self;
 }
 

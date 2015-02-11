@@ -125,8 +125,8 @@ static const NSInteger kMediaTypeLink = 254;
 
 - (void)setupShowProfileTapForView:(UIView *)view
 {
-    [view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showAuthorProfile)]];
-    [view setUserInteractionEnabled:YES];
+    [view addGestureRecognizer: [[UITapGestureRecognizer alloc] initWithTarget: self action: @selector(showAuthorProfile)]];
+    [view setUserInteractionEnabled: YES];
 }
 
 #pragma mark - Avatar setup
@@ -298,6 +298,9 @@ static const NSInteger kMediaTypeLink = 254;
     
     self.mediaScrollBottomOffset.constant = OffsetY;
     self.mediaScrollView.scrollsToTop = NO;
+    
+    NSLog(@"%@", NSStringFromCGRect(self.mediaScrollView.frame));
+    
     [self setMediasList];
 }
 
@@ -314,7 +317,7 @@ static const NSInteger kMediaTypeLink = 254;
     {
         if (mediaObj.type.intValue == kMediaPhoto || mediaObj.type.intValue == kMediaVideo)
         {
-            UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(positionX, 0.f, imageWidth, ExpandedMediaSize)];
+            UIImageView *imageView = [[UIImageView alloc] initWithFrame: CGRectMake(positionX, 0.f, imageWidth, ExpandedMediaSize)];
             
             imageView.backgroundColor = [UIColor blackColor];
             imageView.contentMode = UIViewContentModeScaleAspectFill;
@@ -328,11 +331,11 @@ static const NSInteger kMediaTypeLink = 254;
             [imageView addGestureRecognizer:tapRecognizer];
             imageView.userInteractionEnabled = YES;
             
-            UIActivityIndicatorView *activityIndication = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-            activityIndication.center = CGPointMake(CGRectGetWidth(imageView.frame) / 2.f, CGRectGetHeight(imageView.frame) / 2.f);
-            activityIndication.tag = tagActivityIdicator;
-            [activityIndication startAnimating];
-            [imageView addSubview:activityIndication];
+//            UIActivityIndicatorView *activityIndication = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+//            activityIndication.center = CGPointMake(CGRectGetWidth(imageView.frame) / 2.f, CGRectGetHeight(imageView.frame) / 2.f);
+//            activityIndication.tag = tagActivityIdicator;
+//            [activityIndication startAnimating];
+//            [imageView addSubview:activityIndication];
             
             if (mediaObj.type.integerValue == kMediaVideo)
             {
@@ -343,7 +346,7 @@ static const NSInteger kMediaTypeLink = 254;
                 [imageView addSubview:playIcon];
             }
             
-            [self.mediaScrollView addSubview:imageView];
+            [self.mediaScrollView addSubview: imageView];
             
             NSLayoutConstraint *widthConstraint = [NSLayoutConstraint constraintWithItem:imageView
                                                                                attribute:NSLayoutAttributeWidth
@@ -353,56 +356,58 @@ static const NSInteger kMediaTypeLink = 254;
                                                                               multiplier:1
                                                                                 constant:imageWidth];
             
-            [imageView addConstraint:widthConstraint];
+            [imageView addConstraint: widthConstraint];
             
             positionX += CGRectGetWidth(imageView.frame);
             
-            __weak UIImageView *wImageView = imageView;
-            __weak Media *wMediaObject = mediaObj;
+            [imageView sd_setImageWithURL: [NSURL URLWithString: mediaObj.previewURLString ? mediaObj.previewURLString : mediaObj.mediaURLString]];
             
-            [[SDWebImageManager sharedManager] downloadWithURL:[NSURL URLWithString:mediaObj.previewURLString ? mediaObj.previewURLString : mediaObj.mediaURLString]
-                                                       options:SDWebImageLowPriority | SDWebImageRetryFailed
-                                                      progress:nil
-                                                     completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished) {
-                                                         
-                                                         if (finished)
-                                                         {
-                                                             [[wImageView viewWithTag:tagActivityIdicator] removeFromSuperview];
-                                                             
-                                                             if (!error)
-                                                             {
-                                                                 wImageView.image = image;
-                                                             }
-                                                             
-                                                             if ([wMediaObject.type isEqual:@(kMediaPhoto)])
-                                                             {
-                                                                 [[SDWebImageManager sharedManager] downloadWithURL:[NSURL URLWithString:mediaObj.mediaURLString]
-                                                                                                            options:SDWebImageLowPriority | SDWebImageRetryFailed
-                                                                                                           progress:nil
-                                                                                                          completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished) {
-                                                                                                              
-                                                                                                              if (finished)
-                                                                                                              {
-                                                                                                                  if (error || !image)
-                                                                                                                  {
-                                                                                                                      if (!wImageView.image)
-                                                                                                                      {
-                                                                                                                          wImageView.image = [UIImage imageNamed:@"ImageLoadinFailedIcon"];
-                                                                                                                      }
-                                                                                                                  }
-                                                                                                                  else
-                                                                                                                  {
-                                                                                                                      wImageView.image = image;
-                                                                                                                  }
-                                                                                                              }
-                                                                                                          }];
-                                                             }
-                                                             else
-                                                             {
-                                                                 [[wImageView viewWithTag:tagPlayIcon] setHidden:NO];
-                                                             }
-                                                         }
-                                                     }];
+//            __weak UIImageView *wImageView = imageView;
+//            __weak Media *wMediaObject = mediaObj;
+//            
+//            [[SDWebImageManager sharedManager] downloadWithURL:[NSURL URLWithString:mediaObj.previewURLString ? mediaObj.previewURLString : mediaObj.mediaURLString]
+//                                                       options:SDWebImageLowPriority | SDWebImageRetryFailed
+//                                                      progress:nil
+//                                                     completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished) {
+//                                                         
+//                                                         if (finished)
+//                                                         {
+//                                                             [[wImageView viewWithTag:tagActivityIdicator] removeFromSuperview];
+//                                                             
+//                                                             if (!error)
+//                                                             {
+//                                                                 wImageView.image = image;
+//                                                             }
+//                                                             
+//                                                             if ([wMediaObject.type isEqual:@(kMediaPhoto)])
+//                                                             {
+//                                                                 [[SDWebImageManager sharedManager] downloadWithURL:[NSURL URLWithString:mediaObj.mediaURLString]
+//                                                                                                            options:SDWebImageLowPriority | SDWebImageRetryFailed
+//                                                                                                           progress:nil
+//                                                                                                          completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished) {
+//                                                                                                              
+//                                                                                                              if (finished)
+//                                                                                                              {
+//                                                                                                                  if (error || !image)
+//                                                                                                                  {
+//                                                                                                                      if (!wImageView.image)
+//                                                                                                                      {
+//                                                                                                                          wImageView.image = [UIImage imageNamed:@"ImageLoadinFailedIcon"];
+//                                                                                                                      }
+//                                                                                                                  }
+//                                                                                                                  else
+//                                                                                                                  {
+//                                                                                                                      wImageView.image = image;
+//                                                                                                                  }
+//                                                                                                              }
+//                                                                                                          }];
+//                                                             }
+//                                                             else
+//                                                             {
+//                                                                 [[wImageView viewWithTag:tagPlayIcon] setHidden:NO];
+//                                                             }
+//                                                         }
+//                                                     }];
         }
     }
     

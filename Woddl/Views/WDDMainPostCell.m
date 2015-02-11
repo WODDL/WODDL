@@ -237,14 +237,14 @@ static NSMutableDictionary *st_iconsCache = nil;
             tapRecognizer.mediaURL = [NSURL URLWithString: mediaObj.mediaURLString];
             tapRecognizer.previewURL = [NSURL URLWithString: mediaObj.previewURLString];
             
-            [imageView addGestureRecognizer:tapRecognizer];
+            [imageView addGestureRecognizer: tapRecognizer];
             imageView.userInteractionEnabled = YES;
             
-            UIActivityIndicatorView *activityIndication = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-            activityIndication.center = CGPointMake(CGRectGetWidth(imageView.frame) / 2.f, CGRectGetHeight(imageView.frame) / 2.f);
-            activityIndication.tag = tagActivityIdicator;
-            [activityIndication startAnimating];
-            [imageView addSubview:activityIndication];
+//            UIActivityIndicatorView *activityIndication = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+//            activityIndication.center = CGPointMake(CGRectGetWidth(imageView.frame) / 2.f, CGRectGetHeight(imageView.frame) / 2.f);
+//            activityIndication.tag = tagActivityIdicator;
+//            [activityIndication startAnimating];
+//            [imageView addSubview:activityIndication];
             
             if (mediaObj.type.integerValue == kMediaVideo)
             {
@@ -255,90 +255,91 @@ static NSMutableDictionary *st_iconsCache = nil;
                 [imageView addSubview:playIcon];
             }
             
-            [self.mediaScrollView addSubview:imageView];
+            [self.mediaScrollView addSubview: imageView];
             
-            NSLayoutConstraint *widthConstraint = [NSLayoutConstraint constraintWithItem:imageView
-                                                                               attribute:NSLayoutAttributeWidth
-                                                                               relatedBy:NSLayoutRelationEqual
-                                                                                  toItem:nil
-                                                                               attribute:NSLayoutAttributeNotAnAttribute
-                                                                              multiplier:1
-                                                                                constant:imageWidth];
-            [imageView addConstraint:widthConstraint];
+            NSLayoutConstraint *widthConstraint = [NSLayoutConstraint constraintWithItem: imageView
+                                                                               attribute: NSLayoutAttributeWidth
+                                                                               relatedBy: NSLayoutRelationEqual
+                                                                                  toItem: nil
+                                                                               attribute: NSLayoutAttributeNotAnAttribute
+                                                                              multiplier: 1
+                                                                                constant: imageWidth];
+            [imageView addConstraint: widthConstraint];
             positionX += CGRectGetWidth(imageView.frame);
             
-            __weak UIImageView *wImageView = imageView;
-            __weak Media *wMediaObject = mediaObj;
+            NSString *mediaUrl = mediaObj.previewURLString ? mediaObj.previewURLString : mediaObj.mediaURLString;
             
+            [imageView setImageWithURL: [NSURL URLWithString: mediaUrl] placeholderImage: nil];
             
+//            __weak UIImageView *wImageView = imageView;
+//            __weak Media *wMediaObject = mediaObj;
             
-            [[SDWebImageManager sharedManager] downloadWithURL:[NSURL URLWithString:(mediaObj.previewURLString ? mediaObj.previewURLString : mediaObj.mediaURLString)]
-             options:SDWebImageLowPriority | SDWebImageRetryFailed
-             progress:nil
-             completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished)
-            {
-                 if (finished)
-                 {
-                     [[wImageView viewWithTag:tagActivityIdicator] removeFromSuperview];
-
-                     if (!error)
-                     {
-                         [[wImageView viewWithTag:tagPlayIcon] setHidden:NO];
-                         wImageView.image = image;
-                     }
-                     
-                     if ([wMediaObject.type isEqual:@(kMediaPhoto)])
-                     {
-                         NSString *mediaURLString = mediaObj.mediaURLString;
-                         
-                         [[SDWebImageManager sharedManager] downloadWithURL:[NSURL URLWithString:mediaURLString]
-                          options:SDWebImageLowPriority | SDWebImageRetryFailed
-                          progress:nil
-                          completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished)
-                         {
-                          
-                          if (finished)
-                          {
-                              if (error || !image)
-                              {
-                                  DLog(@"Fail to load image with url: %@", mediaURLString);
-                                  
-                                  if (!wImageView.image)
-                                  {
-                                      wImageView.image = [UIImage imageNamed:@"ImageLoadinFailedIcon"];
-                                  }
-                              }
-                              else if(image.size.height < [UIScreen mainScreen].bounds.size.height && image.size.width < [UIScreen mainScreen].bounds.size.width)
-                              {
-                                  wImageView.image = image;
-                              }
-                              else
-                              {
-                                  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-                                      
-                                      CGFloat screenHeight = [UIScreen mainScreen].bounds.size.height;
-                                      CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
-                                      CGSize rescaledImageSize = (image.size.width > image.size.height) ? CGSizeMake(screenHeight, screenWidth) : CGSizeMake(screenWidth, screenHeight);
-                                      
-                                      UIImage *rescaledImage = [image resizedImageWithContentMode:UIViewContentModeScaleAspectFit bounds:rescaledImageSize interpolationQuality:kCGInterpolationMedium];
-                                      
-                                      [[[SDWebImageManager sharedManager] imageCache] storeImage:rescaledImage forKey:wMediaObject.mediaURLString];
-                                      
-                                      dispatch_async(dispatch_get_main_queue(), ^{
-                                          
-                                          wImageView.image = rescaledImage;
-                                          
-                                      });
-                                      
-                                  });
-                              }
-                          }
-                      }];
-                     }
-                 }
-             }];
-}
-}
+//            [[SDWebImageManager sharedManager] downloadWithURL: [NSURL URLWithString:(mediaObj.previewURLString ? mediaObj.previewURLString : mediaObj.mediaURLString)]
+//             options:SDWebImageLowPriority | SDWebImageRetryFailed
+//             progress:nil
+//             completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished)
+//            {
+//                 if (finished)
+//                 {
+//                     [[wImageView viewWithTag:tagActivityIdicator] removeFromSuperview];
+//
+//                     if (!error)
+//                     {
+//                         [[wImageView viewWithTag:tagPlayIcon] setHidden:NO];
+//                         wImageView.image = image;
+//                     }
+//                     
+//                     if ([wMediaObject.type isEqual:@(kMediaPhoto)])
+//                     {
+//                         NSString *mediaURLString = mediaObj.mediaURLString;
+//                         
+//                         [[SDWebImageManager sharedManager] downloadWithURL:[NSURL URLWithString:mediaURLString]
+//                          options:SDWebImageLowPriority | SDWebImageRetryFailed
+//                          progress:nil
+//                          completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished)
+//                         {
+//                          
+//                          if (finished)
+//                          {
+//                              if (error || !image)
+//                              {
+//                                  DLog(@"Fail to load image with url: %@", mediaURLString);
+//                                  
+//                                  if (!wImageView.image)
+//                                  {
+//                                      wImageView.image = [UIImage imageNamed: @"ImageLoadinFailedIcon"];
+//                                  }
+//                              }
+//                              else if(image.size.height < [UIScreen mainScreen].bounds.size.height && image.size.width < [UIScreen mainScreen].bounds.size.width)
+//                              {
+//                                  wImageView.image = image;
+//                              }
+//                              else
+//                              {
+//                                  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+//                                      
+//                                      CGFloat screenHeight = [UIScreen mainScreen].bounds.size.height;
+//                                      CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
+//                                      CGSize rescaledImageSize = (image.size.width > image.size.height) ? CGSizeMake(screenHeight, screenWidth) : CGSizeMake(screenWidth, screenHeight);
+//                                      
+//                                      UIImage *rescaledImage = [image resizedImageWithContentMode:UIViewContentModeScaleAspectFit bounds:rescaledImageSize interpolationQuality:kCGInterpolationMedium];
+//                                      
+//                                      [[[SDWebImageManager sharedManager] imageCache] storeImage:rescaledImage forKey:wMediaObject.mediaURLString];
+//                                      
+//                                      dispatch_async(dispatch_get_main_queue(), ^{
+//                                          
+//                                          wImageView.image = rescaledImage;
+//                                          
+//                                      });
+//                                  });
+//                              }
+//                          }
+//                      }];
+//                     }
+//                 }
+//             }];
+        }
+    }
     
     [self.links enumerateObjectsUsingBlock:^(id obj, BOOL *stop)
     {
@@ -359,17 +360,17 @@ static NSMutableDictionary *st_iconsCache = nil;
         activityIndication.center = CGPointMake(CGRectGetWidth(imageView.frame) / 2.f, CGRectGetHeight(imageView.frame) / 2.f);
         activityIndication.tag = tagActivityIdicator;
         [activityIndication startAnimating];
-        [imageView addSubview:activityIndication];
+        [imageView addSubview: activityIndication];
         
-        [self.mediaScrollView addSubview:imageView];
+        [self.mediaScrollView addSubview: imageView];
         
-        NSLayoutConstraint *widthConstraint = [NSLayoutConstraint constraintWithItem:imageView
-                                                                           attribute:NSLayoutAttributeWidth
-                                                                           relatedBy:NSLayoutRelationEqual
-                                                                              toItem:nil
-                                                                           attribute:NSLayoutAttributeNotAnAttribute
-                                                                          multiplier:1
-                                                                            constant:imageWidth];
+        NSLayoutConstraint *widthConstraint = [NSLayoutConstraint constraintWithItem: imageView
+                                                                           attribute: NSLayoutAttributeWidth
+                                                                           relatedBy: NSLayoutRelationEqual
+                                                                              toItem: nil
+                                                                           attribute: NSLayoutAttributeNotAnAttribute
+                                                                          multiplier: 1
+                                                                            constant: imageWidth];
         
         [imageView addConstraint:widthConstraint];
         
@@ -980,6 +981,11 @@ static NSMutableDictionary *st_textSizes = nil;
     }
     
     return linksList;
+}
+
+- (void)clearContents
+{
+    
 }
 
 @end

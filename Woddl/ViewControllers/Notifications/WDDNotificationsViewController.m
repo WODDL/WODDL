@@ -165,12 +165,13 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (!self.cell)
-    {
-        self.cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([WDDNotificationCell class])];
+    if (!self.cell) {
+        
+        self.cell = [tableView dequeueReusableCellWithIdentifier: NSStringFromClass([WDDNotificationCell class])];
     }
-    [self configureCell:self.cell atIndexPath:indexPath];
-    return [self.cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height + SEPARATOR_MAX_HEIGHT;
+    [self configureCell: self.cell atIndexPath: indexPath];
+    
+    return [self.cell.contentView systemLayoutSizeFittingSize: UILayoutFittingCompressedSize].height + SEPARATOR_MAX_HEIGHT;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -194,7 +195,7 @@
     if (notification.post!=nil)
     {
         UINavigationController *navigationController
-        = [self.storyboard instantiateViewControllerWithIdentifier:kStoryboardIDWriteCommentNavigationViewController];
+        = [self.storyboard instantiateViewControllerWithIdentifier: kStoryboardIDWriteCommentNavigationViewController];
         
         ((WDDWriteCommetViewController*)[navigationController viewControllers][0]).post = notification.post;
         
@@ -202,12 +203,12 @@
     }
     if ([notification.externalObjectType isEqualToString:@"event"] && notification.socialNetwork.type.integerValue == kSocialNetworkFacebook)
     {
-        url = [NSURL URLWithString:notification.externalURL];
+        url = [NSURL URLWithString: notification.externalURL];
         socialNetwork = notification.socialNetwork;
     }
     if (notification.group!=nil)
     {
-        url = [NSURL URLWithString:notification.group.groupURL];
+        url = [NSURL URLWithString: notification.group.groupURL];
         socialNetwork = notification.socialNetwork;
     }
     if (notification.media!=nil)
@@ -223,12 +224,12 @@
     }
      if (notification.sender)
     {
-        url = [NSURL URLWithString:notification.sender.profileURL];
+        url = [NSURL URLWithString: notification.sender.profileURL];
         socialNetwork = notification.socialNetwork;
     }
      if (notification.externalURL)
     {
-        url = [NSURL URLWithString:notification.externalURL];
+        url = [NSURL URLWithString: notification.externalURL];
     }
 
     
@@ -236,7 +237,7 @@
     {
         if (!url.scheme.length)
         {
-            url = [NSURL URLWithString:[@"https://" stringByAppendingString:[url absoluteString]]];
+            url = [NSURL URLWithString: [@"https://" stringByAppendingString:[url absoluteString]]];
         }
         
         WDDWebViewController *webController = [self.storyboard instantiateViewControllerWithIdentifier:kStoryboardIDWebViewViewController];
@@ -249,9 +250,9 @@
     if (viewControllerToPresent)
     {
         UIViewController *parentVC = self.parentVC;
-        [parentVC.notificationsPopover dismissPopoverAnimated:YES completion:^()
+        [parentVC.notificationsPopover dismissPopoverAnimated: YES completion:^()
         {
-            [parentVC presentViewController:viewControllerToPresent animated:YES completion:nil];
+            [parentVC presentViewController: viewControllerToPresent animated: YES completion: nil];
         }];
     }
 }
@@ -303,7 +304,7 @@
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
 {
     [self.tableView endUpdates];
-    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationNotificationsDidUpdate object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName: kNotificationNotificationsDidUpdate object: nil];
 }
 
 #pragma mark - auxiliary

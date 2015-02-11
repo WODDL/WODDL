@@ -230,7 +230,7 @@ static NSInteger kSearchPostLimit = 10;
     {
         self.searchPostBlock(nil);
         self.searchPostBlock = nil;
-    }    
+    }
 }
 
 - (void)searchPostsWithText:(NSString *)searchText completionBlock:(completionSearchPostsBlock)comletionBlock

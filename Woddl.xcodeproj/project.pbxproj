@@ -4556,8 +4556,8 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Louis Hinault (ZGXUR8U2NJ)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Louis Hinault (ZGXUR8U2NJ)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Woddl ApS (6JUT93LALV)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Woddl ApS (6JUT93LALV)";
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -4578,7 +4578,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-lxml2";
-				PROVISIONING_PROFILE = "19ebc160-15e8-42f9-b79b-ff8e2696f6c5";
+				PROVISIONING_PROFILE = "9d000498-dee4-4d20-b664-01e3b17ddb2d";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -4601,8 +4601,8 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Louis Hinault (ZGXUR8U2NJ)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Louis Hinault (ZGXUR8U2NJ)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Woddl ApS (6JUT93LALV)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Woddl ApS (6JUT93LALV)";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
@@ -4616,7 +4616,7 @@
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				OTHER_LDFLAGS = "-lxml2";
-				PROVISIONING_PROFILE = "19ebc160-15e8-42f9-b79b-ff8e2696f6c5";
+				PROVISIONING_PROFILE = "9d000498-dee4-4d20-b664-01e3b17ddb2d";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -4628,8 +4628,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Louis Hinault (ZGXUR8U2NJ)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Louis Hinault (ZGXUR8U2NJ)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Woddl ApS (6JUT93LALV)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Woddl ApS (6JUT93LALV)";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Woddl/Woddl-Prefix.pch";
@@ -4642,7 +4642,7 @@
 					"Woddl/Social\\ APIs/GoogleAPI/GoogleAnalytics",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "19ebc160-15e8-42f9-b79b-ff8e2696f6c5";
+				PROVISIONING_PROFILE = "9d000498-dee4-4d20-b664-01e3b17ddb2d";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -4653,8 +4653,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Louis Hinault (ZGXUR8U2NJ)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Louis Hinault (ZGXUR8U2NJ)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Woddl ApS (6JUT93LALV)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Woddl ApS (6JUT93LALV)";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Woddl/Woddl-Prefix.pch";
@@ -4667,7 +4667,7 @@
 					"Woddl/Social\\ APIs/GoogleAPI/GoogleAnalytics",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "19ebc160-15e8-42f9-b79b-ff8e2696f6c5";
+				PROVISIONING_PROFILE = "9d000498-dee4-4d20-b664-01e3b17ddb2d";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "arm64 armv7 armv7s";

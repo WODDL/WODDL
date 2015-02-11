@@ -103,36 +103,39 @@ static UIImage *placeHolderImage = nil;
 #ifdef IOS_7_TABLE_AUTOLAYOUT
     self.cellCache = [NSMutableDictionary new];
 #endif
-    self.isFirstLoad=NO;
+    self.isFirstLoad = NO;
+    
+//    self.fetchedResultsController.fetchRequest.predicate = [NSPredicate  predicateWithValue: NO];
+//    [self.fetchedResultsController performFetch: nil];
     
 //    [self setupLongTapGestureForTable];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-    [super viewWillDisappear:animated];
+    [super viewWillDisappear: animated];
+    
     self.isAppeared = NO;
     NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
-    [def setObject:[NSKeyedArchiver archivedDataWithRootObject:nil] forKey:@"curEditingMessage"];
+    [def setObject: [NSKeyedArchiver archivedDataWithRootObject: nil] forKey: @"curEditingMessage"];
     [def synchronize];
-    
 }
--(void)loadPrevStatuses
+
+- (void)loadPrevStatuses
 {
     //ROMA
-    self.isFirstLoad=NO;
-    
-    
+    self.isFirstLoad = NO;
 }
--(void)networkChangedReturnedTo48HrsAtStart
+
+- (void)networkChangedReturnedTo48HrsAtStart
 {
     //ROMA
-    self.isFirstLoad=YES;
+    self.isFirstLoad = YES;
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    [super viewDidAppear:animated];
+    [super viewDidAppear: animated];
     
     if (self.needProcessUpdates)
     {
@@ -153,7 +156,7 @@ static UIImage *placeHolderImage = nil;
     
     if (self.videoURL2OpenInWebView)
     {
-        [self showVideoInWebWithURL:self.videoURL2OpenInWebView];
+        [self showVideoInWebWithURL: self.videoURL2OpenInWebView];
         self.videoURL2OpenInWebView = nil;
     }
     else
@@ -197,7 +200,8 @@ static UIImage *placeHolderImage = nil;
 {
     [self.postMessagesTexts removeAllObjects];
 }
--(void)updateViewSetup
+
+- (void)updateViewSetup
 {
 
     BOOL showHUD = (self.progressHUD.superview == nil);
@@ -206,15 +210,15 @@ static UIImage *placeHolderImage = nil;
      //   [self showProcessHUDWithText:NSLocalizedString(@"lskUpdating", @"Updating message on main screen HUD")];
     }
     self.fetchedResultsController.delegate = self;
-    [self.fetchedResultsController performFetch:nil];
+    [self.fetchedResultsController performFetch: nil];
     [self.postsTable reloadData];
+    
     if (showHUD)
     {
       //  [self removeProcessHUDOnSuccessLoginHUDWithText:NSLocalizedString(@"lskUpdated", @"Updated message on main screen HUD")];
     }
     
     NSLog(@"Posts updated");
-
 }
 
 - (void)checkingForNewPosts
@@ -286,6 +290,8 @@ static UIImage *placeHolderImage = nil;
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
    
+    NSLog(@"numberOfSectionsInTableView = %d", [[self.fetchedResultsController sections] count]);
+    
     return [[self.fetchedResultsController sections] count];
 }
 
@@ -300,7 +306,6 @@ static UIImage *placeHolderImage = nil;
 
 -(BOOL)datesComparator:(NSDate*)postsDate
 {
-    
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     
@@ -316,7 +321,6 @@ static UIImage *placeHolderImage = nil;
     }
     
     return NO;
-    
 }
 
 
@@ -352,7 +356,7 @@ static UIImage *placeHolderImage = nil;
 #endif
 
     
-    CGSize size = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
+    CGSize size = [cell.contentView systemLayoutSizeFittingSize: UILayoutFittingCompressedSize];
     
     return size.height;
     
@@ -498,6 +502,9 @@ static UIImage *placeHolderImage = nil;
 {
     
     id <NSFetchedResultsSectionInfo> sectionInfo = [self.fetchedResultsController sections][section];
+    
+    NSLog(@"numberOfRowsInSection = %d", [sectionInfo numberOfObjects]);
+    
     return [sectionInfo numberOfObjects];
 }
 
@@ -511,16 +518,17 @@ static UIImage *placeHolderImage = nil;
 #else
         WDDMainPostCell *
 #endif
-        cell = [tableView dequeueReusableCellWithIdentifier:[self cellIdentifier]];
+        cell = [tableView dequeueReusableCellWithIdentifier: [self cellIdentifier]];
         
         if (!cell)
         {
             cell = [[[NSBundle mainBundle] loadNibNamed:NSStringFromClass([WDDMainPostCell class]) owner:nil options:nil] firstObject];
         }
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self configureCell:cell atIndexPath:indexPath];
-        });
+//        dispatch_async(dispatch_get_main_queue(), ^{
+        
+            [self configureCell: cell atIndexPath: indexPath];
+//        });
         
 #ifdef IOS_7_TABLE_AUTOLAYOUT
     }
@@ -600,14 +608,12 @@ static UIImage *placeHolderImage = nil;
                            withRowAnimation:UITableViewRowAnimationAutomatic];
         break;
             
-            
         case NSFetchedResultsChangeUpdate:
             [self.postsTable reloadSections:[NSIndexSet indexSetWithIndex:sectionIndex]
                            withRowAnimation:UITableViewRowAnimationAutomatic];
         break;
     }
 }
-
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
 {
@@ -712,21 +718,23 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
         }
     }];
 #endif
-    Post *post = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    
+    Post *post = [self.fetchedResultsController objectAtIndexPath: indexPath];
     
     NSString *subscribedByUserId    = post.subscribedBy.userID;
     NSString *postId                = post.postID;
     
     __block NSString *processdText = post.text;
-    __block NSMutableAttributedString *postMessage = [self.postMessagesTexts objectForKey:postId];
+    __block NSMutableAttributedString *postMessage = [self.postMessagesTexts objectForKey: postId];
     
-    [self setupAvatarImageInCell:cell forPost:post];
+//    [self setupAvatarImageInCell: cell forPost: post];
+    [cell.avatarImageView sd_setImageWithURL: [NSURL URLWithString: post.author.avatarRemoteURL]];
     
     NSMutableArray *linksRanges = [NSMutableArray new];
-    NSMutableArray *links = [[NSMutableArray alloc] initWithCapacity:post.links.count];
+    NSMutableArray *links = [[NSMutableArray alloc] initWithCapacity: post.links.count];
     
     BOOL allLinksFound = YES;
-    NSMutableDictionary *linkPairs = [[NSMutableDictionary alloc] initWithCapacity:post.links.count];
+    NSMutableDictionary *linkPairs = [[NSMutableDictionary alloc] initWithCapacity: post.links.count];
     
     if (!post.isLinksProcessed.boolValue)
     {
@@ -755,10 +763,10 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
                     
                     if (postMessage.string.length)
                     {
-                        [postMessage.mutableString replaceOccurrencesOfString:link.url
-                                                                   withString:cachedLink.absoluteString
-                                                                      options:NSCaseInsensitiveSearch
-                                                                        range:NSMakeRange(0, postMessage.mutableString.length)];
+                        [postMessage.mutableString replaceOccurrencesOfString: link.url
+                                                                   withString: cachedLink.absoluteString
+                                                                      options: NSCaseInsensitiveSearch
+                                                                        range: NSMakeRange(0, postMessage.mutableString.length)];
 //                        [postMessage setLink:cachedLink range:[postMessage.mutableString rangeOfString:cachedLink.absoluteString]];
                         [postMessage setURL: cachedLink range: [postMessage.mutableString rangeOfString: cachedLink.absoluteString]];
                     }
@@ -918,7 +926,7 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
         {
             NSString *regexString = [NSString stringWithFormat:@"%@([^\\w]|$)", tag.tag];
             NSRegularExpression * regex = [NSRegularExpression regularExpressionWithPattern:regexString options:NSRegularExpressionCaseInsensitive error:nil];
-            NSArray *matches = [regex matchesInString:postMessage.string options:0 range:NSMakeRange(0, [postMessage.string length])];
+            NSArray *matches = [regex matchesInString: postMessage.string options: 0 range: NSMakeRange(0, [postMessage.string length])];
             for (NSTextCheckingResult *match in matches)
             {
                 NSRange matchRange = [match range];
@@ -927,6 +935,7 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
                 [postMessage setURL: [NSURL URLWithString: [kTagURLBase stringByAppendingString: tagString]] range: matchRange];
             }
         }
+        
         for (Place *place in post.places)
         {
             NSString *regexString = [NSString stringWithFormat:@"%@([^\\w]|$)", place.name];
@@ -974,26 +983,25 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
 //            }
 //        }
 //        
-        [self.postMessagesTexts s_setObject:postMessage forKey:postId];
+        [self.postMessagesTexts s_setObject: postMessage forKey: postId];
     }
     
     cell.snPost = post;
     cell.authorProfileURLString = post.author.profileURL;
     //cell.textMessage.attributedText = postText;
-    cell.isExpanded = [indexPath isEqual:self.expandedCellIndexPath];
+    cell.isExpanded = [indexPath isEqual: self.expandedCellIndexPath];
     cell.fullMessageText = postMessage;
     cell.delegate = self;
     
-    
-    cell.socialNetworkIcon.image = [UIImage imageNamed:post.socialNetworkIconName];
+    cell.socialNetworkIcon.image = [UIImage imageNamed: post.socialNetworkIconName];
     cell.authorNameLabel.text = post.author.name;
     cell.timeAgoLabel.text = [post.time timeAgo];
     
     cell.likeIconImageName = [post socialNetworkLikesIconName];
-    [cell setNumberOfLikes:([post.isLikable boolValue] ? post.likesCount : nil)];
+    [cell setNumberOfLikes: ([post.isLikable boolValue] ? post.likesCount : nil)];
     
     cell.commentsIconImageName = [post socialNetworkCommentsIconName];
-    [cell setNumberOfComments:([post.isCommentable boolValue] ? post.commentsCount : nil)];
+    [cell setNumberOfComments: ([post.isCommentable boolValue] ? post.commentsCount : nil)];
     
     NSNumber *numberOfRetweets = nil;
     if ([post respondsToSelector:@selector(retweetsCount)])
@@ -1003,15 +1011,15 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
     [cell setNumberOfRetweets:numberOfRetweets];
     
     cell.previewLinksAsMedia = !([post isKindOfClass:[TwitterPost class]] || [post isKindOfClass:[InstagramPost class]]);
-    [cell setMediasList:post.media];
-    [cell setRecentCommets:[self getRecentCommentsForPost:post]];
+    [cell setMediasList: post.media];
+    [cell setRecentCommets: [self getRecentCommentsForPost:post]];
     
     if ([post.type  isEqual: @(kPostTypeEvent)])
     {
         cell.isEvent = YES;
     }
     
-    [cell deleteButtonEnable:[self shouldShowCellDeleteButton]];
+    [cell deleteButtonEnable: [self shouldShowCellDeleteButton]];
     
     cell.textMessage.tag = 1000 + indexPath.row;
     
@@ -1019,7 +1027,6 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
     NSLog(@"postMessage = %@", postMessage);
     [self setupLongTapGestureForCell: cell];
     [self setupTapGestureForTextView: cell.textMessage];
-    
 }
 
 - (void)highlightNamesInText:(NSMutableAttributedString *)text inPost:(Post *)post
@@ -1057,8 +1064,8 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
 
 - (void)setupAvatarImageInCell:(WDDMainPostCell *)cell forPost:(Post *)post
 {
-    NSURL *avatarURL = [NSURL URLWithString:post.author.avatarRemoteURL];
-    [cell.avatarImageView setAvatarWithURL:avatarURL];
+    NSURL *avatarURL = [NSURL URLWithString: post.author.avatarRemoteURL];
+    [cell.avatarImageView setAvatarWithURL: avatarURL];
 }
 
 - (NSArray *)getRecentCommentsForPost:(Post *)post
