@@ -99,6 +99,7 @@ NSString *const ECSlidingViewTopDidReset             = @"ECSlidingViewTopDidRese
 }
 
 - (void)setup {
+    
     self.shouldAllowPanningPastAnchor = YES;
     self.shouldAllowUserInteractionsWhenAnchored = NO;
     self.shouldAddPanGestureRecognizerToTopViewSnapshot = NO;
@@ -134,7 +135,7 @@ NSString *const ECSlidingViewTopDidReset             = @"ECSlidingViewTopDidRese
     _topViewController.view.layer.shadowOffset = CGSizeZero;
     _topViewController.view.layer.shadowPath = [UIBezierPath bezierPathWithRect:[self fullViewBounds]].CGPath;
     
-    [self.view insertSubview:_topViewController.view belowSubview:self.statusBarBackgroundView];
+    [self.view insertSubview:_topViewController.view belowSubview: self.statusBarBackgroundView];
     self.topViewSnapshot.frame = self.topView.bounds;
 }
 
@@ -147,8 +148,9 @@ NSString *const ECSlidingViewTopDidReset             = @"ECSlidingViewTopDidRese
     _underLeftViewController = theUnderLeftViewController;
     
     if (_underLeftViewController) {
-        [self addChildViewController:self.underLeftViewController];
-        [self.underLeftViewController didMoveToParentViewController:self];
+        
+        [self addChildViewController: self.underLeftViewController];
+        [self.underLeftViewController didMoveToParentViewController: self];
         
         [self updateUnderLeftLayout];
     }
@@ -157,14 +159,15 @@ NSString *const ECSlidingViewTopDidReset             = @"ECSlidingViewTopDidRese
 - (void)setUnderRightViewController:(UIViewController *)theUnderRightViewController
 {
     [_underRightViewController.view removeFromSuperview];
-    [_underRightViewController willMoveToParentViewController:nil];
+    [_underRightViewController willMoveToParentViewController: nil];
     [_underRightViewController removeFromParentViewController];
     
     _underRightViewController = theUnderRightViewController;
     
     if (_underRightViewController) {
-        [self addChildViewController:self.underRightViewController];
-        [self.underRightViewController didMoveToParentViewController:self];
+        
+        [self addChildViewController: self.underRightViewController];
+        [self.underRightViewController didMoveToParentViewController: self];
         
         [self updateUnderRightLayout];
     }
@@ -193,7 +196,9 @@ NSString *const ECSlidingViewTopDidReset             = @"ECSlidingViewTopDidRese
 }
 
 - (void)viewDidAppear:(BOOL)animated {
+    
     [super viewDidAppear:animated];
+    
     [self adjustLayout];
     self.topView.layer.shadowOffset = CGSizeZero;
     self.topView.layer.shadowPath = [UIBezierPath bezierPathWithRect:[self fullViewBounds]].CGPath;
@@ -205,14 +210,16 @@ NSString *const ECSlidingViewTopDidReset             = @"ECSlidingViewTopDidRese
     self.topView.layer.shouldRasterize = YES;
     
     if(![self topViewHasFocus]){
+        
         [self removeTopViewSnapshot];
     }
     
     [self adjustLayout];
 }
 
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation{
-    self.topView.layer.shadowPath = [UIBezierPath bezierPathWithRect:[self fullViewBounds]].CGPath;
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+    
+    self.topView.layer.shadowPath = [UIBezierPath bezierPathWithRect: [self fullViewBounds]].CGPath;
     self.topView.layer.shouldRasterize = NO;
     
     if(![self topViewHasFocus]){

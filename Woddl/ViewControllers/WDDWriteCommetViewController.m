@@ -106,6 +106,7 @@ static NSInteger const kMaxCountOfComments = 25;
     self.activateInputFieldsSfouldSall = NO;
     kPlaceholderText = NSLocalizedString(@"lskWriteCommentText", @"Write comment...");
     
+    self.postView.postMessage = self.postMessage;
     self.postView.post = self.post;
     self.postView.delegate = self;
     self.postView.textMessage.delegate = self;
@@ -150,8 +151,9 @@ static NSInteger const kMaxCountOfComments = 25;
     
     [self setupPullToRefresh];
     [self customizeBackButton];
-    if (self.post)
-    {
+    
+    if (self.post) {
+        
         [self setupUserAvatar];
     }
     
@@ -624,7 +626,8 @@ static NSInteger const kMaxCountOfComments = 25;
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     Comment *comment = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    return [WDDCommentPreView sizeOfViewForComment:comment].height;
+    
+    return [WDDCommentPreView sizeOfViewForComment: comment].height;
 }
 
 
@@ -635,7 +638,7 @@ static NSInteger const kMaxCountOfComments = 25;
     
     Comment *comment = [self.fetchedResultsController objectAtIndexPath:indexPath];
     
-    WDDCommentPreView *commentPreView = [[WDDCommentPreView alloc] initWithComment:comment];
+    WDDCommentPreView *commentPreView = [[WDDCommentPreView alloc] initWithComment: comment];
     commentPreView.delegate = self;
     commentPreView.messageLabeldelegate = self;
     cell.commentPreviewView = commentPreView;
@@ -1258,6 +1261,10 @@ static NSInteger const kMaxCountOfComments = 25;
 - (void)contentUpdatedInController:(WDDWhoLikedViewController *)controller
 {
     [self.post.managedObjectContext refreshObject:self.post mergeChanges:YES];
+    
+    NSLog(@"Full Message = %@", self.postMessage);
+    
+    self.postView.postMessage = self.postMessage;
     self.postView.post = self.post;
     [self.postView updateViewContent];
     

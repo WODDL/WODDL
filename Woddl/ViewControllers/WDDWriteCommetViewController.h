@@ -43,6 +43,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *counterLabel;
 
 @property (nonatomic, strong) Post* post;
+@property (nonatomic, strong) NSAttributedString *postMessage;
 
 -(IBAction)sendPressed:(id)sender;
 

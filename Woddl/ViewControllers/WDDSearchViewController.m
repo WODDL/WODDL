@@ -197,9 +197,6 @@ static NSString * const kSearchPostCellIdentifier             = @"SearchPosts";
     [self.postsTable reloadData];
 }
 
-
-
-
 #pragma mark - Search bar delegate
 
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar
@@ -207,7 +204,7 @@ static NSString * const kSearchPostCellIdentifier             = @"SearchPosts";
 	searchBar.showsScopeBar = YES;
 	[searchBar sizeToFit];
     
-	[searchBar setShowsCancelButton:YES animated:YES];
+	[searchBar setShowsCancelButton: YES animated: YES];
     
 	return YES;
 }

@@ -39,8 +39,8 @@ static const CGFloat AuthorNameRightOffset = 32.f;
 
 static const CGFloat ExpandedMediaSize = 120.f;
 static const CGFloat MediaTriangleHeight = 10.0f;
-static const CGFloat OffsetY = 8.0f;
-static const CGFloat MessageMinY = 51.f;
+static const CGFloat OffsetY = 10.0f;
+static const CGFloat MessageMinY = 52.f;
 static const CGFloat MessageWidth = 300.f;
 static const CGFloat ShowEventButtonHeight = 38.0f;
 
@@ -134,19 +134,19 @@ static const NSInteger kMediaTypeLink = 254;
 - (void)setupAvatarImageView
 {
     CGFloat width = self.avatarImageView.frame.size.width*2;
-    UIImage *placeHolderImage = [[UIImage imageNamed:kAvatarPlaceholderImageName] thumbnailImage:width
-                                                                               transparentBorder:1.0f
-                                                                                    cornerRadius:kAvatarCornerRadious
-                                                                            interpolationQuality:kCGInterpolationDefault];
+    UIImage *placeHolderImage = [[UIImage imageNamed:kAvatarPlaceholderImageName] thumbnailImage: width
+                                                                               transparentBorder: 1.0f
+                                                                                    cornerRadius: kAvatarCornerRadious
+                                                                            interpolationQuality: kCGInterpolationDefault];
     NSURL *avatarURL = [NSURL URLWithString:self.post.author.avatarRemoteURL];
     
     SDWebImageCompletedBlock completion = ^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
         if (!error)
         {
-            image = [image thumbnailImage:width
-                        transparentBorder:1.0f
-                             cornerRadius:kAvatarCornerRadious
-                     interpolationQuality:kCGInterpolationMedium];
+            image = [image thumbnailImage: width
+                        transparentBorder: 1.0f
+                             cornerRadius: kAvatarCornerRadious
+                     interpolationQuality: kCGInterpolationMedium];
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 self.avatarImageView.image = image;
@@ -236,7 +236,7 @@ static const NSInteger kMediaTypeLink = 254;
     if (likesCount)
     {
         dispatch_async(bgQueue, ^{
-            UIImage* likesIconImage = [UIImage imageNamed:[self.post socialNetworkLikesIconName]];
+            UIImage* likesIconImage = [UIImage imageNamed: [self.post socialNetworkLikesIconName]];
             dispatch_async(dispatch_get_main_queue(), ^{
                 self.likesIconImageView.image = likesIconImage;
             });
@@ -325,8 +325,8 @@ static const NSInteger kMediaTypeLink = 254;
             
             UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showFullMedia:)];
             tapRecognizer.mediaType = mediaObj.type;
-            tapRecognizer.mediaURL = [NSURL URLWithString:mediaObj.mediaURLString];
-            tapRecognizer.previewURL = [NSURL URLWithString:mediaObj.previewURLString];
+            tapRecognizer.mediaURL = [NSURL URLWithString: mediaObj.mediaURLString];
+            tapRecognizer.previewURL = [NSURL URLWithString: mediaObj.previewURLString];
             
             [imageView addGestureRecognizer:tapRecognizer];
             imageView.userInteractionEnabled = YES;
@@ -343,7 +343,7 @@ static const NSInteger kMediaTypeLink = 254;
                 playIcon.center = CGPointMake(CGRectGetWidth(imageView.frame) / 2.f , CGRectGetHeight(imageView.frame) / 2.f);
                 playIcon.tag = tagPlayIcon;
                 playIcon.hidden = YES;
-                [imageView addSubview:playIcon];
+                [imageView addSubview: playIcon];
             }
             
             [self.mediaScrollView addSubview: imageView];
@@ -360,7 +360,17 @@ static const NSInteger kMediaTypeLink = 254;
             
             positionX += CGRectGetWidth(imageView.frame);
             
-            [imageView sd_setImageWithURL: [NSURL URLWithString: mediaObj.previewURLString ? mediaObj.previewURLString : mediaObj.mediaURLString]];
+//            [imageView sd_setImageWithURL: [NSURL URLWithString: mediaObj.previewURLString ? mediaObj.previewURLString : mediaObj.mediaURLString]];
+            
+            NSString *mediaStr = mediaObj.type.integerValue == kMediaVideo ? mediaObj.previewURLString : mediaObj.mediaURLString;
+//            [imageView sd_setImageWithURL: [NSURL URLWithString: mediaStr]];
+            [imageView sd_setImageWithURL: [NSURL URLWithString: mediaStr] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                
+                if (!error) {
+                    
+                    [[imageView viewWithTag: tagPlayIcon] setHidden: NO];
+                }
+            }];
             
 //            __weak UIImageView *wImageView = imageView;
 //            __weak Media *wMediaObject = mediaObj;
@@ -430,9 +440,9 @@ static const NSInteger kMediaTypeLink = 254;
          activityIndication.center = CGPointMake(CGRectGetWidth(imageView.frame) / 2.f, CGRectGetHeight(imageView.frame) / 2.f);
          activityIndication.tag = tagActivityIdicator;
          [activityIndication startAnimating];
-         [imageView addSubview:activityIndication];
+         [imageView addSubview: activityIndication];
          
-         [self.mediaScrollView addSubview:imageView];
+         [self.mediaScrollView addSubview: imageView];
          
          NSLayoutConstraint *widthConstraint = [NSLayoutConstraint constraintWithItem: imageView
                                                                             attribute: NSLayoutAttributeWidth
@@ -539,14 +549,12 @@ static const NSInteger kMediaTypeLink = 254;
     
     NSMutableAttributedString *attributedStr = [NSMutableAttributedString attributedStringWithString: self.post.text];
     
-    textSize = [self sizeForText: attributedStr withFont: self.messageTextFont];
-    
+    textSize = [self sizeForText: self.postMessage withFont: self.messageTextFont];
     
     CGFloat sizeToExpad = (self.post.media.count || self.links.count) ? ExpandedMediaSize : 0;
     CGFloat textHeight = ceilf(textSize.height) + 1;
-        
     
-    height = MessageMinY + textHeight + OffsetY * ((self.post.media.count || self.links.count) ? 2.0: 1.f) + sizeToExpad;
+    height = MessageMinY + textHeight + OffsetY * ((self.post.media.count || self.links.count) ? 1.5: 1.0f) + sizeToExpad;
 
     if ([self.post.type  isEqual: @(kPostTypeEvent)])
     {
@@ -573,12 +581,12 @@ static const NSInteger kMediaTypeLink = 254;
 
 - (UIFont *)messageTextFont
 {
-    return [UIFont systemFontOfSize:kPostFontSize];
+    return [UIFont systemFontOfSize: kPostFontSize];
 }
 
 - (UIFont *)boldMessageTextFont
 {
-    return [UIFont boldSystemFontOfSize:kPostFontSize];
+    return [UIFont boldSystemFontOfSize: kPostFontSize];
 }
 #pragma mark - Message
 
@@ -595,15 +603,17 @@ static const NSInteger kMediaTypeLink = 254;
     self.textMessage.scrollEnabled = NO;
     self.textMessage.textContainer.lineFragmentPadding = 0;
     self.textMessage.textContainerInset = UIEdgeInsetsZero;
-    self.textMessage.attributedText = postText;
+    self.textMessage.attributedText = self.postMessage;
+    
+    NSLog(@"%@", self.postMessage);
     
 //    NSMutableAttributedString *orgPostText = [[NSMutableAttributedString alloc] initWithString:self.post.text attributes:@{NSFontAttributeName : [self messageTextFont]}];
     
     NSMutableAttributedString *attributedStr = [NSMutableAttributedString attributedStringWithString: self.post.text];
     
-    self.messageLabelHeight.constant = [self sizeForText: attributedStr
+    self.messageLabelHeight.constant = [self sizeForText: self.postMessage
                                                 withFont: self.messageTextFont].height
-                                        + ([self.post.group.type isEqual:@(kGroupTypeGroup)] ? 8.0f : 0.0f);
+                                        + ([self.post.group.type isEqual:@(kGroupTypeGroup)] || [self.post.group.type isEqual: @(kGroupTypePage)] ? 8.0f : 0.0f);
 }
 
 - (NSMutableAttributedString *)getAttribudetPostText
@@ -615,12 +625,12 @@ static const NSInteger kMediaTypeLink = 254;
                                                        error:nil];
     }
     
-    __block NSMutableAttributedString *postText = [[NSMutableAttributedString alloc] initWithString:self.post.text attributes:@{NSFontAttributeName : [self messageTextFont]}];    
+    __block NSMutableAttributedString *postText = [[NSMutableAttributedString alloc] initWithString: self.post.text attributes:@{NSFontAttributeName : [self messageTextFont]}];
     
     if (!self.post.isLinksProcessed.boolValue)
     {
         BOOL allLinksFound = YES;
-        NSMutableDictionary *linkPairs = [[NSMutableDictionary alloc] initWithCapacity:self.post.links.count];
+        NSMutableDictionary *linkPairs = [[NSMutableDictionary alloc] initWithCapacity: self.post.links.count];
         
         for (Link *link in self.post.links)
         {
@@ -642,14 +652,12 @@ static const NSInteger kMediaTypeLink = 254;
                     
                     if (self.post.subscribedBy.socialNetwork.type.integerValue != kSocialNetworkTwitter)
                     {
-//                        [postText setLink:cachedLink range:range];
                         [postText setURL: cachedLink range: range];
                     }
                     else
                     {
                         if ([Link isURLShort:cachedLink])
                         {
-//                            [postText setLink:cachedLink range:range];
                             [postText setURL: cachedLink range: range];
                         }
                     }
@@ -660,7 +668,6 @@ static const NSInteger kMediaTypeLink = 254;
                     
                     if (self.post.subscribedBy.socialNetwork.type.integerValue != kSocialNetworkTwitter)
                     {
-//                        [postText setLink:linkURL range:range];
                         [postText setURL: linkURL range: range];
                     }
                 }
@@ -669,14 +676,12 @@ static const NSInteger kMediaTypeLink = 254;
             {
                 if (self.post.subscribedBy.socialNetwork.type.integerValue != kSocialNetworkTwitter)
                 {
-//                    [postText setLink:linkURL range:range];
                     [postText setURL: linkURL range: range];
                 }
                 else
                 {
                     if ([Link isURLShort:linkURL])
                     {
-//                        [postText setLink:linkURL range:range];
                         [postText setURL: linkURL range: range];
                     }
                 }
@@ -741,14 +746,12 @@ static const NSInteger kMediaTypeLink = 254;
             
             if (self.post.subscribedBy.socialNetwork.type.integerValue != kSocialNetworkTwitter)
             {
-//                [postText setLink:linkURL range:range];
                 [postText setURL: linkURL range: range];
             }
             else
             {
                 if ([Link isURLShort:linkURL])
                 {
-//                    [postText setLink:linkURL range:range];
                     [postText setURL: linkURL range: range];
                 }
             }
@@ -771,14 +774,12 @@ static const NSInteger kMediaTypeLink = 254;
              */
             if (self.post.subscribedBy.socialNetwork.type.integerValue != kSocialNetworkTwitter)
             {
-//                [postText setLink:[NSURL URLWithString:[kTagURLBase stringByAppendingString:tagString]] range:matchRange];
                 [postText setURL: [NSURL URLWithString: [kTagURLBase stringByAppendingString: tagString]] range: matchRange];
             }
             else
             {
                 if ([Link isURLStringShort:[kTagURLBase stringByAppendingString:tagString]])
                 {
-//                    [postText setLink:[NSURL URLWithString:[kTagURLBase stringByAppendingString:tagString]] range:matchRange];
                     [postText setURL: [NSURL URLWithString: [kTagURLBase stringByAppendingString: tagString]] range: matchRange];
                 }
             }
@@ -805,7 +806,6 @@ static const NSInteger kMediaTypeLink = 254;
         
         if (self.post.subscribedBy.socialNetwork.type.integerValue != kSocialNetworkTwitter)
         {
-//            [postText setLink:[NSURL URLWithString:[urlBase stringByAppendingString:username]] range:matchRange];
             [postText setURL: [NSURL URLWithString: [urlBase stringByAppendingString: username]] range: matchRange];
         }
         else
@@ -813,40 +813,39 @@ static const NSInteger kMediaTypeLink = 254;
 //            if ([[urlBase stringByAppendingString:username] rangeOfString:@"t.co/"].location != NSNotFound)
             if ([Link isURLStringShort:[urlBase stringByAppendingString:username]])
             {
-//                [postText setLink:[NSURL URLWithString:[urlBase stringByAppendingString:username]] range:matchRange];
                 [postText setURL: [NSURL URLWithString: [urlBase stringByAppendingString: username]] range: matchRange];
             }
         }
     }
     //DOUBLE GROUP NAME - fix?
     //  Add group name
-//    if ([self.post.group.type isEqual:@(kGroupTypeGroup)])
-//    {
-//        NSString *fromGroupStringBase = NSLocalizedString(@"lskFromGroupBase", @"From group base string");
-//        NSMutableAttributedString *groupNameTitle =  [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@: %@\n\r", fromGroupStringBase, self.post.group.name]];
-//        NSString *test = postText.string;
-//        
-//        if ([test rangeOfString:@"From group"].location == NSNotFound)
-//        {
-//            [groupNameTitle appendAttributedString:postText];
-//            postText = nil;
-//            postText = groupNameTitle;
-//        }
-//    }
-//    
-//    if ([self.post.group.type isEqual:@(kGroupTypePage)])
-//    {
-//        NSString *fromGroupStringBase = NSLocalizedString(@"lskFromPageBase", @"From page base string");
-//        NSMutableAttributedString *groupNameTitle =  [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@: %@\n\r", fromGroupStringBase, self.post.group.name]];
-//        NSString *test = postText.string;
-//        
-//        if ([test rangeOfString:@"From page"].location == NSNotFound)
-//        {
-//            [groupNameTitle appendAttributedString:postText];
-//            postText = nil;
-//            postText = groupNameTitle;
-//        }
-//    }
+    if ([self.post.group.type isEqual:@(kGroupTypeGroup)])
+    {
+        NSString *fromGroupStringBase = NSLocalizedString(@"lskFromGroupBase", @"From group base string");
+        NSMutableAttributedString *groupNameTitle =  [[NSMutableAttributedString alloc] initWithString: [NSString stringWithFormat:@"%@: %@\n\r", fromGroupStringBase, self.post.group.name]];
+        NSString *test = postText.string;
+        
+        if ([test rangeOfString:@"From group"].location == NSNotFound)
+        {
+            [groupNameTitle appendAttributedString: postText];
+            postText = nil;
+            postText = groupNameTitle;
+        }
+    }
+    
+    if ([self.post.group.type isEqual:@(kGroupTypePage)])
+    {
+        NSString *fromGroupStringBase = NSLocalizedString(@"lskFromPageBase", @"From page base string");
+        NSMutableAttributedString *groupNameTitle =  [[NSMutableAttributedString alloc] initWithString: [NSString stringWithFormat:@"%@: %@\n\r", fromGroupStringBase, self.post.group.name]];
+        NSString *test = postText.string;
+        
+        if ([test rangeOfString:@"From page"].location == NSNotFound)
+        {
+            [groupNameTitle appendAttributedString: postText];
+            postText = nil;
+            postText = groupNameTitle;
+        }
+    }
     
     return postText;
 }

@@ -220,8 +220,6 @@ static const NSInteger kTwitterImageLinkLength =  26;
     NSLog(@"%@",url);
     if(url.length>10)//Load attachment
     {
-        
-                    
            UIImage *image = [UIImage imageWithData: [NSData dataWithContentsOfURL:[NSURL URLWithString:url]]];
             // Then to set the image it must be done on the main thread
         
@@ -383,7 +381,7 @@ static const NSInteger kTwitterImageLinkLength =  26;
     return @"";
 }
 
--(void)displayProcessingMessages
+- (void)displayProcessingMessages
 {
     [self showProcessHUDWithText:@""];
    
@@ -391,104 +389,112 @@ static const NSInteger kTwitterImageLinkLength =  26;
     {
          if(self.isEditMode)
         {
-            
-            
             [[WDDSchedulerHelper sharedManager] deletePostWithId:self.editingPostId andToken:self.editingPostToken];
             
             self.isEditMode = NO;
             self.editingPostId = -1;
             self.editingPostToken = @"";
-            
         }
         
         NSArray *allAvailableSelectedAccounts = [self formAllAvailableSelectedAccountsList];
-        if(allAvailableSelectedAccounts.count==0)
+        NSArray *allAvailableSelectedGruops = [self fromAllAvailableSelectedGroupsList];
+        
+        if(allAvailableSelectedAccounts.count == 0 && allAvailableSelectedGruops.count == 0)
         {
-            
             [self showProcessHUDWithText:@""];
-            [self removeProcessHUDWithText:@"Select social!"];
+            [self removeProcessHUDWithText: @"Select social!"];
             return;
-            
         }
-        
-      //  NSArray *allAvailableSelectedGruops = [self fromAllAvailableSelectedGroupsList];
-        
-       
-       
-        
+
         for (SocialNetwork *sn in allAvailableSelectedAccounts)
         {
-                if(sn.type==[NSNumber numberWithInt:1])
+            if(sn.type == [NSNumber numberWithInt: 1])
+            {
+                NSString *accessTokenTmp = [sn accessToken];
+                
+                NSLog(@"FB token %@", accessTokenTmp);
+                
+                if([[WDDSchedulerHelper sharedManager] scheduleMessage2: self.inputTextview.text
+                                                                  token: accessTokenTmp
+                                                                 secret: @""
+                                                                 userID: @""
+                                                                picture: self.mediaAttachment
+                                                               sendDate: self.schedulerDataTimePeaker.date
+                                                              forSocial: @"facebook"
+                                                               userName: sn.profile.name
+                                                                groupId: @""]
+                   ) {
+                    
+                    [self showProcessHUDWithText: @""];
+                }
+            }
+            else if(sn.type == [NSNumber numberWithInt: 2])
+            {
+                NSString *accessTokenTmp = [sn accessToken];
+                
+                NSLog(@"TW token %@", [self getTWToken: accessTokenTmp]);
+                NSLog(@"TW secret %@", [self getTWSecret: accessTokenTmp]);
+                NSLog(@"TW userId %@", [self getTWUserId: accessTokenTmp]);
+                
+                if([[WDDSchedulerHelper sharedManager] scheduleMessage2:self.inputTextview.text token:[self getTWSecret:accessTokenTmp] secret:@""  userID:[self getTWToken:accessTokenTmp] picture:self.mediaAttachment sendDate:self.schedulerDataTimePeaker.date forSocial:@"twitter"  userName:sn.profile.name groupId: @""])
                 {
+                    [self showProcessHUDWithText:@""];
                    
-                        NSString *accessTokenTmp = [sn accessToken];
-                        
-                        NSLog(@"LI token %@",accessTokenTmp);
-                        
-                        if([[WDDSchedulerHelper sharedManager] scheduleMessage2:self.inputTextview.text token:accessTokenTmp secret:@"" userID:@"" picture:self.mediaAttachment sendDate:self.schedulerDataTimePeaker.date forSocial:@"facebook"  userName:sn.profile.name]
-                           )
-                        {
-                            [self showProcessHUDWithText:@""];
-                            
-                        }
-                   
-                   
+                }
+            }
+            else if(sn.type == [NSNumber numberWithInt: 4])
+            {
+                NSString *accessTokenTmp = [sn accessToken];
+            
+                NSLog(@"LI token %@",accessTokenTmp);
+                if([[WDDSchedulerHelper sharedManager] scheduleMessage2:self.inputTextview.text token:accessTokenTmp secret:@""  userID:[self getUserInfoWithToken:accessTokenTmp] picture:self.mediaAttachment sendDate:self.schedulerDataTimePeaker.date  forSocial:@"linkedin" userName:sn.profile.name groupId: @""])
+                {
+                
+                    [self showProcessHUDWithText:@""];
                     
                 }
-                else if(sn.type==[NSNumber numberWithInt:2])
-                {
-                    
-
-                    
-                        NSString *accessTokenTmp = [sn accessToken];
-                        NSLog(@"TW token %@",[self getTWToken:accessTokenTmp]);
-                        NSLog(@"TW secret %@",[self getTWSecret:accessTokenTmp]);
-                        NSLog(@"TW userId %@",[self getTWUserId:accessTokenTmp]);
-                        
-                        if([[WDDSchedulerHelper sharedManager] scheduleMessage2:self.inputTextview.text token:[self getTWSecret:accessTokenTmp] secret:@""  userID:[self getTWToken:accessTokenTmp] picture:self.mediaAttachment sendDate:self.schedulerDataTimePeaker.date forSocial:@"twitter"  userName:sn.profile.name])
-                        {
-                            [self showProcessHUDWithText:@""];
-                           
-                        }
-                    
-                    
-                }
-                else if(sn.type==[NSNumber numberWithInt:4])
-                {
-                    
-                            NSString *accessTokenTmp = [sn accessToken];
-                        
-                            NSLog(@"LI token %@",accessTokenTmp);
-                            if([[WDDSchedulerHelper sharedManager] scheduleMessage2:self.inputTextview.text token:accessTokenTmp secret:@""  userID:[self getUserInfoWithToken:accessTokenTmp] picture:self.mediaAttachment sendDate:self.schedulerDataTimePeaker.date  forSocial:@"linkedin" userName:sn.profile.name])
-                            {
-                            
-                                [self showProcessHUDWithText:@""];
-                                
-                            }
-                   
-                    
-                }
-         
-        
-        
+            }
         }
         
+        for (Group *group in allAvailableSelectedGruops)
+        {
+            for (UserProfile *user in group.managedBy)
+            {
+                NSManagedObjectID *userID = user.objectID;
+                
+                NSString *accessTokenTmp = [user.socialNetwork accessToken];
+                
+                NSLog(@"FB token %@", accessTokenTmp);
+                
+                if([[WDDSchedulerHelper sharedManager] scheduleMessage2: self.inputTextview.text
+                                                                  token: accessTokenTmp
+                                                                 secret: @""
+                                                                 userID: @""
+                                                                picture: self.mediaAttachment
+                                                               sendDate: self.schedulerDataTimePeaker.date
+                                                              forSocial: @"facebook"
+                                                               userName: user.socialNetwork.profile.name
+                                                                groupId: group.groupID]
+                   ) {
+                    
+                    [self showProcessHUDWithText: @""];
+                }
+            }
+        }
     }
     else
     {
-        
         [UIAlertView showAlertWithMessage:@"Internet connection error"];
-        
     }
-         
-    [self removeProcessHUDWithText:@"Done."];
+    
+    [self removeProcessHUDWithText: @"Done."];
     [self.inputTextview becomeFirstResponder];
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        
+        self.inputTextview.attributedText = [[NSAttributedString alloc] initWithString: @""];
+    });
     [self updateUI];
 }
-         
-         
-         
-         
          
 - (void)myMixedTask {
     // Indeterminate mode
@@ -518,15 +524,16 @@ static const NSInteger kTwitterImageLinkLength =  26;
     HUD.labelText = @"Completed";
     sleep(2);
 }
--(IBAction)schedulerDoneAction:(UIButton*)sender
+
+- (IBAction)schedulerDoneAction:(UIButton*)sender
 {
-   
     [self.inputTextview becomeFirstResponder];
     self.inputTextview.userInteractionEnabled = YES;
     self.isEditMode = YES;
     
     
 }
+
 - (void)showProcessHUDWithText:(NSString *)text
 {
     if (!self.progressHUD)
@@ -711,111 +718,111 @@ static const NSInteger kTwitterImageLinkLength =  26;
        // [self updateUI];
         [self.schedulerButton setEnabled:YES];
         [self.inputTextview resignFirstResponder];
-        [HUD showWhileExecuting:@selector(displayProcessingMessages) onTarget:self withObject:nil animated:YES];
+        [HUD showWhileExecuting: @selector(displayProcessingMessages) onTarget: self withObject: nil animated: YES];
         
     }
     else
     {
 
-    if (![APP_DELEGATE isInternetConnected])
-    {
-        [[[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"lskConnectInternet", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"lskOK", @"") otherButtonTitles:nil] show];
-       return ;
-    }
-    
-    NSArray *allAvailableSelectedAccounts = [self formAllAvailableSelectedAccountsList];
-    NSArray *allAvailableSelectedGruops = [self fromAllAvailableSelectedGroupsList];
-    
-    if (!self.inputTextview.text.length)
-    {
-        [[[UIAlertView alloc] initWithTitle:nil
-                                    message:NSLocalizedString(@"lsEnterStatusUpdate", @"No SN selected")
-                                   delegate:nil
-                          cancelButtonTitle:NSLocalizedString(@"lskOK", @"OK button")
-                          otherButtonTitles:nil] show];
-        return ;
-    }
-    
-    if (!allAvailableSelectedAccounts.count && !allAvailableSelectedGruops.count)
-    {
-        [[[UIAlertView alloc] initWithTitle:nil
-                                    message:NSLocalizedString(@"lskSelectNetwork", @"No SN selected")
-                                   delegate:nil
-                          cancelButtonTitle:NSLocalizedString(@"lskOK", @"OK button")
-                          otherButtonTitles:nil] show];
-        return ;
-    }
-    
-    
-    __weak WDDStatusViewController *wSelf = self;
-    
-    self.statusesTaskCounter++;
-    
-    [self processLinksInText:self.inputTextview.attributedText.mutableCopy
-                 withOptions:ProcessLinksAtLastPosition
-                  complition:^(BOOL isChanged, NSAttributedString *text)
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            DLog(@"Status will be updated for %i accounts",   allAvailableSelectedAccounts.count);
-            
-            for (SocialNetwork *sn in allAvailableSelectedAccounts)
-            {
-                wSelf.statusesTaskCounter++;
-                NSManagedObjectID *userID = sn.profile.objectID;
+        if (![APP_DELEGATE isInternetConnected])
+        {
+            [[[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"lskConnectInternet", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"lskOK", @"") otherButtonTitles:nil] show];
+           return ;
+        }
+        
+        NSArray *allAvailableSelectedAccounts = [self formAllAvailableSelectedAccountsList];
+        NSArray *allAvailableSelectedGruops = [self fromAllAvailableSelectedGroupsList];
+        
+        if (!self.inputTextview.text.length)
+        {
+            [[[UIAlertView alloc] initWithTitle:nil
+                                        message:NSLocalizedString(@"lsEnterStatusUpdate", @"No SN selected")
+                                       delegate:nil
+                              cancelButtonTitle:NSLocalizedString(@"lskOK", @"OK button")
+                              otherButtonTitles:nil] show];
+            return ;
+        }
+        
+        if (!allAvailableSelectedAccounts.count && !allAvailableSelectedGruops.count)
+        {
+            [[[UIAlertView alloc] initWithTitle:nil
+                                        message:NSLocalizedString(@"lskSelectNetwork", @"No SN selected")
+                                       delegate:nil
+                              cancelButtonTitle:NSLocalizedString(@"lskOK", @"OK button")
+                              otherButtonTitles:nil] show];
+            return ;
+        }
+        
+        
+        __weak WDDStatusViewController *wSelf = self;
+        
+        self.statusesTaskCounter++;
+        
+        [self processLinksInText:self.inputTextview.attributedText.mutableCopy
+                     withOptions:ProcessLinksAtLastPosition
+                      complition:^(BOOL isChanged, NSAttributedString *text)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
                 
-                DLog(@"Update status for social network %@ type %@", sn.type, sn.profile.name);
+                DLog(@"Status will be updated for %i accounts",   allAvailableSelectedAccounts.count);
                 
-                [sn addStatusWithMessage:text.string
-                               andImages:(wSelf.mediaAttachment ? @[wSelf.mediaAttachment] : nil)
-                               andLocation:wSelf.currentLocation
-                               withCompletionBlock:^(NSError *error)
-                 {
-                         
-                         if (error)
-                         {
-                             [wSelf showStatusErrorForAcccountWithID:userID];
-                             
-                             DLog(@"Error: %@", [error localizedDescription]);
-                         }
-                         else
-                         {
-                             wSelf.statusesTaskCounter--;
-                         }
-                    }];
-            }
-            
-            for (Group *group in allAvailableSelectedGruops)
-            {
-                for (UserProfile *user in group.managedBy)
+                for (SocialNetwork *sn in allAvailableSelectedAccounts)
                 {
                     wSelf.statusesTaskCounter++;
-                    NSManagedObjectID *userID = user.objectID;
+                    NSManagedObjectID *userID = sn.profile.objectID;
                     
-                    [user.socialNetwork addStatusWithMessage:text.string
-                                                   andImages:(wSelf.mediaAttachment ? @[wSelf.mediaAttachment] : nil)
-                                                 andLocation:wSelf.currentLocation
-                                                     toGroup:group
-                                         withCompletionBlock:^(NSError *error) {
+                    DLog(@"Update status for social network %@ type %@", sn.type, sn.profile.name);
+                    
+                    [sn addStatusWithMessage:text.string
+                                   andImages:(wSelf.mediaAttachment ? @[wSelf.mediaAttachment] : nil)
+                                   andLocation:wSelf.currentLocation
+                                   withCompletionBlock:^(NSError *error) {
                              
-                                             if (error)
-                                             {
-                                                 [wSelf showStatusErrorForAcccountWithID:userID];
-                                                 
-                                                 DLog(@"Error: %@", [error localizedDescription]);
-                                             }
-                                             else
-                                             {
-                                                 wSelf.statusesTaskCounter--;
-                                             }
-                                         }];
+                             if (error)
+                             {
+                                 [wSelf showStatusErrorForAcccountWithID: userID];
+                                 
+                                 DLog(@"Error: %@", [error localizedDescription]);
+                             }
+                             else
+                             {
+                                 wSelf.statusesTaskCounter--;
+                             }
+                        }];
                 }
-            }
-            
-            self.statusesTaskCounter--;
-        });
-    }];
+                
+                for (Group *group in allAvailableSelectedGruops)
+                {
+                    for (UserProfile *user in group.managedBy)
+                    {
+                        wSelf.statusesTaskCounter++;
+                        NSManagedObjectID *userID = user.objectID;
+                        
+                        [user.socialNetwork addStatusWithMessage: text.string
+                                                       andImages: (wSelf.mediaAttachment ? @[wSelf.mediaAttachment] : nil)
+                                                     andLocation: wSelf.currentLocation
+                                                         toGroup: group
+                                             withCompletionBlock: ^(NSError *error) {
+                                 
+                                                 if (error)
+                                                 {
+                                                     [wSelf showStatusErrorForAcccountWithID: userID];
+                                                     
+                                                     DLog(@"Error: %@", [error localizedDescription]);
+                                                 }
+                                                 else
+                                                 {
+                                                     wSelf.statusesTaskCounter--;
+                                                 }
+                                             }];
+                    }
+                }
+                
+                self.statusesTaskCounter--;
+            });
+        }];
     }
+    
     [self.inputTextview becomeFirstResponder];
      NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
     [def setObject:[NSKeyedArchiver archivedDataWithRootObject:nil] forKey:@"curEditingMessage"];
@@ -1332,11 +1339,11 @@ static const NSInteger kActionSheetLibraryCameraButton = 1;
             {
                 imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
                 self.cameraMediaSource = NO;
-                [self presentViewController:imagePicker animated:YES completion:nil];
+                [self presentViewController: imagePicker animated: YES completion: nil];
             }
             else
             {
-                [self showAlertView:NSLocalizedString(@"lskLibraryUnavailable", @"Library is not available")];
+                [self showAlertView: NSLocalizedString(@"lskLibraryUnavailable", @"Library is not available")];
             }
         }
             break;
@@ -1345,11 +1352,11 @@ static const NSInteger kActionSheetLibraryCameraButton = 1;
 
 - (void)showAlertView:(NSString *)message
 {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil
-                                                    message:message
-                                                   delegate:nil
-                                          cancelButtonTitle:NSLocalizedString(@"lskOK", @"OK button for alert")
-                                          otherButtonTitles:nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle: nil
+                                                    message: message
+                                                   delegate: nil
+                                          cancelButtonTitle: NSLocalizedString(@"lskOK", @"OK button for alert")
+                                          otherButtonTitles: nil];
     [alert show];
 }
 
@@ -1366,7 +1373,7 @@ static const NSInteger kActionSheetLibraryCameraButton = 1;
 
 #pragma mark - Setters and getters
 
--(NSInteger)statusesTaskCounter
+- (NSInteger)statusesTaskCounter
 {
     @synchronized(self)
     {
@@ -1374,18 +1381,23 @@ static const NSInteger kActionSheetLibraryCameraButton = 1;
     }
 }
 
--(void)setStatusesTaskCounter:(NSInteger)statusesTaskCounter
+- (void)setStatusesTaskCounter:(NSInteger)statusesTaskCounter
 {
     @synchronized(self)
     {
         if(_statusesTaskCounter == 0 && statusesTaskCounter == 1)
         {
-            [self showProcessHUDWithText:NSLocalizedString(@"lskProcessing", @"")];
+            [self showProcessHUDWithText: NSLocalizedString(@"lskProcessing", @"")];
         }
         else if(_statusesTaskCounter == 1 && statusesTaskCounter == 0)
         {
-            [self removeProcessHUDOnSuccessLoginHUDWithText:NSLocalizedString(@"lskComplete", @"")];
+            [self removeProcessHUDOnSuccessLoginHUDWithText: NSLocalizedString(@"lskComplete", @"")];
            // [self dismiss];
+            
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                
+                self.inputTextview.attributedText = [[NSAttributedString alloc] initWithString: @""];
+            });
         }
         _statusesTaskCounter = statusesTaskCounter;
     }
@@ -1397,7 +1409,7 @@ static const NSInteger kActionSheetLibraryCameraButton = 1;
 {
     if (self.progressHUD)
     {
-        [self.progressHUD completeAndDismissWithTitle:text];
+        [self.progressHUD completeAndDismissWithTitle: text];
         self.progressHUD = nil;
     }
 }
@@ -1406,7 +1418,7 @@ static const NSInteger kActionSheetLibraryCameraButton = 1;
 {
     if (self.progressHUD)
     {
-        [self.progressHUD failAndDismissWithTitle:text];
+        [self.progressHUD failAndDismissWithTitle: text];
         self.progressHUD = nil;
     }
 }
@@ -1438,6 +1450,7 @@ static const NSInteger kActionSheetLibraryCameraButton = 1;
         self.twitterSelectedAccounts  = accounts;
     }
 }
+
 - (void)popoverControllerDidDismissPopover:(WYPopoverController *)popoverController
 {
     self.popoverVC = nil;

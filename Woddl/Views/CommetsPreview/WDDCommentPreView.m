@@ -31,9 +31,10 @@
 #define bgQueue dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT,0)
 
 static const CGFloat kCommentsViewWidth = 320.0f;
-static const CGFloat kMessageWidth = 260.0f;
+static const CGFloat kMessageWidth = 300.0f; // 260.0f
 static const CGFloat kEdgeOffset = 10.0f;
 static const CGFloat kStandratViewOffset = 8.0f;
+static const CGFloat kBottomShawdowHeight = 6.0f;
 
 static const CGFloat kAvatarSize = 32.0f;
 
@@ -66,15 +67,16 @@ static UIImage *placeHolderImage = nil;
 - (instancetype)initWithComment:(Comment *)comment
 {
     self = [super init];
+    
     if (self)
     {
-        self.frame = CGRectMake(0, 0, kCommentsViewWidth, [WDDCommentPreView sizeOfViewForComment:comment].height );
+        self.frame = CGRectMake(0, 0, kCommentsViewWidth, [WDDCommentPreView sizeOfViewForComment: comment].height );
         self.commentId = comment.objectID;
         
         self.commentLabel = [self addCommetLabelForComment: comment];
-        UIImageView *avatarView = [self addAvatarImageViewForComment:comment];
-        UILabel *authorLabel = [self addAuthorLableWithComment:comment];
-        [self addTimeAgoLabelWithComment:comment];
+        UIImageView *avatarView = [self addAvatarImageViewForComment: comment];
+        UILabel *authorLabel = [self addAuthorLableWithComment: comment];
+        [self addTimeAgoLabelWithComment: comment];
         _separatorImageView = [self addSeparator];
         
         self.backgroundColor = [UIColor colorWithRed:245/255.0f
@@ -84,8 +86,8 @@ static UIImage *placeHolderImage = nil;
         
         self.authorProfileURLString = comment.author.profileURL;
         
-        [self setupShowProfileTapForView:avatarView];
-        [self setupShowProfileTapForView:authorLabel];
+        [self setupShowProfileTapForView: avatarView];
+        [self setupShowProfileTapForView: authorLabel];
     }
     return  self;
 }
@@ -93,41 +95,43 @@ static UIImage *placeHolderImage = nil;
 
 - (void)setupShowProfileTapForView:(UIView *)view
 {
-    [view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showAuthorProfile)]];
-    [view setUserInteractionEnabled:YES];
+    [view addGestureRecognizer: [[UITapGestureRecognizer alloc] initWithTarget: self action: @selector(showAuthorProfile)]];
+    [view setUserInteractionEnabled: YES];
 }
 
 #pragma mark - Adding Subviews
 
 - (UIImageView *)addSeparator
 {
-    UIImageView *separatorView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"cell_bottom_shadow"]];
+    UIImageView *separatorView = [[UIImageView alloc] initWithImage: [UIImage imageNamed: @"cell_bottom_shadow"]];
     separatorView.backgroundColor = [UIColor whiteColor];
     separatorView.opaque = YES;
     
     CGRect frame = separatorView.frame;
-    frame.origin.y = CGRectGetMaxY(self.frame)-frame.size.height;
+    frame.origin.y = CGRectGetMaxY(self.frame) - frame.size.height;
     separatorView.frame = frame;
     
     [self addSubview:separatorView];
+    
     return separatorView;
 }
 
 - (UILabel *)addTimeAgoLabelWithComment:(Comment *)comment
 {
-    UILabel *timeAgoLabel = [[UILabel alloc]  initWithFrame:CGRectMake(CGRectGetWidth(self.frame) - kEdgeOffset - kTimeAgoLabelWidth,
+    UILabel *timeAgoLabel = [[UILabel alloc]  initWithFrame: CGRectMake(CGRectGetWidth(self.frame) - kEdgeOffset - kTimeAgoLabelWidth,
                                                                        kEdgeOffset,
                                                                        kTimeAgoLabelWidth,
                                                                        kTimeAgoLabelHeight)];
     timeAgoLabel.text = [comment.date timeAgo];
-    timeAgoLabel.font = [UIFont boldSystemFontOfSize:12.0f];
+    timeAgoLabel.font = [UIFont boldSystemFontOfSize: 12.0f];
     timeAgoLabel.textColor = [UIColor lightGrayColor];
     timeAgoLabel.textAlignment = NSTextAlignmentRight;
     timeAgoLabel.backgroundColor = [UIColor whiteColor];
     timeAgoLabel.opaque = YES;
      
-    [timeAgoLabel setUserInteractionEnabled:YES];
-    [self addSubview:timeAgoLabel];
+    [timeAgoLabel setUserInteractionEnabled: YES];
+    [self addSubview: timeAgoLabel];
+    
     return timeAgoLabel;
 }
 
@@ -139,31 +143,33 @@ static UIImage *placeHolderImage = nil;
                                                                       kAuthorLabelHeight)];
     
     authorLabel.text = commnet.author.name;
-    authorLabel.font = [UIFont boldSystemFontOfSize:14.0f];
+    authorLabel.font = [UIFont boldSystemFontOfSize: 14.0f];
     authorLabel.textColor = [UIColor blackColor];
     authorLabel.textAlignment = NSTextAlignmentLeft;
     authorLabel.backgroundColor = [UIColor whiteColor];
     authorLabel.opaque = YES;
     
-    [authorLabel setUserInteractionEnabled:YES];
-    [self addSubview:authorLabel];
+    [authorLabel setUserInteractionEnabled: YES];
+    [self addSubview: authorLabel];
+    
     return authorLabel;
 }
 
 - (UIImageView *)addAvatarImageViewForComment:(Comment *)comment
 {
-    UIImageView *avatarImage = [[UIImageView alloc] initWithFrame:CGRectMake(kEdgeOffset, kEdgeOffset, kAvatarSize, kAvatarSize)];
+    UIImageView *avatarImage = [[UIImageView alloc] initWithFrame: CGRectMake(kEdgeOffset, kEdgeOffset, kAvatarSize, kAvatarSize)];
     avatarImage.backgroundColor = [UIColor whiteColor];
     avatarImage.opaque = YES;
     
-    NSURL *avatarURL = [NSURL URLWithString:comment.author.avatarRemoteURL];
-    [avatarImage setAvatarWithURL:avatarURL];
+    NSURL *avatarURL = [NSURL URLWithString: comment.author.avatarRemoteURL];
+    [avatarImage setAvatarWithURL: avatarURL];
     
 //    avatarImage.layer.masksToBounds = YES;
 //    [avatarImage.layer setCornerRadius:kAvatarCornerRadious];
     
-    [avatarImage setUserInteractionEnabled:YES];
-    [self addSubview:avatarImage];
+    [avatarImage setUserInteractionEnabled: YES];
+    [self addSubview: avatarImage];
+    
     return avatarImage;
 }
 
@@ -193,18 +199,18 @@ static UIImage *placeHolderImage = nil;
                                         {
                                             NSString *linkString = [comment.text substringWithRange:result.range];
                                             
-                                            if (![Link isURLStringShort:linkString])
+                                            if (![Link isURLStringShort: linkString])
                                             {
-                                                NSURL *linkURL = [NSURL URLWithString:linkString];
-                                                NSURL *cachedLink = [[WDDURLShorter defaultShorter] cachedLinkForURL:linkURL];
+                                                NSURL *linkURL = [NSURL URLWithString: linkString];
+                                                NSURL *cachedLink = [[WDDURLShorter defaultShorter] cachedLinkForURL: linkURL];
                                                 
                                                 if (cachedLink)
                                                 {
-                                                    [commetText.mutableString replaceOccurrencesOfString:linkString
-                                                                                              withString:cachedLink.absoluteString
-                                                                                                 options:NSCaseInsensitiveSearch
-                                                                                                   range:NSMakeRange(0, commetText.mutableString.length)];
-                                                    NSRange linkRange = [commetText.mutableString rangeOfString:cachedLink.absoluteString];
+                                                    [commetText.mutableString replaceOccurrencesOfString: linkString
+                                                                                              withString: cachedLink.absoluteString
+                                                                                                 options: NSCaseInsensitiveSearch
+                                                                                                   range: NSMakeRange(0, commetText.mutableString.length)];
+                                                    NSRange linkRange = [commetText.mutableString rangeOfString: cachedLink.absoluteString];
                                                     
                                                     if (forSize)
                                                     {
@@ -257,7 +263,6 @@ static UIImage *placeHolderImage = nil;
                                                 }
                                                 else
                                                 {
-//                                                    [commetText setLink:[NSURL URLWithString:linkString] range:linkRange];
                                                     [commetText setURL: [NSURL URLWithString: linkString] range: linkRange];
                                                 }
                                             }
@@ -287,7 +292,7 @@ static UIImage *placeHolderImage = nil;
                 [objectContext.parentContext performBlock:^{
                     
                     NSError *error = nil;
-                    [objectContext.parentContext save:&error];
+                    [objectContext.parentContext save: &error];
                     
                     if (error)
                     {
@@ -317,7 +322,6 @@ static UIImage *placeHolderImage = nil;
             }
             else
             {
-//                [commetText setLink:[NSURL URLWithString:[kTagURLBase stringByAppendingString:tagString]] range:matchRange];
                 [commetText setURL: [NSURL URLWithString: [kTagURLBase stringByAppendingString: tagString]] range: matchRange];
             }
         }
@@ -358,7 +362,6 @@ static UIImage *placeHolderImage = nil;
         }
         else
         {
-//            [commetText setLink:[NSURL URLWithString:[urlBase stringByAppendingString:username]] range:matchRange];
             [commetText setURL: [NSURL URLWithString: [urlBase stringByAppendingString: username]] range: matchRange];
         }
     }
@@ -369,11 +372,13 @@ static UIImage *placeHolderImage = nil;
     __block NSMutableAttributedString *commetText = [[NSMutableAttributedString alloc] initWithString:comment.text
                                                                                    attributes:@{ NSFontAttributeName : [WDDCommentPreView messageTextFont],
                                                                                                  NSForegroundColorAttributeName : [UIColor blackColor] }];
-    [[self class] buildCommentText:&commetText forCommet:comment forSize:YES commentPreview:self];
+    [[self class] buildCommentText: &commetText forCommet: comment forSize: YES commentPreview: self];
     
-    CGSize textSize = [WDDCommentPreView sizeForText:commetText withFont:[WDDCommentPreView messageTextFont]];
+    CGSize textSize = [WDDCommentPreView sizeForText: commetText withFont: [WDDCommentPreView messageTextFont]];
     
-    UITextView *commentMessageLabel = [[UITextView alloc] initWithFrame:CGRectMake(kEdgeOffset+kAvatarSize+kStandratViewOffset, kEdgeOffset + kAuthorLabelHeight + kStandratViewOffset, textSize.width, textSize.height)];
+//    UITextView *commentMessageLabel = [[UITextView alloc] initWithFrame: CGRectMake(kEdgeOffset + kAvatarSize + kStandratViewOffset, kEdgeOffset + kAuthorLabelHeight + kStandratViewOffset, kMessageWidth, textSize.height + 5)];
+    
+    UITextView *commentMessageLabel = [[UITextView alloc] initWithFrame: CGRectMake(kEdgeOffset, kEdgeOffset + kAvatarSize + kEdgeOffset, kMessageWidth, textSize.height + 5)];
     
     commentMessageLabel.editable = NO;
     commentMessageLabel.scrollEnabled = NO;
@@ -386,6 +391,7 @@ static UIImage *placeHolderImage = nil;
 //    commentMessageLabel.linkUnderlineStyle = kCTUnderlineStyleNone | kOHBoldStyleTraitSetBold;
     commentMessageLabel.backgroundColor = [UIColor clearColor];
     commentMessageLabel.opaque = YES;
+    commentMessageLabel.font = [WDDCommentPreView messageTextFont];
     commentMessageLabel.attributedText = commetText;
     [commentMessageLabel setUserInteractionEnabled: YES];
     
@@ -401,7 +407,7 @@ static UIImage *placeHolderImage = nil;
 #pragma mark - Calculating text height of comment
 
 + (CGSize)sizeForText:(NSAttributedString *)text withFont:(UIFont *)font
-{    
+{
     CGSize fitSize = CGSizeZero;
     CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)text);
     if (framesetter)
@@ -431,7 +437,11 @@ static UIImage *placeHolderImage = nil;
     NSMutableAttributedString *commetText = [[NSMutableAttributedString alloc] initWithString:comment.text attributes:@{NSFontAttributeName : [WDDCommentPreView messageTextFont]}];
     [self buildCommentText:&commetText forCommet:comment forSize:YES commentPreview:nil];
     CGSize textSize = [WDDCommentPreView sizeForText:commetText withFont:[WDDCommentPreView messageTextFont]];
-    CGFloat height = kEdgeOffset*2 + kAuthorLabelHeight + kStandratViewOffset + textSize.height;
+    
+//    CGFloat height = kEdgeOffset * 2 + kAuthorLabelHeight + kStandratViewOffset + textSize.height + kBottomShawdowHeight;
+    CGFloat height = kEdgeOffset * 2 + kAvatarSize + textSize.height + kEdgeOffset + kBottomShawdowHeight;
+    
+    
     return CGSizeMake(kCommentsViewWidth, height);
 }
 

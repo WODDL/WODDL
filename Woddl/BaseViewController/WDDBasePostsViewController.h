@@ -14,11 +14,16 @@ static NSString * const kPostMessagesCache              = @"PostMessagesCache";
 extern NSString * const kPostTimeKey;
 
 @interface WDDBasePostsViewController : UIViewController <NSFetchedResultsControllerDelegate, UITableViewDataSource, UITableViewDelegate, UITextViewDelegate, WDDMainPostCellDelegate, IDSEllipseMenuDelegate, MFMailComposeViewControllerDelegate>
-
+{
+    
+}
 @property (weak, nonatomic) IBOutlet UITableView *postsTable;
 
 @property (assign, nonatomic) BOOL isAppeared;
 @property (nonatomic, assign) BOOL needProcessUpdates;
+@property (nonatomic, assign) BOOL isLoadMore;
+@property (nonatomic, strong) NSIndexPath *blackCellIndexPath;
+@property (nonatomic, strong) NSIndexPath *blackNewCellIndexPath;
 
 @property (strong, nonatomic) NSFetchedResultsController * fetchedResultsController;
 

@@ -104,13 +104,13 @@ static const CGFloat avatatLeftSideOffset = 4.0f;
                                                          
                                                          if (finished && !error)
                                                          {
-                                                             [[weakAvatarView viewWithTag:tagLoadingIndicator] removeFromSuperview];
+                                                             [[weakAvatarView viewWithTag: tagLoadingIndicator] removeFromSuperview];
                                                              CGFloat width = avatarSize * [UIScreen mainScreen].scale;
                                                              
-                                                             image = [image thumbnailImage:width
-                                                                         transparentBorder:1.f
-                                                                              cornerRadius:3.f
-                                                                      interpolationQuality:kCGInterpolationMedium];
+                                                             image = [image thumbnailImage: width
+                                                                         transparentBorder: 1.f
+                                                                              cornerRadius: 3.f
+                                                                      interpolationQuality: kCGInterpolationMedium];
                                                              
                                                              dispatch_async(dispatch_get_main_queue(), ^{
                                                                  weakAvatarView.image = image;
@@ -158,12 +158,12 @@ static const CGFloat avatatLeftSideOffset = 4.0f;
                                                                 constant:avatarToNameOffset];
         
         NSLayoutConstraint *maskCenterLayout = [NSLayoutConstraint constraintWithItem:avatarMask
-                                                                            attribute:NSLayoutAttributeCenterY
-                                                                            relatedBy:NSLayoutRelationEqual
-                                                                               toItem:self
-                                                                            attribute:NSLayoutAttributeCenterY
-                                                                           multiplier:1.f
-                                                                             constant:0];
+                                                                            attribute: NSLayoutAttributeCenterY
+                                                                            relatedBy: NSLayoutRelationEqual
+                                                                               toItem: self
+                                                                            attribute: NSLayoutAttributeCenterY
+                                                                           multiplier: 1.f
+                                                                             constant: 0];
         
         NSLayoutConstraint *avatarCenterLayout = [NSLayoutConstraint constraintWithItem:contactAvatareVeiw
                                                                               attribute:NSLayoutAttributeCenterY

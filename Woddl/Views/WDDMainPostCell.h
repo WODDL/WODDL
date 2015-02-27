@@ -71,6 +71,8 @@ typedef void(^WDDPostCellReuseBlock)(NSIndexPath *indexpath);
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *retweetsLabelWidth;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *showEventInfoButtonHeight;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *textToMediaOffset;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *blackLineViewHeight;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomShawdowHeight;
 
 //  Appearance properties
 @property (strong, nonatomic) NSString *likeIconImageName;
@@ -92,6 +94,7 @@ typedef void(^WDDPostCellReuseBlock)(NSIndexPath *indexpath);
 @property (nonatomic, readonly) BOOL isExpandable;
 @property (nonatomic, assign) BOOL isExpanded;
 @property (nonatomic, assign) BOOL isEvent;
+@property (assign, nonatomic) BOOL hasBlackLine;
 
 @property (nonatomic, assign, getter = shouldPreviewLinksAsMedia) BOOL previewLinksAsMedia;
 

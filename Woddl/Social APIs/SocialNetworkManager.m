@@ -356,7 +356,6 @@ static SocialNetworkManager* mySocialNetworkManager = nil;
                         else
                         {
                             DLog(@"%@ is not active, skip it", NSStringFromClass([socNetwork class]));
-                            
 
                             if (socNetwork.type.integerValue == kSocialNetworkGooglePlus)
                             {
@@ -365,12 +364,11 @@ static SocialNetworkManager* mySocialNetworkManager = nil;
                                     self.isGoogleInProgress = NO;
                                 }
                             }
-
                             
                             networksCount--;
                             if (networksCount == 0)
                             {
-                                [[UIApplication sharedApplication] endBackgroundTask:updateTask];
+                                [[UIApplication sharedApplication] endBackgroundTask: updateTask];
                                 updateTask = UIBackgroundTaskInvalid;
                                 
                                 self.isUpdatePostsInProgress = NO;
@@ -381,7 +379,7 @@ static SocialNetworkManager* mySocialNetworkManager = nil;
                 }
                 else
                 {
-                    [[UIApplication sharedApplication] endBackgroundTask:updateTask];
+                    [[UIApplication sharedApplication] endBackgroundTask: updateTask];
                     updateTask = UIBackgroundTaskInvalid;
                     
                     self.isUpdatePostsInProgress = NO;
@@ -391,12 +389,12 @@ static SocialNetworkManager* mySocialNetworkManager = nil;
             else
             {
                 DLog(@"Can't update - no internet connection");
-                [[UIApplication sharedApplication] endBackgroundTask:updateTask];
+                [[UIApplication sharedApplication] endBackgroundTask: updateTask];
                 updateTask = UIBackgroundTaskInvalid;
                 
                 self.isUpdatePostsInProgress = NO;
                 complationBlock();
-                [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationInternetNotConnected object:nil];
+                [[NSNotificationCenter defaultCenter] postNotificationName: kNotificationInternetNotConnected object: nil];
             }
         };
         
@@ -609,16 +607,16 @@ static SocialNetworkManager* mySocialNetworkManager = nil;
      
             for(NSString* userID in allUsersID)
             {
-                NSDictionary* getPostsInfo = [infoData objectForKey:userID];
+                NSDictionary* getPostsInfo = [infoData objectForKey: userID];
      
-                NSPredicate* predicate = [NSPredicate predicateWithFormat:@"self.profile.userID == %@ AND self.type == %i", userID,[[getPostsInfo objectForKey:kLoadMorePostsType] intValue]];
+                NSPredicate* predicate = [NSPredicate predicateWithFormat: @"self.profile.userID == %@ AND self.type == %i", userID, [[getPostsInfo objectForKey: kLoadMorePostsType] intValue]];
                 
                 NSArray* socialNateworks = [[WDDDataBase sharedDatabase] getItemsWithEntityName:NSStringFromClass([SocialNetwork class]) andPredicate:predicate];
                 
                 SocialNetwork* socNetwork = [socialNateworks lastObject];
                 
-                if([[getPostsInfo objectForKey:kLoadMorePostsType] intValue] == kSocialNetworkTwitter ||
-                   [[getPostsInfo objectForKey:kLoadMorePostsType] intValue] == kSocialNetworkInstagram)
+                if([[getPostsInfo objectForKey: kLoadMorePostsType] intValue] == kSocialNetworkTwitter ||
+                   [[getPostsInfo objectForKey: kLoadMorePostsType] intValue] == kSocialNetworkInstagram)
                 {
                     networkID = socNetwork.objectID;
                     ++allActionsCount;
@@ -637,7 +635,7 @@ static SocialNetworkManager* mySocialNetworkManager = nil;
                         
                         if (!--allActionsCount)
                         {
-                            [[UIApplication sharedApplication] endBackgroundTask:updateTask];
+                            [[UIApplication sharedApplication] endBackgroundTask: updateTask];
                             updateTask = UIBackgroundTaskInvalid;
                             
                             self.isLoadingMoreInProgress = NO;
@@ -658,17 +656,15 @@ static SocialNetworkManager* mySocialNetworkManager = nil;
                     dispatch_async(updateQueue, ^{
                         
                         ++operationsCount;
-                        SocialNetwork *network = (SocialNetwork *)[[WDDDataBase sharedDatabase].managedObjectContext objectWithID:networkID];
-                        [network getPostsFrom:[getPostsInfo objectForKey:kLoadMorePostsSelfCount]
-                                              to:[getPostsInfo objectForKey:kLoadMorePostsTo]
-                                     isSelfPosts:YES];
-                        [network getPostsFrom:[getPostsInfo objectForKey:kLoadMorePostsTheirCount]
-                                              to:[getPostsInfo objectForKey:kLoadMorePostsTo]
-                                     isSelfPosts:NO];
+                        SocialNetwork *network = (SocialNetwork *)[[WDDDataBase sharedDatabase].managedObjectContext objectWithID: networkID];
+                        [network getPostsFrom: [getPostsInfo objectForKey:kLoadMorePostsSelfCount]
+                                           to: [getPostsInfo objectForKey:kLoadMorePostsTo]
+                                  isSelfPosts: YES];
+                        [network getPostsFrom: [getPostsInfo objectForKey:kLoadMorePostsTheirCount]
+                                           to: [getPostsInfo objectForKey:kLoadMorePostsTo]
+                                  isSelfPosts: NO];
                         
-                        
-                        
-                      [[WDDDataBase sharedDatabase] save];
+                        [[WDDDataBase sharedDatabase] save];
                         
                         if (!--operationsCount)
                         {
@@ -676,14 +672,13 @@ static SocialNetworkManager* mySocialNetworkManager = nil;
                             
                             if (!--allActionsCount)
                             {
-                                [[UIApplication sharedApplication] endBackgroundTask:updateTask];
+                                [[UIApplication sharedApplication] endBackgroundTask: updateTask];
                                 updateTask = UIBackgroundTaskInvalid;
                                 
                                 self.isLoadingMoreInProgress = NO;
                                 complationBlock();
                             }
                         }
-
                     });
                     
                     dispatch_async(updateQueue, ^{

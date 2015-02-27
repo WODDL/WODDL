@@ -68,7 +68,7 @@ static const NSInteger kCountLoadMorePosts = 10;
                                                object:nil];
 }
 
--(void)displayPoweredByScreen
+- (void)displayPoweredByScreen
 {
     WDDPoweredByViewController* infoController = [self.storyboard instantiateViewControllerWithIdentifier:@"PoweredByScreen"];
     [self.navigationController pushViewController:infoController animated:NO];
@@ -268,7 +268,7 @@ static const NSUInteger kIMIconFrames = 14;
     self.unreadMessagesBadge.strokeColor = [UIColor whiteColor];
     self.unreadMessagesBadge.strokeWidth = 1.0f;
     self.unreadMessagesBadge.textColor = [UIColor whiteColor];
-    self.unreadMessagesBadge.font = [UIFont systemFontOfSize:8.0f];
+    self.unreadMessagesBadge.font = [UIFont systemFontOfSize: 8.0f];
     self.unreadMessagesBadge.shine = NO;
     self.unreadMessagesBadge.shadow = NO;
     self.unreadMessagesBadge.value = [@(self.unreadMessagesCount) stringValue];
@@ -280,7 +280,7 @@ static const NSUInteger kIMIconFrames = 14;
     
     for (NSUInteger i = 0; i<count; i++)
     {
-        NSString *frame = [NSString stringWithFormat:@"%@%u", frameName, i];
+        NSString *frame = [NSString stringWithFormat:@"%@%lu", frameName, (unsigned long)i];
         UIImage *frameImage = [UIImage imageNamed:frame];
         [frames addObject:frameImage];
     }
@@ -431,7 +431,7 @@ static const NSUInteger kIMIconFrames = 14;
     
     NSPredicate *authorPredicate= [NSPredicate predicateWithFormat:@"SELF.author.isBlocked == %@ AND SELF.group == nil", @NO];
     NSPredicate *groupPredicate = [NSPredicate predicateWithFormat:@"SELF.group.isGroupBlock == %@ AND SELF.group != nil", @NO];
-    finalPredicate = [NSCompoundPredicate orPredicateWithSubpredicates:@[authorPredicate, groupPredicate]];
+    finalPredicate = [NSCompoundPredicate orPredicateWithSubpredicates: @[authorPredicate, groupPredicate]];
     
     if (!self.groupIDFilter)
     {
@@ -578,8 +578,21 @@ static const CGFloat kSlideMenuRightAnchor = 240.0f;
         return;
     }
     
+    int iPrevCnt = [self tableView: self.postsTable numberOfRowsInSection: 0];
+    DLog(@"Previous Count = %d", iPrevCnt);
     
     __weak WDDMainScreenViewController *wSelf = self;
+    
+    NSIndexPath *prevIndexPath = [NSIndexPath indexPathForRow: self.blackNewCellIndexPath.row inSection: 0];
+    
+    self.blackNewCellIndexPath = [NSIndexPath indexPathForRow: -1 inSection: 0];
+    
+    if (prevIndexPath.row != -1) {
+        
+        NSLog(@"%@", prevIndexPath);
+        
+        [self.postsTable reloadRowsAtIndexPaths: @[prevIndexPath] withRowAnimation: UITableViewRowAnimationNone];
+    }
     
     BOOL updating = [[SocialNetworkManager sharedManager] updatePostsWithComplationBlock:^{
         
@@ -588,8 +601,25 @@ static const CGFloat kSlideMenuRightAnchor = 240.0f;
             wSelf.postsTable.pullTableIsRefreshing = NO;
             
             DLog(@"Refresh posts finished");
+            
+            int iCurCnt = [self tableView: self.postsTable numberOfRowsInSection: 0];
+            DLog(@"Current Count = %d", iCurCnt);
+            
+            if (self.blackCellIndexPath.row != -1) {
+                
+                self.blackCellIndexPath = [NSIndexPath indexPathForRow: (self.blackCellIndexPath.row + iCurCnt - iPrevCnt)
+                                                             inSection: 0];
+            }
+            
+            self.blackNewCellIndexPath = [NSIndexPath indexPathForRow: (iCurCnt - iPrevCnt - 1) inSection: 0];
+            
+            if (self.blackNewCellIndexPath.row != -1) {
+                
+                NSLog(@"%@", self.blackNewCellIndexPath);
+                
+                [self.postsTable reloadRowsAtIndexPaths: @[self.blackNewCellIndexPath] withRowAnimation: UITableViewRowAnimationAutomatic];
+            }
         });
-        
     }];
     
     if (updating)
@@ -622,11 +652,11 @@ static const CGFloat kSlideMenuRightAnchor = 240.0f;
     
     if (self.groupIDFilter)
     {
-        NSPredicate *snPreidcate = [NSPredicate predicateWithFormat:@"ANY SELF.groups.groupID == %@", self.groupIDFilter];
-        NSFetchRequest *snRequest = [[NSFetchRequest alloc] initWithEntityName:NSStringFromClass([SocialNetwork class])];
+        NSPredicate *snPreidcate = [NSPredicate predicateWithFormat: @"ANY SELF.groups.groupID == %@", self.groupIDFilter];
+        NSFetchRequest *snRequest = [[NSFetchRequest alloc] initWithEntityName: NSStringFromClass([SocialNetwork class])];
         snRequest.predicate = snPreidcate;
         
-        socialNetworks = [[WDDDataBase sharedDatabase].managedObjectContext executeFetchRequest:snRequest error:nil];
+        socialNetworks = [[WDDDataBase sharedDatabase].managedObjectContext executeFetchRequest: snRequest error: nil];
         
         if (!socialNetworks.count)
         {
@@ -664,6 +694,19 @@ static const CGFloat kSlideMenuRightAnchor = 240.0f;
         
         socialNetworks = [[WDDDataBase sharedDatabase].managedObjectContext executeFetchRequest:snRequest error:nil];
     }
+    
+    NSIndexPath *prevIndexPath = [NSIndexPath indexPathForRow: self.blackCellIndexPath.row inSection: 0];
+    
+    self.blackCellIndexPath = [NSIndexPath indexPathForRow: [[self.fetchedResultsController sections][0] numberOfObjects] - 1 inSection: 0];
+    
+    if (prevIndexPath.row != -1) {
+        
+        [self.postsTable reloadRowsAtIndexPaths: @[prevIndexPath] withRowAnimation: UITableViewRowAnimationNone];
+    }
+    
+    [self.postsTable reloadRowsAtIndexPaths: @[self.blackCellIndexPath] withRowAnimation: UITableViewRowAnimationAutomatic];
+    
+    NSLog(@"%@", self.blackCellIndexPath);
     
     NSMutableDictionary *loadMoreInfoDict = [[NSMutableDictionary alloc] init];
     
@@ -824,7 +867,7 @@ static NSString * const kPostCellIdentifier = @"PostCell";
 
 #pragma mark - Activity Indicator
 
-- (void) refreshLoadActivityIndicator
+- (void)refreshLoadActivityIndicator
 {
     WDDAppDelegate* delegate = [[UIApplication sharedApplication] delegate];
     delegate.networkActivityIndicatorCounter++;

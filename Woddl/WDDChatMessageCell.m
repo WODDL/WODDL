@@ -93,7 +93,7 @@ static NSInteger clockImageWidth        = 9;
         dateTextColor = [UIColor lightGrayColor];
     }
     
-    self.baloonView = [[UIImageView alloc] initWithImage:bubbleImage];
+    self.baloonView = [[UIImageView alloc] initWithImage: bubbleImage];
    /*
     self.baloonView.layer.shadowColor = [UIColor purpleColor].CGColor;
     self.baloonView.layer.shadowOffset = CGSizeMake(0, 1);
@@ -101,8 +101,7 @@ static NSInteger clockImageWidth        = 9;
     self.baloonView.layer.shadowRadius = 5.0;
     self.baloonView.clipsToBounds = NO;
   */
-    [self.contentView addSubview:self.baloonView];
-    
+    [self.contentView addSubview: self.baloonView];
     
     if(!self.message.isComposing)
     {
@@ -176,7 +175,7 @@ static NSInteger clockImageWidth        = 9;
     NSString *messageText = self.message.isComposing ? NSLocalizedString(@"lskIsTyping", @"is typing...") : self.message.body;
     
     CGSize textSize = [WDDChatMessageCell sizeForMessageText: messageText];
-    CGFloat dateLabelWidth = [WDDChatMessageCell widthForOneLineText:self.messageDateLabel.text withFont:DATE_TEXT_FONT];
+    CGFloat dateLabelWidth = [WDDChatMessageCell widthForOneLineText: self.messageDateLabel.text withFont: DATE_TEXT_FONT];
     
 //    CGFloat bottomLineWidth = [WDDChatMessageCell widthForOneLineText:self.messageDate withFont:DATE_TEXT_FONT];
     
@@ -298,9 +297,9 @@ static NSInteger clockImageWidth        = 9;
 
 + (CGFloat)widthForOneLineText:(NSString *)text withFont:(UIFont *)font
 {
-    return [text sizeWithFont:font
-            constrainedToSize:CGSizeMake(CGFLOAT_MAX, font.lineHeight)
-                lineBreakMode:NSLineBreakByWordWrapping].width;
+    return [text sizeWithFont: font
+            constrainedToSize: CGSizeMake(CGFLOAT_MAX, font.lineHeight)
+                lineBreakMode: NSLineBreakByWordWrapping].width;
 }
 
 + (CGFloat)heightForCellWithText:(NSString *)text

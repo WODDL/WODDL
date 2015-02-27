@@ -36,8 +36,8 @@
 {
     [super viewDidLoad];
 
-    self.mapView = [[MKMapView alloc] initWithFrame:CGRectZero];
-    [self.view addSubview:self.mapView];
+    self.mapView = [[MKMapView alloc] initWithFrame: CGRectZero];
+    [self.view addSubview: self.mapView];
     
     NSLayoutConstraint *botttom =[NSLayoutConstraint
                                   constraintWithItem:self.mapView
@@ -75,12 +75,12 @@
                                multiplier:1.0
                                constant:0];
 
-    [self.mapView setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [self.view addConstraints:@[top, left, right, botttom]];
+    [self.mapView setTranslatesAutoresizingMaskIntoConstraints: NO];
+    [self.view addConstraints: @[top, left, right, botttom]];
     [self customizeBackButton];
     
     self.title = self.place.name;
-    [self.mapView addAnnotation:self.place];
+    [self.mapView addAnnotation: self.place];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -93,7 +93,7 @@
     span.longitudeDelta = 0.015;
     region.span = span;
 
-    [self.mapView setRegion:region animated:YES];
+    [self.mapView setRegion: region animated: YES];
 }
 
 - (void)didReceiveMemoryWarning

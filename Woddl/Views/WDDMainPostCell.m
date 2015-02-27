@@ -13,7 +13,6 @@
 #import "Media.h"
 #import "Post.h"
 #import "UITextView+DisableCopyPaste.h"
-
 #import <SDWebImage/SDWebImageManager.h>
 #import "UITapGestureRecognizer+MediaInfo.h"
 #import "WDDCommentPreView.h"
@@ -23,6 +22,7 @@
 #import "NSString+Additions.h"
 #import "NSString+MD5.h"
 #import "UIImage+ResizeAdditions.h"
+#import "UIImageView+WebCache.h"
 
 #define SHOW_COMMENTS 0
 
@@ -84,11 +84,7 @@ static NSMutableDictionary *st_iconsCache = nil;
     
     self.textMessage.linkTextAttributes = @{NSForegroundColorAttributeName: [UIColor blackColor],
                                             NSUnderlineStyleAttributeName: [NSNumber numberWithInt: NSUnderlineStyleNone]};
-//    self.textMessage.linkColor = [UIColor blackColor];
-//    self.textMessage.linkUnderlineStyle = kCTUnderlineStyleNone | kOHBoldStyleTraitSetBold;
-//    self.textMessage.automaticallyAddLinksForType = 0;
     
-//    self.textMessage.extendBottomToFit = YES;
     self.textMessage.textContainer.lineFragmentPadding = 0;
     self.textMessage.textContainerInset = UIEdgeInsetsZero;
     self.textMessage.editable = NO;
@@ -248,11 +244,11 @@ static NSMutableDictionary *st_iconsCache = nil;
             
             if (mediaObj.type.integerValue == kMediaVideo)
             {
-                UIImageView *playIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"PlayIcon"]];
+                UIImageView *playIcon = [[UIImageView alloc] initWithImage: [UIImage imageNamed: @"PlayIcon"]];
                 playIcon.center = CGPointMake(CGRectGetWidth(imageView.frame) / 2.f , CGRectGetHeight(imageView.frame) / 2.f);
                 playIcon.tag = tagPlayIcon;
                 playIcon.hidden = YES;
-                [imageView addSubview:playIcon];
+                [imageView addSubview: playIcon];
             }
             
             [self.mediaScrollView addSubview: imageView];
@@ -267,9 +263,19 @@ static NSMutableDictionary *st_iconsCache = nil;
             [imageView addConstraint: widthConstraint];
             positionX += CGRectGetWidth(imageView.frame);
             
-            NSString *mediaUrl = mediaObj.previewURLString ? mediaObj.previewURLString : mediaObj.mediaURLString;
+//            NSString *mediaUrl = mediaObj.previewURLString ? mediaObj.previewURLString : mediaObj.mediaURLString;
             
-            [imageView setImageWithURL: [NSURL URLWithString: mediaUrl] placeholderImage: nil];
+            NSString *mediaUrl = mediaObj.type.integerValue == kMediaVideo ? mediaObj.previewURLString : mediaObj.mediaURLString;
+            
+//            [imageView setImageWithURL: [NSURL URLWithString: mediaUrl] placeholderImage: nil];
+            
+            [imageView sd_setImageWithURL: [NSURL URLWithString: mediaUrl] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                
+                if (!error) {
+                    
+                    [[imageView viewWithTag: tagPlayIcon] setHidden: NO];
+                }
+            }];
             
 //            __weak UIImageView *wImageView = imageView;
 //            __weak Media *wMediaObject = mediaObj;
@@ -447,8 +453,9 @@ static NSMutableDictionary *st_iconsCache = nil;
 - (void)setDelegate:(id<WDDMainPostCellDelegate>)delegate
 {
     _delegate = delegate;
-    for (WDDCommentPreView *preview in self.commentsView.subviews)
-    {
+    
+    for (WDDCommentPreView *preview in self.commentsView.subviews) {
+        
         preview.delegate = delegate;
     }
 }
@@ -533,7 +540,6 @@ static NSMutableDictionary *st_iconsCache = nil;
     
     NSAttributedString *newText = [self.fullMessageText attributedSubstringFromRange:NSMakeRange(0, newSearchRange.location+newSearchRange.length)];
     
-
     return [self formShortMessageStringWithMessageText: newText searchRange: newSearchRange];
 }
 
@@ -566,7 +572,7 @@ static NSMutableDictionary *st_iconsCache = nil;
 
 static const CGFloat MessageWidth = 300.f;
 static const CGFloat OffsetY = 10.f;
-static const CGFloat MessageMinY = 51.f;
+static const CGFloat MessageMinY = 52.f;
 
 - (void)layoutSubviews
 {
@@ -577,10 +583,13 @@ static const CGFloat MessageMinY = 51.f;
     self.mediaScrollBottomOffset.constant = (self.medias.count || self.links.count ? OffsetY : 0);
     self.textToMediaOffset.constant = (self.medias.count || self.links.count ? OffsetY / 2.f : OffsetY);
     self.arrowIcon.hidden = YES;
-    self.commentsViewHeight.constant = (!self.isExpanded ? 0.f : [WDDMainPostCell heightForCommentsView:self.comments]);
-    self.commentsViewBottomOffSet.constant = 0.0f;
+    self.commentsViewHeight.constant = (!self.isExpanded ? 0.f : [WDDMainPostCell heightForCommentsView: self.comments]);
+    self.commentsViewBottomOffSet.constant = self.hasBlackLine ? 17.0f : 0.0f;
     
     self.showEventInfoButtonHeight.constant = (self.isEvent ? ShowEventButtonHeight : 0.0f);
+    
+    self.blackLineViewHeight.constant = self.hasBlackLine ? 22.0f : 0.0f;
+    self.bottomShawdowHeight.constant = self.hasBlackLine ? 0.0f : 6.0f;
 }
 
 - (void)prepareForReuse
@@ -663,9 +672,10 @@ static const CGFloat MessageMinY = 51.f;
     CGFloat cellHeight = 0;
 
     NSInteger textLength = ([text isKindOfClass:[NSAttributedString class]] ? [[text string] length] : [text length]);
-    if (textLength)
-    {
-        textSize = [self sizeForText:text withFont:self.messageTextFont];
+    
+    if (textLength) {
+        
+        textSize = [self sizeForText: text withFont: self.messageTextFont];
     }
     
     __block BOOL isContainLink = NO;
@@ -674,18 +684,19 @@ static const CGFloat MessageMinY = 51.f;
     if (mode == CellModeExpanded)
     {
         CGFloat textHeight = ceilf(textSize.height) + 20.f;
-        CGFloat commetsViewHeight = [WDDMainPostCell heightForCommentsView:comments];
+        CGFloat commetsViewHeight = [WDDMainPostCell heightForCommentsView: comments];
         
-        cellHeight = MessageMinY + textHeight + OffsetY * (isMedia || isContainLink ? 2.0f : 0.f) + mediaScrollHeight + commetsViewHeight;
+        cellHeight = MessageMinY + textHeight + OffsetY * (isMedia || isContainLink ? 2.2f : 0.2f) + mediaScrollHeight + commetsViewHeight;
     }
     else
     {
-        CGFloat textHeight = round(textSize.height);
-        if (textSize.height > SixStringsTextSize)
-        {
+        CGFloat textHeight = (int)(textSize.height + 0.5);
+        
+        if (textSize.height > SixStringsTextSize) {
+            
             textHeight = SevenStringsTextSize;
         }
-        cellHeight = MessageMinY + mediaScrollHeight + OffsetY * (isMedia || isContainLink ? 2.0f : 1.0f) + textHeight;
+        cellHeight = MessageMinY + mediaScrollHeight + OffsetY * (isMedia || isContainLink ? 2.2f : 1.2f) + textHeight;
     }
     
     if (mode == CellModeEvent)
@@ -755,12 +766,12 @@ static NSMutableDictionary *st_textSizes = nil;
 
 + (UIFont *)messageTextFont
 {
-    return [UIFont systemFontOfSize:kPostFontSize];
+    return [UIFont systemFontOfSize: kPostFontSize];
 }
 
 + (UIFont *)boldMessageTextFont
 {
-    return [UIFont boldSystemFontOfSize:kPostFontSize];
+    return [UIFont boldSystemFontOfSize: kPostFontSize];
 }
 
 #pragma mark - User actions processing

@@ -55,7 +55,8 @@ static NSInteger kSearchPostLimit = 10;
 
 -(void)getPosts
 {
-    NSMutableArray* groupsResultArray = [[NSMutableArray alloc] initWithCapacity:self.groups.count];
+    NSMutableArray* groupsResultArray = [[NSMutableArray alloc] initWithCapacity: self.groups.count];
+    
     for (Group *group in self.groups)
     {
         NSMutableDictionary *groupInfo = [@{@"groupId": group.groupID, @"name" : group.name, @"type" : group.type} mutableCopy];
@@ -286,15 +287,15 @@ static NSInteger kSearchPostLimit = 10;
         
         NSError *error = nil;
         FacebookRequest *request = [FacebookRequest new];
-        if (![request addStatusWithToken:accessToken
-                              andMessage:message
-                                 location:location
-                                andImage:image
-                                 toGroup:group.groupID])
+        if (![request addStatusWithToken: accessToken
+                              andMessage: message
+                                location: location
+                                andImage: image
+                                 toGroup: group.groupID])
         {
-            error = [NSError errorWithDomain:@"WDDFacebookDomain"
-                                        code:1024
-                                    userInfo:@{ NSLocalizedDescriptionKey : @"Can't add post to group" }];
+            error = [NSError errorWithDomain: @"WDDFacebookDomain"
+                                        code: 1024
+                                    userInfo: @{ NSLocalizedDescriptionKey : @"Can't add post to group" }];
         }
         
         if (completionBlock)

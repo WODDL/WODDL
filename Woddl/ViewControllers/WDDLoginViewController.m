@@ -322,7 +322,6 @@ typedef NS_ENUM(NSUInteger, LoginFacebookActionSheetButton)
     });
 }
 
-
 #pragma mark - Facebook Delegate
 
 -(void)loginFacebookViewController:(UIViewController *)fbViewController

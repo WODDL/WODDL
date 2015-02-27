@@ -91,6 +91,10 @@ static UIImage *placeHolderImage = nil;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.blackCellIndexPath = [NSIndexPath indexPathForRow: -1 inSection: 0];
+    self.blackNewCellIndexPath = [NSIndexPath indexPathForRow: -1 inSection: 0];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadPrevStatuses)
                                                  name:@"loadPrevStatuses" object: nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkChangedReturnedTo48HrsAtStart)
@@ -187,7 +191,7 @@ static UIImage *placeHolderImage = nil;
     
     if (self.videoURL2OpenInWebView)
     {
-        [self showVideoInWebWithURL:self.videoURL2OpenInWebView];
+        [self showVideoInWebWithURL: self.videoURL2OpenInWebView];
         self.videoURL2OpenInWebView = nil;
     }
     else
@@ -233,7 +237,6 @@ static UIImage *placeHolderImage = nil;
             TF_CHECKPOINT(@"Update using pull to refresh finished");
             DLog(@"Refresh posts finished");
         });
-        
     }];
     
     if (updating)
@@ -245,7 +248,6 @@ static UIImage *placeHolderImage = nil;
 
 - (void)startUpdateView
 {
-
     [NSTimer scheduledTimerWithTimeInterval: 120.f
                                      target: self
                                    selector: @selector(checkingForNewPosts)
@@ -258,7 +260,7 @@ static UIImage *placeHolderImage = nil;
 {
     if (!self.progressHUD)
     {
-        self.progressHUD = [[SAMHUDView alloc] initWithTitle:text];
+        self.progressHUD = [[SAMHUDView alloc] initWithTitle: text];
         [self.progressHUD show];
     }
     else
@@ -311,11 +313,11 @@ static UIImage *placeHolderImage = nil;
     
     NSDate* enddate = postsDate;
     NSDate* currentdate = [NSDate date];
-    NSTimeInterval distanceBetweenDates = [currentdate timeIntervalSinceDate:enddate];
+    NSTimeInterval distanceBetweenDates = [currentdate timeIntervalSinceDate: enddate];
     double secondsInMinute = 60;
     NSInteger secondsBetweenDates = distanceBetweenDates / secondsInMinute;
     secondsInMinute*=60;//1h
-    if (secondsBetweenDates*24<=86400)
+    if (secondsBetweenDates * 24 <= 86400)
     {
         return YES;
     }
@@ -333,45 +335,18 @@ static UIImage *placeHolderImage = nil;
             return 0.f;
         }
     }
-    
-#ifdef IOS_7_TABLE_AUTOLAYOUT
+        
     if (indexPath.section >= [[self.fetchedResultsController sections] count] ||
         indexPath.row >= [(id <NSFetchedResultsSectionInfo>)[self.fetchedResultsController sections][indexPath.section] numberOfObjects])
     {
         return 0.f;
     }
     
-    WDDMainPostCell *cell = [tableView dequeueReusableCellWithIdentifier:[self cellIdentifier]];
-    if (!cell)
-    {
-        cell = [[[NSBundle mainBundle] loadNibNamed: NSStringFromClass([WDDMainPostCell class]) owner: nil options: nil] firstObject];
-    }
-    
-    [self configureCell: cell atIndexPath: indexPath];
-    
-#ifdef CACHE_CELLS
-    self.cellCache[indexPath] = cell;
-#else
-    self.cellCache[[NSIndexPath indexPathForRow:0 inSection:1]] = cell;
-#endif
-
-    
-    CGSize size = [cell.contentView systemLayoutSizeFittingSize: UILayoutFittingCompressedSize];
-    
-    return size.height;
-    
-#else
-    if (indexPath.section >= [[self.fetchedResultsController sections] count] ||
-        indexPath.row >= [(id <NSFetchedResultsSectionInfo>)[self.fetchedResultsController sections][indexPath.section] numberOfObjects])
-    {
-        return 0.f;
-    }
-    
-    NSLog(@"%@",[[self.fetchedResultsController objectAtIndexPath:indexPath] valueForKey:@"time"]);
-    Post *post = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    NSLog(@"%@",[[self.fetchedResultsController objectAtIndexPath: indexPath] valueForKey: @"time"]);
+    Post *post = [self.fetchedResultsController objectAtIndexPath: indexPath];
     
     CellMode mode = CellModeNormal;
-    if ([self.expandedCellIndexPath isEqual:indexPath])
+    if ([self.expandedCellIndexPath isEqual: indexPath])
     {
         mode = CellModeExpanded;
     }
@@ -380,7 +355,7 @@ static UIImage *placeHolderImage = nil;
         mode = CellModeEvent;
     }
     
-    __block NSMutableAttributedString *postMessage = [self.postMessagesTexts objectForKey:post.postID];
+    __block NSMutableAttributedString *postMessage = [self.postMessagesTexts objectForKey: post.postID];
     __block NSString *postText = postMessage ? postMessage.string : post.text;
 
     CGFloat rowHeight = 0.f;
@@ -425,10 +400,9 @@ static UIImage *placeHolderImage = nil;
             {
                 if (link.url)
                 {
-                    [links addObject:link.url];
+                    [links addObject: link.url];
                 }
             }
-
         }
     }
     else if (!postMessage)
@@ -442,37 +416,34 @@ static UIImage *placeHolderImage = nil;
         }
     }
     
-   
     //  Add group name
-//    if ([post.group.type isEqual:@(kGroupTypeGroup)])
-//    {
-//        NSString *fromGroupStringBase = NSLocalizedString(@"lskFromGroupBase", @"From group base string");
-//        NSMutableAttributedString *groupNameTitle =  [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@: %@\n\r", fromGroupStringBase, post.group.name]];
-//        NSString *test = postMessage.string;
-//        
-//        if ([test rangeOfString:@"From group"].location == NSNotFound)
-//        {
-//           [groupNameTitle appendAttributedString:postMessage];
-//            postMessage = nil;
-//            postMessage = groupNameTitle;
-//        }
-//        
-//        
-//    }
-//    
-//    if ([post.group.type isEqual:@(kGroupTypePage)])
-//    {
-//        NSString *fromGroupStringBase = NSLocalizedString(@"lskFromPageBase", @"From page base string");
-//        NSMutableAttributedString *groupNameTitle =  [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@: %@\n\r", fromGroupStringBase, post.group.name]];
-//        NSString *test = postMessage.string;
-//        
-//        if ([test rangeOfString:@"From page"].location == NSNotFound)
-//        {
-//            [groupNameTitle appendAttributedString:postMessage];
-//            postMessage = nil;
-//            postMessage = groupNameTitle;
-//        }
-//    }
+    if ([post.group.type isEqual:@(kGroupTypeGroup)])
+    {
+        NSString *fromGroupStringBase = NSLocalizedString(@"lskFromGroupBase", @"From group base string");
+        NSMutableAttributedString *groupNameTitle =  [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@: %@\n\r", fromGroupStringBase, post.group.name]];
+        NSString *test = postMessage.string;
+        
+        if ([test rangeOfString:@"From group"].location == NSNotFound)
+        {
+           [groupNameTitle appendAttributedString: postMessage];
+            postMessage = nil;
+            postMessage = groupNameTitle;
+        }
+    }
+    
+    if ([post.group.type isEqual:@(kGroupTypePage)])
+    {
+        NSString *fromGroupStringBase = NSLocalizedString(@"lskFromPageBase", @"From page base string");
+        NSMutableAttributedString *groupNameTitle =  [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@: %@\n\r", fromGroupStringBase, post.group.name]];
+        NSString *test = postMessage.string;
+        
+        if ([test rangeOfString:@"From page"].location == NSNotFound)
+        {
+            [groupNameTitle appendAttributedString:postMessage];
+            postMessage = nil;
+            postMessage = groupNameTitle;
+        }
+    }
     
     if (!postMessage && postText.length)
     {
@@ -488,51 +459,42 @@ static UIImage *placeHolderImage = nil;
         }
     }
     
-    rowHeight = [WDDMainPostCell calculateCellHeightForText:postMessage
-                                                  withMedia:post.media.count
-                                               withComments:[self getRecentCommentsForPost:post]
-                                                     inMode:mode
-                                         shouldPreviewLinks:NO/*![post isKindOfClass:[TwitterPost class]]*/];
+    rowHeight = [WDDMainPostCell calculateCellHeightForText: postMessage
+                                                  withMedia: post.media.count
+                                               withComments: [self getRecentCommentsForPost: post]
+                                                     inMode: mode
+                                         shouldPreviewLinks: NO/*![post isKindOfClass:[TwitterPost class]]*/];
+    
+    if ((indexPath.row == self.blackCellIndexPath.row) ||
+        (indexPath.row == self.blackNewCellIndexPath.row)) {
+        
+        rowHeight += 22.0f;
+    }
     
     return rowHeight;
-#endif
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    
     id <NSFetchedResultsSectionInfo> sectionInfo = [self.fetchedResultsController sections][section];
     
-    NSLog(@"numberOfRowsInSection = %d", [sectionInfo numberOfObjects]);
+    NSLog(@"numberOfRowsInSection = %lu", (unsigned long)[sectionInfo numberOfObjects]);
     
     return [sectionInfo numberOfObjects];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-#ifdef IOS_7_TABLE_AUTOLAYOUT
-    WDDMainPostCell *cell = self.cellCache[indexPath];
+    WDDMainPostCell *cell = [tableView dequeueReusableCellWithIdentifier: [self cellIdentifier]];
     
     if (!cell)
     {
-#else
-        WDDMainPostCell *
-#endif
-        cell = [tableView dequeueReusableCellWithIdentifier: [self cellIdentifier]];
-        
-        if (!cell)
-        {
-            cell = [[[NSBundle mainBundle] loadNibNamed:NSStringFromClass([WDDMainPostCell class]) owner:nil options:nil] firstObject];
-        }
-        
-//        dispatch_async(dispatch_get_main_queue(), ^{
-        
-            [self configureCell: cell atIndexPath: indexPath];
-//        });
-        
-#ifdef IOS_7_TABLE_AUTOLAYOUT
+        cell = [[[NSBundle mainBundle] loadNibNamed: NSStringFromClass([WDDMainPostCell class]) owner:nil options:nil] firstObject];
     }
-#endif
+    
+    cell.hasBlackLine = (indexPath.row == self.blackCellIndexPath.row || indexPath.row == self.blackNewCellIndexPath.row) ? YES : NO;
+    
+    [self configureCell: (WDDMainPostCell*)cell atIndexPath: indexPath];
     
     return cell;
 }
@@ -555,7 +517,7 @@ static UIImage *placeHolderImage = nil;
 //        [self goToTwitterReplyWithPost:post shouldQoute:NO];
 //    }
 //    else
-//    {
+//    {    
         [self goToCommentScreenWithPost: post];
 //    }
     
@@ -566,6 +528,12 @@ static UIImage *placeHolderImage = nil;
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
 {
+//    int fCnt = [self tableView: self.postsTable numberOfRowsInSection: 0];
+//    NSLog(@"Count = %d", fCnt);
+//    self.blackCellIndexPath = [NSIndexPath indexPathForRow: fCnt inSection: 0];
+    
+    DLog(@"Feed controller did start to change content!");
+    
     [self.postsTable beginUpdates];
 }
 
@@ -575,10 +543,13 @@ static UIImage *placeHolderImage = nil;
 {
     switch (type) {
         case NSFetchedResultsChangeInsert:
-            [self.postsTable insertRowsAtIndexPaths:@[newIndexPath]
-                                   withRowAnimation:UITableViewRowAnimationAutomatic];
-        break;
+        {
+            DLog(@"Feed controller insert one more row");
             
+            [self.postsTable insertRowsAtIndexPaths: @[newIndexPath]
+                                   withRowAnimation: UITableViewRowAnimationAutomatic];
+            break;
+        }
         case NSFetchedResultsChangeDelete:
             [self.postsTable deleteRowsAtIndexPaths:@[indexPath]
                                    withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -617,6 +588,8 @@ static UIImage *placeHolderImage = nil;
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
 {
+    self.isLoadMore = NO;
+    
     [self.postsTable endUpdates];
     DLog(@"Feed controller did change content!");
 }
@@ -679,7 +652,7 @@ static UIImage *placeHolderImage = nil;
         availableSNPredicate = nil;
     }
     
-    availableSNPredicate = [self predicateIfSocialNetworkAvailableWithType:kSocialNetworkLinkedIN];
+    availableSNPredicate = [self predicateIfSocialNetworkAvailableWithType: kSocialNetworkLinkedIN];
     if (availableSNPredicate)
     {
         [availableNetworksPredicates addObject:availableSNPredicate];
@@ -742,12 +715,12 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
         {
             if (!link.isShortLink)
             {
-                NSURL *linkURL = [NSURL URLWithString:link.url];
-                NSURL *cachedLink = [[WDDURLShorter defaultShorter] cachedLinkForURL:linkURL];
+                NSURL *linkURL = [NSURL URLWithString: link.url];
+                NSURL *cachedLink = [[WDDURLShorter defaultShorter] cachedLinkForURL: linkURL];
 
                 if (cachedLink)
                 {
-                    [linkPairs setObject:cachedLink.absoluteString forKey:link.objectID];
+                    [linkPairs setObject: cachedLink.absoluteString forKey: link.objectID];
                     
                     if (post.subscribedBy.socialNetwork.type.integerValue != kSocialNetworkTwitter)
                     {
@@ -767,7 +740,7 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
                                                                    withString: cachedLink.absoluteString
                                                                       options: NSCaseInsensitiveSearch
                                                                         range: NSMakeRange(0, postMessage.mutableString.length)];
-//                        [postMessage setLink:cachedLink range:[postMessage.mutableString rangeOfString:cachedLink.absoluteString]];
+
                         [postMessage setURL: cachedLink range: [postMessage.mutableString rangeOfString: cachedLink.absoluteString]];
                     }
                     else
@@ -796,16 +769,15 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
             {
                 if (post.subscribedBy.socialNetwork.type.integerValue != kSocialNetworkTwitter)
                 {
-                    [links addObject:link.url];
+                    [links addObject: link.url];
                 }
                 else
                 {
                     if ([link.url rangeOfString:@"t.co/"].location != NSNotFound)
                     {
-                        [links addObject:link.url];
+                        [links addObject: link.url];
                     }
                 }
-
             }
         }
         
@@ -919,8 +891,10 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
     
         for (NSTextCheckingResult *link in linksRanges)
         {
-//            [postMessage setLink:[NSURL URLWithString:[postMessage.string substringWithRange:link.range]] range:link.range];
             [postMessage setURL: [NSURL URLWithString: [postMessage.string substringWithRange: link.range]] range: link.range];
+            [postMessage addAttribute: NSFontAttributeName
+                                value: [WDDMainPostCell boldMessageTextFont]
+                                range: link.range];
         }
         for (Tag *tag in post.tags)
         {
@@ -931,8 +905,10 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
             {
                 NSRange matchRange = [match range];
                 NSString *tagString = [tag.tag stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-//                [postMessage setLink:[NSURL URLWithString:[kTagURLBase stringByAppendingString:tagString]] range:matchRange];
                 [postMessage setURL: [NSURL URLWithString: [kTagURLBase stringByAppendingString: tagString]] range: matchRange];
+                [postMessage addAttribute: NSFontAttributeName
+                                    value: [WDDMainPostCell boldMessageTextFont]
+                                    range: matchRange];
             }
         }
         
@@ -945,44 +921,46 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
             {
                 NSRange matchRange = [match range];
                 NSString *placeLink = [NSString stringWithFormat:@"%@%@_%@", kPlaceURLBase, place.networkType.stringValue, place.placeId];
-                NSURL *placeURL = [NSURL URLWithString:placeLink];
-//                [postMessage setLink:placeURL range:matchRange];
+                NSURL *placeURL = [NSURL URLWithString: placeLink];
                 [postMessage setURL: placeURL range: matchRange];
+                [postMessage addAttribute: NSFontAttributeName
+                                    value: [WDDMainPostCell boldMessageTextFont]
+                                    range: matchRange];
             }
         }
         
-        [self highlightNamesInText:postMessage inPost:post];
+        [self highlightNamesInText: postMessage inPost: post];
         
-//        //  Add group name
-//        if ([post.group.type isEqual:@(kGroupTypeGroup)])
-//        {
-//            NSString *fromGroupStringBase = NSLocalizedString(@"lskFromGroupBase", @"From group base string");
-//            NSMutableAttributedString *groupNameTitle =  [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@: %@\n\r", fromGroupStringBase, post.group.name]];
-//            
-//            NSString *test = postMessage.string;
-//            
-//            if ([test rangeOfString:@"From group"].location == NSNotFound)
-//            {
-//                [groupNameTitle appendAttributedString:postMessage];
-//                postMessage = nil;
-//                postMessage = groupNameTitle;
-//            }
-//        }
-//        
-//        if ([post.group.type isEqual:@(kGroupTypePage)])
-//        {
-//            NSString *fromGroupStringBase = NSLocalizedString(@"lskFromPageBase", @"From page base string");
-//            NSMutableAttributedString *groupNameTitle =  [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@: %@\n\r", fromGroupStringBase, post.group.name]];
-//            NSString *test = postMessage.string;
-//            
-//            if ([test rangeOfString:@"From page"].location == NSNotFound)
-//            {
-//                [groupNameTitle appendAttributedString:postMessage];
-//                postMessage = nil;
-//                postMessage = groupNameTitle;
-//            }
-//        }
-//        
+        //  Add group name
+        if ([post.group.type isEqual:@(kGroupTypeGroup)])
+        {
+            NSString *fromGroupStringBase = NSLocalizedString(@"lskFromGroupBase", @"From group base string");
+            NSMutableAttributedString *groupNameTitle =  [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@: %@\n\r", fromGroupStringBase, post.group.name]];
+            
+            NSString *test = postMessage.string;
+            
+            if ([test rangeOfString:@"From group"].location == NSNotFound)
+            {
+                [groupNameTitle appendAttributedString:postMessage];
+                postMessage = nil;
+                postMessage = groupNameTitle;
+            }
+        }
+        
+        if ([post.group.type isEqual:@(kGroupTypePage)])
+        {
+            NSString *fromGroupStringBase = NSLocalizedString(@"lskFromPageBase", @"From page base string");
+            NSMutableAttributedString *groupNameTitle =  [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@: %@\n\r", fromGroupStringBase, post.group.name]];
+            NSString *test = postMessage.string;
+            
+            if ([test rangeOfString:@"From page"].location == NSNotFound)
+            {
+                [groupNameTitle appendAttributedString:postMessage];
+                postMessage = nil;
+                postMessage = groupNameTitle;
+            }
+        }
+        
         [self.postMessagesTexts s_setObject: postMessage forKey: postId];
     }
     
@@ -1057,8 +1035,10 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
         {
             urlBase = kTagURLBase;
         }
-//        [text setLink:[NSURL URLWithString:[urlBase stringByAppendingString:username]] range:matchRange];
         [text setURL: [NSURL URLWithString: [urlBase stringByAppendingString: username]] range: matchRange];
+        [text addAttribute: NSFontAttributeName
+                            value: [WDDMainPostCell boldMessageTextFont]
+                            range: matchRange];
     }
 }
 
@@ -1792,12 +1772,21 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     Post* post = sender;
-    if ([segue.identifier isEqualToString:[self goToCommentsScreenSegueIdentifier]])
+    if ([segue.identifier isEqualToString: [self goToCommentsScreenSegueIdentifier]])
     {
         UINavigationController *navVC = segue.destinationViewController;
         WDDWriteCommetViewController *commentVC = [navVC.viewControllers firstObject];
         
         commentVC.post = post;
+        
+//        NSIndexPath *selectedIP = [self.postsTable indexPathForSelectedRow];
+//        WDDMainPostCell *cell = (WDDMainPostCell*)[self.postsTable cellForRowAtIndexPath: selectedIP];
+
+        NSMutableAttributedString *postMessage = [self.postMessagesTexts objectForKey: post.postID];
+        
+        NSLog(@"Full Message = %@", postMessage);
+        
+        commentVC.postMessage = postMessage;
     }
     else if([segue.identifier isEqualToString:[self goToTwitterReplyScreenSegueIdentifier]])
     {

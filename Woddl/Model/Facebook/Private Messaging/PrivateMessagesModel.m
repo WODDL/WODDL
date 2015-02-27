@@ -87,7 +87,7 @@
         _privateMessagesStorage = [[PrivateMessagesStorage alloc] init];
         self.unreadOfflineMessages = [[NSMutableDictionary alloc] init];
         
-        self.delegates = [[NSMutableArray alloc] initWithCapacity:10];
+        self.delegates = [[NSMutableArray alloc] initWithCapacity: 10];
         
         [[NSNotificationCenter defaultCenter] addObserver:self
 												 selector:@selector(socialNetworkItemDidChangeStatus:)
@@ -135,14 +135,14 @@
         {
             if ([delegateObj.object respondsToSelector:@selector(xmppClientAdded:)])
             {
-                [(id<PrivateMessagesModelDelegate>)delegateObj.object xmppClientAdded:client];
+                [(id<PrivateMessagesModelDelegate>)delegateObj.object xmppClientAdded: client];
             }
         }
         
         if (anItem.activeState.boolValue)
         {
             [client goOnline];
-            _countUnreadMessages += [self getCountOfUnreadMessagesForXmppClient:client];
+            _countUnreadMessages += [self getCountOfUnreadMessagesForXmppClient: client];
         }
     }
 }

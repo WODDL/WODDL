@@ -175,6 +175,7 @@ static NSDictionary *static_syncResources;
 {
     NSAssert([self class] == [SocialNetwork class], @"SocialNetwork class is abstract and have to be subclassed!");
 }
+
 - (void)getPostsWithCompletionBlock:(ComplationGetPostBlock)completionBlock
 {
     NSAssert([self class] == [SocialNetwork class], @"SocialNetwork class is abstract and have to be subclassed!");

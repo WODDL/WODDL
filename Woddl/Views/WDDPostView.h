@@ -44,6 +44,7 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *messageLabelHeight;
 
 // Post View - data source
+@property (nonatomic, strong) NSAttributedString *postMessage;
 @property (weak, nonatomic) Post *post;
 @property (weak, nonatomic) id<WDDMainPostCellDelegate> delegate;
 

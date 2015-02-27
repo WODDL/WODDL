@@ -393,9 +393,9 @@ static const NSInteger tag_AuthentificationProposal = 2048;
     }
     else
     {
-        if ([self.navigationController.viewControllers indexOfObject:self])
+        if ([self.navigationController.viewControllers indexOfObject: self])
         {
-            [self.navigationController popViewControllerAnimated:YES];
+            [self.navigationController popViewControllerAnimated: YES];
         }
         else
         {
@@ -413,15 +413,15 @@ static const NSInteger tag_AuthentificationProposal = 2048;
         case kSocialNetworkFacebook :
             
             TF_CHECKPOINT(@"Login to FB requested");
-            [[FacebookAPI instance] loginWithDelegate:self];
+            [[FacebookAPI instance] loginWithDelegate: self];
         break;
             
         case kSocialNetworkTwitter : {
             
             TF_CHECKPOINT(@"Login to Twitter requested");
             self.isLoggingInToTwitter = YES;
-            NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"https://mobile.twitter.com/session/new?bypass_interstitial=true"]];
-            [self.webView loadRequest:request];
+            NSURLRequest *request = [NSURLRequest requestWithURL: [NSURL URLWithString: @"https://mobile.twitter.com/session/new?bypass_interstitial=true"]];
+            [self.webView loadRequest: request];
         break; }
             
         case kSocialNetworkLinkedIN : {
@@ -429,26 +429,26 @@ static const NSInteger tag_AuthentificationProposal = 2048;
             TF_CHECKPOINT(@"Login to LinkedIn requested");
             self.isLoggingInToLinkedIn = YES;
             
-            NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"https://www.linkedin.com/nhome/?trk=hb_signin"]];
-            [self.webView loadRequest:request];
+            NSURLRequest *request = [NSURLRequest requestWithURL: [NSURL URLWithString: @"https://www.linkedin.com/nhome/?trk=hb_signin"]];
+            [self.webView loadRequest: request];
         break; }
             
         case kSocialNetworkGooglePlus :
             
             TF_CHECKPOINT(@"Login to G+ requested");
-            [[GoogleAPI Instance] loginWithDelegate:self];
+            [[GoogleAPI Instance] loginWithDelegate: self];
         break;
             
         case kSocialNetworkInstagram :
             
             TF_CHECKPOINT(@"Login to Instagram requested");
-            [[InstagramAPI Instance] loginWithDelegate:self];
+            [[InstagramAPI Instance] loginWithDelegate: self];
         break;
             
         case kSocialNetworkFoursquare :
             
             TF_CHECKPOINT(@"Login to Foursquare requested");
-            [[FoursquareAPI Instance] loginWithDelegate:self];
+            [[FoursquareAPI Instance] loginWithDelegate: self];
         break;
     }
 }

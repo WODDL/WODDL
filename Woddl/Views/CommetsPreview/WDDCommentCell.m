@@ -24,7 +24,7 @@
     }
     
     _commentPreviewView = (WDDCommentPreView*) commentPreviewView;
-    [self addSubview:commentPreviewView];
+    [self addSubview: commentPreviewView];
     [self bringSubviewToFront:self.separatorImageView];
 }
 

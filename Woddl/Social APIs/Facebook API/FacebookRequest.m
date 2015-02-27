@@ -84,7 +84,7 @@ static NSInteger const kMaxCountOfPostsInUpdate = 10;
     
     if (!date)
     {
-        date = [NSDate dateWithTimeIntervalSinceNow:-86400];
+        date = [NSDate dateWithTimeIntervalSinceNow: -86400];
     }
     
 #if FB_EVENTS_SUPPORT == ON
@@ -167,7 +167,7 @@ static NSInteger const kMaxCountOfPostsInUpdate = 10;
             NSString *requestString = [NSString stringWithFormat: @"https://graph.facebook.com/fql?q=SELECT %@ FROM stream WHERE (source_id IN (SELECT gid FROM group_member WHERE uid = me()) OR source_id IN (SELECT page_id FROM page_fan WHERE uid = me())) AND created_time>%@&access_token=%@", kFeedFields, @((int)groupDate.timeIntervalSince1970), token];
             requestString = [requestString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
             
-            NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestString] cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kInternetIntervalTimeout];
+            NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString: requestString] cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval: kInternetIntervalTimeout];
             NSError *error = nil; NSURLResponse *response = nil;
             NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
             if(data)
@@ -630,9 +630,9 @@ static NSInteger const kMaxCountOfPostsInUpdate = 10;
 
             for(NSDictionary* dataDict in sortedPostsArray)
             {
-                NSMutableDictionary *postInfo = [[self getPostWithDictionary:dataDict andToken:token] mutableCopy];
-                [postInfo setObject:@YES forKey:kPostIsSearched];
-                [resultArray addObject:postInfo];
+                NSMutableDictionary *postInfo = [[self getPostWithDictionary: dataDict andToken: token] mutableCopy];
+                [postInfo setObject: @YES forKey: kPostIsSearched];
+                [resultArray addObject: postInfo];
             }
             
             return resultArray;
@@ -681,10 +681,10 @@ static NSInteger const kMaxCountOfPostsInUpdate = 10;
                 for(NSDictionary* dataItem in dataArray)
                 {
                     NSMutableDictionary* resultDict = [dataItem mutableCopy];
-                    [resultDict setObject:groupID forKey:kPostGroupID];
-                    [resultDict setObject:groupName forKey:kPostGroupName];
-                    [resultDict setObject:@(groupType) forKey:kPostGroupType];
-                    [resultArray addObject:resultDict];
+                    [resultDict setObject: groupID forKey: kPostGroupID];
+                    [resultDict setObject: groupName forKey: kPostGroupName];
+                    [resultDict setObject: @(groupType) forKey: kPostGroupType];
+                    [resultArray addObject: resultDict];
                 }
                 return resultArray;
             }
@@ -1417,20 +1417,20 @@ static NSInteger const kMaxCountOfPostsInUpdate = 10;
     
     if (groupId)
     {
-        NSString *requestString = [[NSString stringWithFormat:@"https://graph.facebook.com/me/accounts?limit=5000&offset=0&access_token=%@", token] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-        NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:requestString]];
+        NSString *requestString = [[NSString stringWithFormat: @"https://graph.facebook.com/me/accounts?limit=5000&offset=0&access_token=%@", token] stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding];
+        NSURLRequest *request = [NSURLRequest requestWithURL: [NSURL URLWithString: requestString]];
         
         NSError *error = nil;
         NSURLResponse *response = nil;
-        NSData *responseData = [NSURLConnection sendSynchronousRequest:request
-                                                     returningResponse:&response
-                                                                 error:&error];
+        NSData *responseData = [NSURLConnection sendSynchronousRequest: request
+                                                     returningResponse: &response
+                                                                 error: &error];
         if(responseData)
         {
             NSError* parserError = nil;
-            NSDictionary* json = [NSJSONSerialization JSONObjectWithData:responseData
-                                                                 options:kNilOptions
-                                                                   error:&parserError];
+            NSDictionary* json = [NSJSONSerialization JSONObjectWithData: responseData
+                                                                 options: kNilOptions
+                                                                   error: &parserError];
             if(!parserError)
             {
                 if (json[@"error"])
@@ -1440,14 +1440,14 @@ static NSInteger const kMaxCountOfPostsInUpdate = 10;
                     
                     if ([errorDescription[@"code"] integerValue] == 190)
                     {
-                        [self invalidateSocialNetworkWithToken:token];
+                        [self invalidateSocialNetworkWithToken: token];
                     }
                     
                     return NO;
                 }
                 
                 NSArray *pages = json[@"data"];
-                if (pages && [pages isKindOfClass:[NSArray class]])
+                if (pages && [pages isKindOfClass: [NSArray class]])
                 {
                     for (NSDictionary *pageInfo in pages)
                     {
@@ -1461,7 +1461,7 @@ static NSInteger const kMaxCountOfPostsInUpdate = 10;
                             continue;
                         }
                         
-                        if ([pageId isEqualToString:groupId])
+                        if ([pageId isEqualToString: groupId])
                         {
                             groupToken = pageInfo[@"access_token"];
                         }
@@ -1495,7 +1495,7 @@ static NSInteger const kMaxCountOfPostsInUpdate = 10;
     }
     if (![lon isEqualToString:@"0"] && ![lat isEqualToString:@"0"])
     {
-        NSString* coordinates=[NSString stringWithFormat:@"{\"latitude\": %@, \"longitude\": %@}",lat,lon];
+        NSString* coordinates=[NSString stringWithFormat:@"{\"latitude\": %@, \"longitude\": %@}", lat, lon];
         [params s_setObject:coordinates forKey:@"coordinates"];
     }
     
@@ -1524,27 +1524,26 @@ static NSInteger const kMaxCountOfPostsInUpdate = 10;
             [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"\r\n\r\n%@", key, params[key]] dataUsingEncoding:NSUTF8StringEncoding]];
         }
         
-        [body appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-        [body appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-        
+        [body appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n", boundary] dataUsingEncoding: NSUTF8StringEncoding]];
+        [body appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n", boundary] dataUsingEncoding: NSUTF8StringEncoding]];
         
         photoUploadRequest.HTTPBody = body;
-        [photoUploadRequest addValue:@(body.length).stringValue forHTTPHeaderField: @"Content-Length"];
+        [photoUploadRequest addValue: @(body.length).stringValue forHTTPHeaderField: @"Content-Length"];
         
         NSHTTPURLResponse *photoRequestResponse = nil;
         NSError *photoRequestError = nil;
-        NSData *data = [NSURLConnection sendSynchronousRequest:photoUploadRequest
-                                             returningResponse:&photoRequestResponse
-                                                         error:&photoRequestError];
+        NSData *data = [NSURLConnection sendSynchronousRequest: photoUploadRequest
+                                             returningResponse: &photoRequestResponse
+                                                         error: &photoRequestError];
         
         NSError *serializationError = nil;
-        id response = [NSJSONSerialization JSONObjectWithData:data
-                                                      options:kNilOptions
-                                                        error:&serializationError];
+        id response = [NSJSONSerialization JSONObjectWithData: data
+                                                      options: kNilOptions
+                                                        error: &serializationError];
         
         if (serializationError)
         {
-            NSString *response = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+            NSString *response = [[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding];
             DLog(@"Can't serialize FB response: %@", response);
         }
         
@@ -1553,14 +1552,14 @@ static NSInteger const kMaxCountOfPostsInUpdate = 10;
     else
     {
         NSString *urlString = [[NSString stringWithFormat:@"https://graph.facebook.com/%@/feed", groupId] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlString] cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kInternetIntervalTimeout];
-        [request setHTTPMethod:@"POST"];
-        [request setHTTPBody:[[self buildQueryFromDictionary:params] dataUsingEncoding:NSUTF8StringEncoding]];
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString: urlString] cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval: kInternetIntervalTimeout];
+        [request setHTTPMethod: @"POST"];
+        [request setHTTPBody: [[self buildQueryFromDictionary: params] dataUsingEncoding:NSUTF8StringEncoding]];
         
         NSError *error = nil; NSURLResponse *response = nil;
-        NSData* data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-        NSString* status = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-        if([status rangeOfString:@"id"].location != NSNotFound)
+        NSData* data = [NSURLConnection sendSynchronousRequest: request returningResponse: &response error: &error];
+        NSString* status = [[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding];
+        if([status rangeOfString: @"id"].location != NSNotFound)
         {
             return YES;
         }
@@ -1569,17 +1568,17 @@ static NSInteger const kMaxCountOfPostsInUpdate = 10;
     return NO;
 }
 
--(NSString*)getLocationIDFromLocation:(WDDLocation *)location withToken:(NSString*)token
+- (NSString*)getLocationIDFromLocation:(WDDLocation *)location withToken:(NSString*)token
 {
     NSString *lon = @(location.longitude).stringValue;
     NSString *lat = @(location.latidude).stringValue;
     
     NSString* locationID = nil;
     NSString* query = [NSString stringWithFormat:@"https://graph.facebook.com/search?type=place&center=%@,%@&distance=1000&access_token=%@",lat,lon,token];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:query] cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kInternetIntervalTimeout];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString:query] cachePolicy: NSURLRequestReloadIgnoringCacheData timeoutInterval: kInternetIntervalTimeout];
     
     NSError *error = nil; NSURLResponse *response = nil;
-    NSData* data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+    NSData* data = [NSURLConnection sendSynchronousRequest: request returningResponse: &response error: &error];
     if(data)
     {
         NSError* error = nil;
@@ -1596,7 +1595,7 @@ static NSInteger const kMaxCountOfPostsInUpdate = 10;
                 
                 if ([errorDescription[@"code"] integerValue] == 190)
                 {
-                    [self invalidateSocialNetworkWithToken:token];
+                    [self invalidateSocialNetworkWithToken: token];
                 }
                 
                 return nil;
