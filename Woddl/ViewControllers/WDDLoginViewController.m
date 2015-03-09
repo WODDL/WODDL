@@ -15,6 +15,7 @@
 #import "FacebookSN.h"
 #import "TwitterSN.h"
 #import "FaceBookProfile.h"
+#import "FBGraphAPIHelper.h"
 
 #import "SAMHUDView.h"
 

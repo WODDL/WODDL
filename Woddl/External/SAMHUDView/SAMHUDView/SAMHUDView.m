@@ -249,6 +249,7 @@ static CGFloat kIndicatorSize = 40.0;
 
 
 - (void)completeAndDismissWithTitle:(NSString *)aTitle {
+    
 	[self completeWithTitle:aTitle];
 	double delayInSeconds = 1.0;
 	dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));

@@ -25,8 +25,7 @@
 
 #import <YTVimeoExtractor/YTVimeoExtractor.h>
 #import <uidevice-extension/UIDevice-Hardware.h>
-
-
+#import "FBGraphAPIHelper.h"
 
 
 static NSString * const kHighResolutionPhoto = @"source";
@@ -69,6 +68,7 @@ static NSInteger const kMaxCountOfPostsInUpdate = 10;
 {
     return nil;
 }
+
 - (BOOL)getPostsWithToken:(NSString*)token
                 andUserID:(NSString*)userID
                  andCount:(NSUInteger)count
@@ -78,62 +78,39 @@ static NSInteger const kMaxCountOfPostsInUpdate = 10;
 {
     NSMutableArray* resultArray = [[NSMutableArray alloc] init];
     
-#if FB_EVENTS_SUPPORT == ON
-    NSString * const kEventFields = @"eid,name,pic_small,pic_big,description,start_time,end_time,location,creator,update_time,venue";
-#endif
-    
     if (!date)
     {
         date = [NSDate dateWithTimeIntervalSinceNow: -86400];
     }
     
 #if FB_EVENTS_SUPPORT == ON
-    // Events
-    NSString *eventsRequestString = [NSString stringWithFormat:@"https://graph.facebook.com/fql?q=SELECT %@ FROM event WHERE eid IN (SELECT eid FROM event_member WHERE uid == me()) AND (end_time > now() OR end_time == 'null')&access_token=%@", kEventFields, token];
-    eventsRequestString = [eventsRequestString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    NSURLRequest *eventsRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:eventsRequestString]];
+
+    [FBGraphAPIHelper setAccessToken: token];
     
-    NSError *eventsError = nil; NSURLResponse *eventsResponse = nil;
-    NSData *eventsData = [NSURLConnection sendSynchronousRequest:eventsRequest returningResponse:&eventsResponse error:&eventsError];
-    if(eventsData)
-    {
-        NSError* error = nil;
-        NSDictionary* json = [NSJSONSerialization
-                              JSONObjectWithData:eventsData
-                              options:kNilOptions
-                              error:&error];
-        if(!error)
-        {
-            if (json[@"error"])
-            {
-                NSDictionary *errorDescription = json[@"error"];
-                DLog(@"Facebook response with error : %@", errorDescription);
-                
-                if ([errorDescription[@"code"] integerValue] == 190)
-                {
-                    [self invalidateSocialNetworkWithToken:token];
-                }
-                
-                return NO;
-            }
+    [FBGraphAPIHelper loadEventsFromUser: @"me" completion:^(NSDictionary *eventsInfo) {
+        
+        if (eventsInfo == nil) {
             
-            NSMutableArray *events = [[NSMutableArray alloc] initWithCapacity:[json[@"data"] count]];
-            
-            for (NSDictionary *eventData in json[@"data"])
-            {
-                [events addObject:[self getEventWithDictionary:eventData]];
-            }
-            
-            NSArray *processedEvents = [self addCreatorInfoToEvents:events
-                                                           fromData:json[@"data"]
-                                                        accessToken:token];
-            [resultArray addObjectsFromArray:processedEvents];
+            return ;
         }
-    }
-#endif
+        
+        NSMutableArray *events = [[NSMutableArray alloc] initWithCapacity: [eventsInfo[@"data"] count]];
+        
+        for (NSDictionary *eventData in eventsInfo[@"data"])
+        {
+            [events addObject:[self getEventWithDictionary:eventData]];
+        }
+        
+        NSArray *processedEvents = [self addCreatorInfoToEvents: events
+                                                       fromData: eventsInfo[@"data"]
+                                                    accessToken: token];
+        [resultArray addObjectsFromArray:processedEvents];
+    }];
     
+#endif
+
 #if FB_GROUPS_SUPPORT == ON
-    NSMutableDictionary *gruopsTable = [[NSMutableDictionary alloc] initWithCapacity:groups.count];
+    NSMutableDictionary *gruopsTable = [[NSMutableDictionary alloc] initWithCapacity: groups.count];
     for (NSDictionary *groupInfo in groups)
     {
         [gruopsTable setObject:groupInfo forKey:groupInfo[@"groupId"]];
@@ -215,7 +192,6 @@ static NSInteger const kMaxCountOfPostsInUpdate = 10;
             
             __block NSInteger groupsToProcessCount = 0;
             
-            
             [gruopsTable.allKeys enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                 
                 NSBlockOperation *groupOperation = [NSBlockOperation blockOperationWithBlock:^{
@@ -235,9 +211,9 @@ static NSInteger const kMaxCountOfPostsInUpdate = 10;
                     {
                         NSError* error = nil;
                         NSDictionary* json = [NSJSONSerialization
-                                              JSONObjectWithData:data
-                                              options:kNilOptions
-                                              error:&error];
+                                              JSONObjectWithData: data
+                                              options: kNilOptions
+                                              error: &error];
                         if(!error)
                         {
                             if (json[@"error"])
@@ -295,16 +271,26 @@ static NSInteger const kMaxCountOfPostsInUpdate = 10;
     
 #endif
     
+#if FB_FRIENDS_SUPPORT == ON
+
+//    date = [NSDate dateWithTimeIntervalSinceNow: -86400 * 3];
+    
+    NSArray *friendsPosts = [self loadFriendsPostsFromDate: @((int)date.timeIntervalSince1970) withToken: token];
+    
+#endif
+    
     // Facebook posts
-    NSArray *postsData = [self loadPostFromDate:@((int)date.timeIntervalSince1970) withToken:token];
+    NSMutableArray *postsData = [[self loadPostFromDate: @((int)date.timeIntervalSince1970) withToken: token] mutableCopy];
+    
+    [postsData addObjectsFromArray: friendsPosts];
     
 //    DLog(@"Got FB response:\n %@", postsData);
     
     for (NSDictionary *postData in postsData)
     {
-        NSDictionary *processedData = [self getTopStoryPostWithDictionary:postData
-                                                         forGroupWithInfo:nil
-                                                                 andToken:token];
+        NSDictionary *processedData = [self getTopStoryPostWithDictionary: postData
+                                                         forGroupWithInfo: nil
+                                                                 andToken: token];
         if (processedData)
         {
             [resultArray addObject:processedData];
@@ -539,16 +525,80 @@ static NSInteger const kMaxCountOfPostsInUpdate = 10;
     [operation start];
 }
 
+- (NSArray *)loadFriendsPostsFromDate:(NSNumber *)fromDateUNIX withToken:(NSString *)token
+{
+    NSArray *resultPosts = [[NSArray alloc] init];
+    
+//    NSString *requestString = [NSString stringWithFormat: @"https://graph.facebook.com/fql?q=SELECT %@ FROM status WHERE created_time>%@ AND uid in (SELECT uid2 FROM friend WHERE uid1 = me()) ORDER BY created_time ASC LIMIT %d &access_token=%@", kFeedFields, fromDateUNIX, kMaxCountOfPostsInUpdate, token];
+    
+//    NSString *requestString = [NSString stringWithFormat: @"https://graph.facebook.com/fql?q=SELECT %@ FROM stream WHERE created_time>%@ AND NOT (source_id IN (SELECT gid FROM group_member WHERE uid = me())) AND NOT (target_id IN (SELECT gid FROM group_member WHERE uid = me())) AND NOT (source_id IN (SELECT page_id FROM page_fan WHERE uid = me())) ORDER BY created_time ASC LIMIT %d &access_token=%@", kFeedFields, fromDateUNIX, kMaxCountOfPostsInUpdate, token];
+    
+    NSString *requestString = [NSString stringWithFormat: @"https://graph.facebook.com/fql?q=SELECT %@ FROM stream WHERE created_time>%@ AND filter_key in (SELECT filter_key FROM stream_filter WHERE uid = me() AND type = 'newsfeed') AND type != '347' ORDER BY created_time ASC LIMIT %d &access_token=%@", kFeedFields, fromDateUNIX, 50, token];
+    
+//    NSString *requestString = [NSString stringWithFormat: @"https://graph.facebook.com/fql?q=SELECT %@ FROM stream WHERE created_time>%@ AND filter_key = 'nf' ORDER BY created_time ASC LIMIT %d &access_token=%@", kFeedFields, fromDateUNIX, 50, token];
+
+//    NSString *requestString = [NSString stringWithFormat:@"https://graph.facebook.com/me/home?since=%@&access_token=%@", fromDateUNIX, token];
+    
+//    NSString *requestString = [NSString stringWithFormat: @"https://graph.facebook.com/fql?q=SELECT uid1 FROM friend WHERE uid2 = me()&access_token=%@", token];
+    
+//    NSString *requestString = [NSString stringWithFormat:@"https://graph.facebook.com/me/feed?since=%@&access_token=%@", fromDateUNIX, token];
+    
+    requestString = [requestString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestString] cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kInternetIntervalTimeout];
+    NSError *error = nil;
+    NSURLResponse *response = nil;
+    NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+    
+    if(data)
+    {
+        NSError* error = nil;
+        NSDictionary* json = [NSJSONSerialization
+                              JSONObjectWithData:data
+                              options:kNilOptions
+                              error:&error];
+        if(!error)
+        {
+            if (json[@"error"])
+            {
+                NSDictionary *errorDescription = json[@"error"];
+                DLog(@"Facebook response with error : %@", errorDescription);
+                
+                if ([errorDescription[@"code"] integerValue] == 190)
+                {
+                    [self invalidateSocialNetworkWithToken:token];
+                }
+                
+                return NO;
+            }
+            
+            NSArray* postsData = [json objectForKey:@"data"];
+            if (postsData.count)
+            {
+                NSDictionary *latestPost = [postsData lastObject];
+                
+                NSNumber *fromDate = latestPost[@"created_time"];
+                
+                return [[self loadFriendsPostsFromDate: fromDate withToken: token] arrayByAddingObjectsFromArray: postsData];
+            }
+        }
+    }
+    
+    return resultPosts;
+}
+
 - (NSArray *)loadPostFromDate:(NSNumber *)fromDateUNIX withToken:(NSString *)token;
 {
     NSArray *resultPosts = [[NSArray alloc] init];
     
-    NSString *requestString = [NSString stringWithFormat: @"https://graph.facebook.com/fql?q=SELECT %@ FROM stream WHERE created_time>%@ AND filter_key = \"others\" AND NOT (source_id IN (SELECT gid FROM group_member WHERE uid = me())) AND NOT (target_id IN (SELECT gid FROM group_member WHERE uid = me())) AND NOT (source_id IN (SELECT page_id FROM page_fan WHERE uid = me())) ORDER BY created_time ASC LIMIT %d &access_token=%@", kFeedFields, fromDateUNIX, kMaxCountOfPostsInUpdate, token];
-    requestString = [requestString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    //filter_key in (SELECT filter_key FROM stream_filter WHERE uid = me() AND type = 'newsfeed')
     
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestString] cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kInternetIntervalTimeout];
+    NSString *requestString = [NSString stringWithFormat: @"https://graph.facebook.com/fql?q=SELECT %@ FROM stream WHERE created_time>%@ AND filter_key = \"others\" AND NOT (source_id IN (SELECT gid FROM group_member WHERE uid = me())) AND NOT (target_id IN (SELECT gid FROM group_member WHERE uid = me())) AND NOT (source_id IN (SELECT page_id FROM page_fan WHERE uid = me())) ORDER BY created_time ASC LIMIT %d&access_token=%@", kFeedFields, fromDateUNIX, kMaxCountOfPostsInUpdate, token];
+    requestString = [requestString stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding];
+    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString: requestString] cachePolicy: NSURLRequestReloadIgnoringCacheData timeoutInterval: kInternetIntervalTimeout];
     NSError *error = nil; NSURLResponse *response = nil;
-    NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+    NSData *data = [NSURLConnection sendSynchronousRequest: request returningResponse: &response error: &error];
     
     if(data)
     {
@@ -926,9 +976,7 @@ static NSInteger const kMaxCountOfPostsInUpdate = 10;
         
         
     }
-    
-    
-    
+
     return nil;
     
 }

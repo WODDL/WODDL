@@ -349,9 +349,9 @@ NSString *const ECSlidingViewTopDidReset             = @"ECSlidingViewTopDidRese
         if (animations) {
             animations();
         }
-        [self updateTopViewHorizontalCenter:newCenter];
+        [self updateTopViewHorizontalCenter: newCenter];
     } completion:^(BOOL finished){
-        [self updateTopViewHorizontalCenter:newCenter];
+        [self updateTopViewHorizontalCenter: newCenter];
         if (_resetStrategy & ECPanning) {
             self.panGesture.enabled = YES;
         } else {
@@ -485,13 +485,13 @@ NSString *const ECSlidingViewTopDidReset             = @"ECSlidingViewTopDidRese
     
 	if (center.x >= self.resettedCenter && newHorizontalCenter == self.resettedCenter) {
 		dispatch_async(dispatch_get_main_queue(), ^{
-			[[NSNotificationCenter defaultCenter] postNotificationName:ECSlidingViewUnderLeftWillDisappear object:self userInfo:nil];
+			[[NSNotificationCenter defaultCenter] postNotificationName: ECSlidingViewUnderLeftWillDisappear object: self userInfo: nil];
 		});
 	}
 	
 	if (center.x <= self.resettedCenter && newHorizontalCenter == self.resettedCenter) {
 		dispatch_async(dispatch_get_main_queue(), ^{
-			[[NSNotificationCenter defaultCenter] postNotificationName:ECSlidingViewUnderRightWillDisappear object:self userInfo:nil];
+			[[NSNotificationCenter defaultCenter] postNotificationName: ECSlidingViewUnderRightWillDisappear object: self userInfo: nil];
 		});
 	}
 	
@@ -515,9 +515,9 @@ NSString *const ECSlidingViewTopDidReset             = @"ECSlidingViewTopDidRese
         
         if (self.shouldAddPanGestureRecognizerToTopViewSnapshot) {
             self.snapshotPanGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(updateTopViewHorizontalCenterWithRecognizer:)];
-            [self.topViewSnapshot addGestureRecognizer:self.snapshotPanGesture];
+            [self.topViewSnapshot addGestureRecognizer: self.snapshotPanGesture];
         }
-        [self.topView addSubview:self.topViewSnapshot];
+        [self.topView addSubview: self.topViewSnapshot];
     }
 }
 
@@ -533,10 +533,15 @@ NSString *const ECSlidingViewTopDidReset             = @"ECSlidingViewTopDidRese
 - (CGFloat)anchorRightTopViewCenter
 {
     if (self.anchorRightPeekAmount) {
+        
         return self.view.bounds.size.width + self.resettedCenter - self.anchorRightPeekAmount;
-    } else if (self.anchorRightRevealAmount) {
+    }
+    else if (self.anchorRightRevealAmount) {
+        
         return self.resettedCenter + self.anchorRightRevealAmount;
-    } else {
+    }
+    else {
+        
         return NSNotFound;
     }
 }

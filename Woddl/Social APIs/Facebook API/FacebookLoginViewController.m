@@ -9,6 +9,7 @@
 #import "FacebookLoginViewController.h"
 #import "FacebookPictures.h"
 #import "FacebookRequest.h"
+#import "FBGraphAPIHelper.h"
 
 @interface FacebookLoginViewController ()<UIWebViewDelegate>
 
@@ -83,9 +84,10 @@ static NSString* extended_permissions = @"offline_access,publish_actions,read_st
     {
         [cookies deleteCookie:cookie];
     }
-    NSString *fbAuthorizeURL = [NSString stringWithFormat:@"https://graph.facebook.com/oauth/authorize?client_id=%@&redirect_uri=%@&scope=%@&type=user_agent&display=touch", kFacebookAccessKey, redirectUri, extended_permissions];
+    
+    NSString *fbAuthorizeURL = [NSString stringWithFormat:@"https://graph.facebook.com/v2.2/oauth/authorize?client_id=%@&redirect_uri=%@&scope=%@&response_type=token&display=touch", kFacebookAccessKey, redirectUri, extended_permissions];
     NSURL *url = [NSURL URLWithString:fbAuthorizeURL];
-    [fbWebView loadRequest:[NSURLRequest requestWithURL:url]];
+    [fbWebView loadRequest:[NSURLRequest requestWithURL: url]];
 }
 
 -(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
@@ -94,50 +96,30 @@ static NSString* extended_permissions = @"offline_access,publish_actions,read_st
     NSString *requestPath = [[request URL] absoluteString];
     if ([requestPath rangeOfString:redirectUri].location != NSNotFound)
     {
+        NSLog(@"Request Path = %@", requestPath);
         if([requestPath rangeOfString:@"access_token="].location != NSNotFound)
         {
-            NSString * token = [self stringBetweenString:@"access_token=" andString:@"&" innerString:requestPath];
-            NSString* expire = [self stringBetweenString:@"expires_in=" andString:@"" innerString:requestPath];
-            if (!expire.integerValue)
-            {
+            NSString *token = [self stringBetweenString:@"access_token=" andString:@"&" innerString:requestPath];
+            NSString *expire = [self stringBetweenString:@"expires_in=" andString:@"" innerString:requestPath];
+            if (!expire.integerValue) {
                 expire = @(INT32_MAX).stringValue;
             }
             
-//            NSString *request = [NSString stringWithFormat:@"https://graph.facebook.com/me?fields=id,name&access_token=%@",token];
-            NSString *request = [NSString stringWithFormat:@"https://graph.facebook.com/fql?q=SELECT uid,name,pic_square,profile_url FROM user WHERE uid == me()&access_token=%@",token];
-            request = [request stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-            
-            NSMutableURLRequest *requestURL = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:request]
-                                                                      cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
-                                                                  timeoutInterval:60.0];
-            NSData *responseData = [NSURLConnection sendSynchronousRequest:requestURL returningResponse:nil error:nil];
-            if(responseData)
-            {
-                NSError* error = nil;
-                NSDictionary* json = [NSJSONSerialization
-                                      JSONObjectWithData:responseData
-                                      
-                                      options:kNilOptions
-                                      error:&error];
-                if(!error && json[@"data"])
-                {
-                    NSDictionary *userInfo = [json[@"data"] firstObject];
-                    
-
-                    NSString *userID = userInfo[@"uid"];
-                    NSString *profileURL = userInfo[@"profile_url"];
-                    NSString* userIDStr = [NSString stringWithFormat:@"%lli",[userID longLongValue]];
-                    NSString *screenName = userInfo[@"name"];
-                    NSString *imageURL = userInfo[@"pic_square"];
-                    
-                    [delegate loginSuccessWithToken:token
-                                      andTimeExpire:expire
-                                          andUserID:userIDStr
-                                      andScreenName:screenName
-                                        andImageURL:imageURL
-                                      andProfileURL:profileURL];
-                }
-            }
+            [FBGraphAPIHelper setAccessToken: token];
+            [FBGraphAPIHelper loadInfoFromUser: @"me" completion:^(NSDictionary *userInfo) {
+   
+                NSString *userID = userInfo[@"id"];
+                NSString *profileURL = [@"https://www.facebook.com/profile.php?id=" stringByAppendingString: userID];
+                NSString *screenName = userInfo[@"name"];
+                NSString *imageURL = [FBGraphAPIHelper GetProfilePictureUrlFromID: userID];
+                
+                [delegate loginSuccessWithToken: token
+                                  andTimeExpire: expire
+                                      andUserID: userID
+                                  andScreenName: screenName
+                                    andImageURL: imageURL
+                                  andProfileURL: profileURL];
+            }];
         }
     }
     return YES;

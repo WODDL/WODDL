@@ -49,7 +49,7 @@
         self.allOwnGroups = [[NSMutableDictionary alloc] initWithCapacity:_allSocialNetworkAccounts.count];
         for (SocialNetwork *account in _allSocialNetworkAccounts)
         {
-            NSArray *groupsList = [account.profile.manageGroups sortedArrayUsingDescriptors:@[ [NSSortDescriptor sortDescriptorWithKey:@"type" ascending:YES], [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]]];
+            NSArray *groupsList = [account.profile.manageGroups sortedArrayUsingDescriptors: @[[NSSortDescriptor sortDescriptorWithKey:@"type" ascending:YES], [NSSortDescriptor sortDescriptorWithKey: @"name" ascending: YES]]];
             
 //            NSArray *groupsList = [[account.groups filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"isManagedByMe == %@", @YES]]
 //                                   sortedArrayUsingDescriptors:@[ [NSSortDescriptor sortDescriptorWithKey:@"type" ascending:YES], [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]]];
@@ -148,7 +148,7 @@ static NSString * kStatusSNAccountCellIdentifier = @"StatusSNAccountCell";
 
     Group *group = [self.allOwnGroups[[self.allSocialNetworkAccounts[indexPath.section] objectID]] objectAtIndex:indexPath.row];
     cell.usernameLabel.text = group.name;
-    cell.checkmarkImage.image = [self checkmarkImageForGroup:group];
+    cell.checkmarkImage.image = [self checkmarkImageForGroup: group];
     
     return cell;
 }

@@ -188,7 +188,7 @@
                 return nil;
             }
             
-            NSArray* groups = [json objectForKey:@"data"];
+            NSArray* groups = [json objectForKey: @"data"];
             for(NSDictionary* group in groups)
             {
                 NSMutableDictionary* groupResultDict = [[self getGroupInfoWithID:[group objectForKey:@"gid"] andToken:token] mutableCopy];
@@ -207,7 +207,8 @@
 - (NSDictionary *)getPageInfoWithID:(NSString *)groupID andToken:(NSString *)token
 {
     NSString *requestString = [[NSString stringWithFormat:@"https://graph.facebook.com/fql?q=SELECT page_id,name,page_url,pic,pic_big,pic_cover FROM page WHERE page_id = %@&access_token=%@", groupID, token] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestString]];
+    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString: requestString]];
     
     NSError *error = nil; NSURLResponse *response = nil;
     NSData* data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];

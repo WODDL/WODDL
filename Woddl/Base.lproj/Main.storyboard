@@ -1801,7 +1801,7 @@
                                             <constraint firstAttribute="height" constant="25" id="vnn-BX-IAQ"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                        <state key="normal" image="726D8F3E-2B2C-4154-BF2C-5489C245DC64">
+                                        <state key="normal" image="44DCAE1F-88A8-43ED-B5CF-7BDA691C1088">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
@@ -1840,7 +1840,7 @@
                                         <constraints>
                                             <constraint firstAttribute="width" constant="29" id="UyN-94-JIo"/>
                                         </constraints>
-                                        <state key="normal" image="EA21B64A-3A21-4CED-AA75-0461E573B0B0" backgroundImage="schedule-clock.png">
+                                        <state key="normal" image="B33B1A18-C100-4172-894D-58BF6746ACE7" backgroundImage="schedule-clock.png">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
@@ -3362,7 +3362,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="726D8F3E-2B2C-4154-BF2C-5489C245DC64" width="35" height="25">
+        <image name="44DCAE1F-88A8-43ED-B5CF-7BDA691C1088" width="35" height="25">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGOzxYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK0HCBEW
 GxwgISksLzU4VSRudWxs1AkKCwwNDg8QViRjbGFzc1xOU0ltYWdlRmxhZ3NWTlNSZXBzV05TQ29sb3KA
@@ -3495,8 +3495,7 @@ HDccOhw/HEccShxcHF8cZAAAAAAAAAIBAAAAAAAAAD8AAAAAAAAAAAAAAAAAABxmA
         <image name="ArrowRight" width="15" height="15"/>
         <image name="AvatarComment" width="32" height="33"/>
         <image name="AvatarMask" width="32" height="32"/>
-        <image name="ContactOnlineIcon" width="15" height="15"/>
-        <image name="EA21B64A-3A21-4CED-AA75-0461E573B0B0" width="9" height="9">
+        <image name="B33B1A18-C100-4172-894D-58BF6746ACE7" width="9" height="9">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGOzxYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK0HCBEW
 GxwgISksLzU4VSRudWxs1AkKCwwNDg8QViRjbGFzc1xOU0ltYWdlRmxhZ3NWTlNSZXBzV05TQ29sb3KA
@@ -3571,6 +3570,7 @@ AJ0AoACiAKQApgCoAK0AxADGAMgPHg8jDy4PNw9KD04PYQ9sD3UPeg+CD4UPig+ZD50PpA+sD7kPvg/A
 D8IPxw/PD9IP1w/fD+IP9A/3D/wAAAAAAAACAQAAAAAAAAA/AAAAAAAAAAAAAAAAAAAP/g
 </mutableData>
         </image>
+        <image name="ContactOnlineIcon" width="15" height="15"/>
         <image name="FieldComment" width="263" height="33"/>
         <image name="IM.png" width="103" height="30"/>
         <image name="MainScreen_IM_icon" width="13" height="13"/>
@@ -3633,9 +3633,9 @@ D8IPxw/PD9IP1w/fD+IP9A/3D/wAAAAAAAACAQAAAAAAAAA/AAAAAAAAAAAAAAAAAAAP/g
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+        <segue reference="4hP-Mq-qME"/>
         <segue reference="tw7-vT-2Sj"/>
         <segue reference="xkp-X2-xvr"/>
         <segue reference="qzP-bh-suj"/>
-        <segue reference="sn9-6f-cNS"/>
     </inferredMetricsTieBreakers>
 </document>

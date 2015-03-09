@@ -609,11 +609,12 @@ static const NSInteger kTwitterImageLinkLength =  26;
 {
     [self setupSocialNetworkButtonsTag];
     
-    [self setupButtonForSocialNetwork:kSocialNetworkFacebook];
-    [self setupButtonForSocialNetwork:kSocialNetworkTwitter];
-    [self setupButtonForSocialNetwork:kSocialNetworkLinkedIN];
-    [self setupButtonForSocialNetwork:kSocialNetworkFoursquare];
+    [self setupButtonForSocialNetwork: kSocialNetworkFacebook];
+    [self setupButtonForSocialNetwork: kSocialNetworkTwitter];
+    [self setupButtonForSocialNetwork: kSocialNetworkLinkedIN];
+    [self setupButtonForSocialNetwork: kSocialNetworkFoursquare];
 }
+
 - (void)setupSocialNetworkButtonsTag
 {
     
@@ -623,6 +624,7 @@ static const NSInteger kTwitterImageLinkLength =  26;
     self.foursquareButton.tag = kSocialNetworkButtonTagBase + kSocialNetworkFoursquare;
     
 }
+
 - (void)setupButtonForSocialNetwork:(SocialNetworkType)type
 {
     NSInteger tag = kSocialNetworkButtonTagBase + type;
@@ -872,19 +874,19 @@ const NSInteger kStatusUpdateErrorAlertTag = 4321;
     
     if (self.twitterSelectedAccounts.count && self.twitterCharactersLeft >= 0 && self.twitterButton.isEnabled)
     {
-        [allSelectedAccounts addObjectsFromArray:self.twitterSelectedAccounts];
+        [allSelectedAccounts addObjectsFromArray: self.twitterSelectedAccounts];
     }
     if (self.facebookSelectedAccounts.count)
     {
-        [allSelectedAccounts addObjectsFromArray:self.facebookSelectedAccounts];
+        [allSelectedAccounts addObjectsFromArray: self.facebookSelectedAccounts];
     }
-    if (self.foursquareSelectedAccounts.count && self.foursquareButton.isEnabled)
+    if (self.foursquareSelectedAccounts.count &&  self.foursquareButton.isEnabled)
     {
-        [allSelectedAccounts addObjectsFromArray:self.foursquareSelectedAccounts];
+        [allSelectedAccounts addObjectsFromArray: self.foursquareSelectedAccounts];
     }
     if (self.linkedInSelectedAccounts.count && self.linkedInButton.isEnabled)
     {
-        [allSelectedAccounts addObjectsFromArray:self.linkedInSelectedAccounts];
+        [allSelectedAccounts addObjectsFromArray: self.linkedInSelectedAccounts];
     }
     
     return [allSelectedAccounts copy];
@@ -999,7 +1001,6 @@ const NSInteger kStatusUpdateErrorAlertTag = 4321;
     }
     else
     {
-        
         GetLocationBlock resultBlock = ^(WDDLocation *location, NSError *error)
         {
             if (!error)
@@ -1479,15 +1480,15 @@ static const NSInteger kActionSheetLibraryCameraButton = 1;
         
         NSString *friendNameString = [NSString stringWithFormat:@" @%@ ", [friendName lastPathComponent]];
 
-        NSMutableAttributedString *friendNameAtrString = [[NSMutableAttributedString alloc] initWithString:friendNameString
-                                                                                                attributes:@{ NSFontAttributeName:[UIFont boldSystemFontOfSize:kPostFontSize ],
-                                                                                                       NSForegroundColorAttributeName:[UIColor blackColor] }];
+        NSMutableAttributedString *friendNameAtrString = [[NSMutableAttributedString alloc] initWithString: friendNameString
+                                                                                                attributes: @{ NSFontAttributeName: [UIFont boldSystemFontOfSize: kPostFontSize],
+                                                                                                       NSForegroundColorAttributeName: [UIColor blackColor] }];
         [friendNameAtrString setAttributes:@{ NSFontAttributeName:[UIFont systemFontOfSize:kPostFontSize ],
                                               NSForegroundColorAttributeName:[UIColor blackColor] }
                                      range:NSMakeRange(friendNameString.length-1 , 1)];
         
         NSMutableAttributedString *compliteAtrString = [[NSMutableAttributedString alloc] initWithAttributedString:self.inputTextview.attributedText];
-        [compliteAtrString appendAttributedString:friendNameAtrString];
+        [compliteAtrString appendAttributedString: friendNameAtrString];
         self.inputTextview.attributedText = compliteAtrString;
         [self updateUI];
     }

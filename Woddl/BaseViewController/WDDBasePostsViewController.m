@@ -754,13 +754,13 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
                     allLinksFound = NO;
                     if (post.subscribedBy.socialNetwork.type.integerValue != kSocialNetworkTwitter)
                     {
-                        [links addObject:link.url];
+                        [links addObject: link.url];
                     }
                     else
                     {
                         if (link.isShortLink)
                         {
-                            [links addObject:link.url];
+                            [links addObject: link.url];
                         }
                     }
                 }
@@ -1107,8 +1107,8 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
         Post *post = [self.fetchedResultsController objectAtIndexPath:indexPath];
         self.postForMenu = post;
         
-        IDSEllipseMenu *menu = [WDDEllipseMenuFactory ellipseMenuForSocialNetworkType:[post.subscribedBy.socialNetwork.type integerValue]
-                                                                               inRect:self.postsTable.frame];
+        IDSEllipseMenu *menu = [WDDEllipseMenuFactory ellipseMenuForSocialNetworkType: [post.subscribedBy.socialNetwork.type integerValue]
+                                                                               inRect: self.postsTable.frame];
         menu.likeAvailable = [post.isLikable boolValue];
         menu.commentAvailable = [post.isCommentable boolValue];
         
@@ -1423,12 +1423,14 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
         mailViewController.mailComposeDelegate = self;
         
         [mailViewController setSubject:NSLocalizedString(@"lksPositInteresting", @"")];
+        
         DLog(@"%@", self.postForMenu.linkURLString);
-        NSString *message = [NSString stringWithFormat:@"%@, \r\nURL: %@",(self.postForMenu.text ? self.postForMenu.text : @"" ),self.postForMenu.linkURLString];
         
-        [mailViewController setMessageBody:message isHTML:NO];
+        NSString *message = [NSString stringWithFormat: @"%@, \r\nURL: %@", (self.postForMenu.text ? self.postForMenu.text : @"" ), self.postForMenu.linkURLString];
         
-        [self presentViewController:mailViewController animated:YES completion:nil];
+        [mailViewController setMessageBody: message isHTML: NO];
+        
+        [self presentViewController: mailViewController animated: YES completion: nil];
     }
     
     else {
@@ -1442,11 +1444,11 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
 {
     if (post.group)
     {
-        [self blockGroup:post.group];
+        [self blockGroup: post.group];
     }
     else
     {
-        [self blockAuthor:post.author];
+        [self blockAuthor: post.author];
     }
     
     [self reloadTableContent];
@@ -1455,14 +1457,14 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
 - (void)blockGroup:(Group *)group
 {
     BOOL newState = ![group.isGroupBlock boolValue];
-    group.isGroupBlock = [NSNumber numberWithBool:newState];
+    group.isGroupBlock = [NSNumber numberWithBool: newState];
     [[WDDDataBase sharedDatabase] save];
 }
 
 - (void)blockAuthor:(UserProfile *)profile
 {
     BOOL isBlocked = ![profile.isBlocked boolValue];
-    profile.isBlocked = [NSNumber numberWithBool:isBlocked];
+    profile.isBlocked = [NSNumber numberWithBool: isBlocked];
     [[WDDDataBase sharedDatabase] save];
 }
 
@@ -1476,11 +1478,11 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
     
     void (^errorBlock)(NSError *) = ^(NSError *error)
     {
-        if([[error localizedFailureReason] isEqualToString:@"Throttle limit for calls to this resource is reached."])
+        if([[error localizedFailureReason] isEqualToString: @"Throttle limit for calls to this resource is reached."])
         {
-            [UIAlertView showAlertWithMessage:NSLocalizedString(@"lskEnterRequestsNumber", @"")];
+            [UIAlertView showAlertWithMessage: NSLocalizedString(@"lskEnterRequestsNumber", @"")];
         }
-        [self removeProcessHUDOnFailLoginHUDWithText:NSLocalizedString(@"lskFail", @"Progress hud info")];
+        [self removeProcessHUDOnFailLoginHUDWithText: NSLocalizedString(@"lskFail", @"Progress hud info")];
     };
     
     [self.postForMenu addLikeWithCompletionBlock:completion

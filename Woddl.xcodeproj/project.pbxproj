@@ -442,6 +442,7 @@
 		BF0E04CC1A7A8A4400C5C0E8 /* UITextView+Autolayout.m in Sources */ = {isa = PBXBuildFile; fileRef = BF0E04CB1A7A8A4400C5C0E8 /* UITextView+Autolayout.m */; };
 		BF25BE451A80635E00D3CB9C /* WDDTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = BF25BE441A80635E00D3CB9C /* WDDTextView.m */; };
 		BFD3D79E1A7FA17800AA2C87 /* UITextView+DisableCopyPaste.m in Sources */ = {isa = PBXBuildFile; fileRef = BFD3D79D1A7FA17800AA2C87 /* UITextView+DisableCopyPaste.m */; };
+		BFF016561AAA31D300F042BC /* FBGraphAPIHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = BFF016551AAA31D300F042BC /* FBGraphAPIHelper.m */; };
 		D80E5FBA19AFA058009478D7 /* Guide Screen 1.png in Resources */ = {isa = PBXBuildFile; fileRef = D860B0EF19AF8C8F00BD98EB /* Guide Screen 1.png */; };
 		D80E5FBB19AFA058009478D7 /* Guide Screen 1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D860B0F219AF8C9400BD98EB /* Guide Screen 1@2x.png */; };
 		D80E5FBC19AFA058009478D7 /* Guide Screen 1-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D860B0EC19AF8C8C00BD98EB /* Guide Screen 1-568h@2x.png */; };
@@ -1318,6 +1319,8 @@
 		BF25BE441A80635E00D3CB9C /* WDDTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WDDTextView.m; sourceTree = "<group>"; };
 		BFD3D79C1A7FA17800AA2C87 /* UITextView+DisableCopyPaste.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UITextView+DisableCopyPaste.h"; path = "Categories/UITextView/UITextView+DisableCopyPaste.h"; sourceTree = "<group>"; };
 		BFD3D79D1A7FA17800AA2C87 /* UITextView+DisableCopyPaste.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UITextView+DisableCopyPaste.m"; path = "Categories/UITextView/UITextView+DisableCopyPaste.m"; sourceTree = "<group>"; };
+		BFF016541AAA31D300F042BC /* FBGraphAPIHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBGraphAPIHelper.h; sourceTree = "<group>"; };
+		BFF016551AAA31D300F042BC /* FBGraphAPIHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBGraphAPIHelper.m; sourceTree = "<group>"; };
 		D81182DC18C1BC5C00B36D26 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		D85E6E7518B3CBF50004F220 /* WDDURLShorter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WDDURLShorter.h; sourceTree = "<group>"; };
 		D85E6E7618B3CBF50004F220 /* WDDURLShorter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WDDURLShorter.m; sourceTree = "<group>"; };
@@ -3627,6 +3630,8 @@
 				9DC854F5188ECD8600E3F590 /* FacebookRequestGetTopStoryPostOperation.h */,
 				9DC854F6188ECD8600E3F590 /* FacebookRequestGetTopStoryPostOperation.m */,
 				7CB1B6F31896A9D2000EAC69 /* FacebookRequestTypes.h */,
+				BFF016541AAA31D300F042BC /* FBGraphAPIHelper.h */,
+				BFF016551AAA31D300F042BC /* FBGraphAPIHelper.m */,
 			);
 			path = "Facebook API";
 			sourceTree = "<group>";
@@ -4125,6 +4130,7 @@
 				97A53876181ECA2A0037C2BD /* Tag.m in Sources */,
 				975B8DCE1872E2C40066F390 /* ContextFilterLogFormatter.m in Sources */,
 				D85E6E7718B3CBF50004F220 /* WDDURLShorter.m in Sources */,
+				BFF016561AAA31D300F042BC /* FBGraphAPIHelper.m in Sources */,
 				975B8D891872E2C40066F390 /* XMPPRoomOccupantMemoryStorageObject.m in Sources */,
 				975B8D6C1872E2C40066F390 /* XMPPGoogleSharedStatus.m in Sources */,
 				9DDABBC0181FACE100C6B9DE /* FacebookPublishing.m in Sources */,

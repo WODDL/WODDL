@@ -21,6 +21,7 @@
 #import "FaceBookOthersProfile.h"
 #import "FacebookRequest.h"
 #import "FacebookGroupsInfo.h"
+#import "FBGraphAPIHelper.h"
 
 static NSInteger kSearchPostLimit = 10;
 
@@ -185,6 +186,13 @@ static NSInteger kSearchPostLimit = 10;
     [self facebookLoadMoreGroupsPostDidFinishWithPosts:posts];
 }
 
+- (void)setAccessToken:(NSString *)accessToken
+{
+    super.accessToken = accessToken;
+    
+    [FBGraphAPIHelper setAccessToken: accessToken];
+}
+
 - (void)updateProfileInfo
 {
     NSString *request = [NSString stringWithFormat:@"https://graph.facebook.com/fql?q=SELECT name,pic_square,profile_url FROM user WHERE uid == me()&access_token=%@", self.accessToken];
@@ -213,6 +221,7 @@ static NSInteger kSearchPostLimit = 10;
         }
     }
 }
+
 
 #pragma mark - Search posts
 
