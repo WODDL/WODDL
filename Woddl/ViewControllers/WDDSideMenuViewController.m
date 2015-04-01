@@ -602,6 +602,7 @@ typedef enum tagMenuButtons
     
     NSString *imageName = (profile.socialNetwork.accessToken == nil) ? @"Sidebar_account_unavailable.png" : @"Sidebar_account_disabled.png";
     [cell.stateButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
+    [cell.displayName setUserInteractionEnabled: YES];
     [cell.displayName addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showAuthorProfile:)]];
     cell.displayName.text = profile.socialNetwork.displayName;
     [self  setupAvatarImageInCell:cell forSocialNetwork:profile.socialNetwork];

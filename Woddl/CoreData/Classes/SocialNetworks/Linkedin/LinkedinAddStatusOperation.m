@@ -36,7 +36,7 @@
 
 - (void)main
 {
-    self.image = [self getURLFromImageData:_dataForUpload];
+    self.image = [self getURLFromImageData: _dataForUpload];
     LinkedinRequest* request = [[LinkedinRequest alloc] init];
     if([request addStatusWithToken:self.token andMessage:self.message andImageURL:self.image])
     {

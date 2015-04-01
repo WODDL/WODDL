@@ -11,6 +11,9 @@
 #import "FacebookPublishing.h"
 #import "NetworkRequest.h"
 #import "FacebookGroupsInfo.h"
+#import "WDDFacebookHelper.h"
+#import "FBGraphAPIHelper.h"
+#import "NSString+Additions.h"
 
 #define bgQueue dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT,0)
 
@@ -41,11 +44,50 @@ static FacebookAPI* myFacebook = nil;
 
 - (void)loginWithDelegate:(id<FacebookAPIDelegate>)delegate_
 {
-    FacebookLoginViewController *fbController  = [[FacebookLoginViewController alloc] init];
-    fbController.delegate = self;
     delegate = delegate_;
-    if(delegate)
-        [delegate loginFacebookViewController: fbController];
+    
+    [[WDDFacebookHelper Helper] loginWithCompletion:^(NSError *error) {
+        
+        NSLog(@"Error");
+        
+        if (!error) {
+            
+            NSString *authResponse = [[WDDFacebookHelper Helper] authResponse];
+            
+            NSString *token = [authResponse stringBetweenString:@"access_token=" andString:@"&"];
+            NSString *expire = [authResponse stringBetweenString:@"expires_in=" andString:@"&"];
+            if (!expire.integerValue) {
+                expire = @(INT32_MAX).stringValue;
+            }
+            
+            [FBGraphAPIHelper setAccessToken: token];
+            [FBGraphAPIHelper loadInfoFromUser: @"me" completion:^(NSDictionary *userInfo) {
+                
+                if (userInfo == nil) {
+                    
+                    return ;
+                }
+                
+                NSString *userID = userInfo[@"id"];
+                NSString *profileURL = [@"https://www.facebook.com/profile.php?id=" stringByAppendingString: userID];
+                NSString *screenName = userInfo[@"name"];
+                NSString *imageURL = [FBGraphAPIHelper GetProfilePictureUrlFromID: userID];
+                
+                [self loginSuccessWithToken: token
+                              andTimeExpire: expire
+                                  andUserID: userID
+                              andScreenName: screenName
+                                andImageURL: imageURL
+                              andProfileURL: profileURL];
+            }];
+        }
+    }];
+    
+//    FacebookLoginViewController *fbController  = [[FacebookLoginViewController alloc] init];
+//    fbController.delegate = self;
+//    delegate = delegate_;
+//    if(delegate)
+//        [delegate loginFacebookViewController: fbController];
 }
 
 - (BOOL)loginWithToken:(NSString *)token expire:(NSDate *)expire delegate:(id<FacebookAPIDelegate>)delegate_
@@ -85,7 +127,7 @@ static FacebookAPI* myFacebook = nil;
                 NSDictionary *userInfo = [json[@"data"] firstObject];
                 
                 NSString *userID = userInfo[@"uid"];
-                NSString* userIDStr = [NSString stringWithFormat:@"%lli",[userID longLongValue]];
+                NSString *userIDStr = [NSString stringWithFormat:@"%lli", [userID longLongValue]];
                 NSString *screenName = userInfo[@"name"];
                 NSString *imageURL = userInfo[@"pic_square"];
                 NSString *profileURL = userInfo[@"profile_url"];
@@ -154,13 +196,13 @@ static FacebookAPI* myFacebook = nil;
             
             if(delegate)
             {
-                [delegate loginWithSuccessWithToken:token
-                                          andExpire:expiresIn
-                                          andUserID:userID
-                                      andScreenName:name
-                                        andImageURL:imageURL
-                                      andProfileURL:profileURLString
-                                          andGroups:groups];
+                [delegate loginWithSuccessWithToken: token
+                                          andExpire: expiresIn
+                                          andUserID: userID
+                                      andScreenName: name
+                                        andImageURL: imageURL
+                                      andProfileURL: profileURLString
+                                          andGroups: groups];
             }
             delegate = nil;
         });

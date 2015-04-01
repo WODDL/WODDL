@@ -496,23 +496,47 @@ static const NSUInteger kIMIconFrames = 14;
 
 - (void)setupNavigationBarButtons
 {
-    UIImage *hamburgerButtonImage = [UIImage imageNamed: @"MainScreen_hamburger_icon"];
-    UIImage *readLaterButtonImage = [UIImage imageNamed: @"MainScreen_readlater_icon"];
+    UIImage *hamburgerButtonImage = [UIImage imageNamed: @"menu_btn"];
+    UIImage *readLaterButtonImage = [UIImage imageNamed: @"bookmark_btn"];
+    UIImage *postButtonImage = [UIImage imageNamed: @"post_btn"];
+    UIImage *searchButtonImage = [UIImage imageNamed: @"search_btn"];
     
     UIButton *sideButton = [UIButton buttonWithType: UIButtonTypeCustom];
     UIButton *readLaterButton = [UIButton buttonWithType: UIButtonTypeCustom];
+    UIButton *postButton = [UIButton buttonWithType: UIButtonTypeCustom];
+    UIButton *searchBtn = [UIButton buttonWithType: UIButtonTypeCustom];
     
     sideButton.bounds = CGRectMake( 0, 0, hamburgerButtonImage.size.width, hamburgerButtonImage.size.height );
     readLaterButton.bounds = CGRectMake( 0, 0, readLaterButtonImage.size.width, readLaterButtonImage.size.height );
+    postButton.bounds = CGRectMake(0, 0, postButtonImage.size.width, postButtonImage.size.height);
+    searchBtn.bounds = CGRectMake(0, 0, searchButtonImage.size.width, searchButtonImage.size.height);
     
     [sideButton setImage: hamburgerButtonImage forState: UIControlStateNormal];
     [readLaterButton setImage: readLaterButtonImage forState: UIControlStateNormal];
+    [postButton setImage: postButtonImage forState: UIControlStateNormal];
+    [searchBtn setImage: searchButtonImage forState: UIControlStateNormal];
     
     [sideButton addTarget:self action:@selector(showSideMenuAction:) forControlEvents: UIControlEventTouchUpInside];
     [readLaterButton addTarget:self action:@selector(showReadLaterAction:) forControlEvents:UIControlEventTouchUpInside];
+    [postButton addTarget: self action: @selector(showPostScreenAction:) forControlEvents: UIControlEventTouchUpInside];
+    [searchBtn addTarget: self action: @selector(showSearchScreenAction:) forControlEvents: UIControlEventTouchUpInside];
     
-    [menuSideButton setCustomView:sideButton];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:readLaterButton];
+//    [menuSideButton setCustomView:sideButton];
+//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView: readLaterButton];
+    
+    UIBarButtonItem *menuItemBtn = [[UIBarButtonItem alloc] initWithCustomView: sideButton];
+    UIBarButtonItem *postItemBtn = [[UIBarButtonItem alloc] initWithCustomView: postButton];
+    UIBarButtonItem *searchItemBtn = [[UIBarButtonItem alloc] initWithCustomView: searchBtn];
+    UIBarButtonItem *bookmarkItemBtn = [[UIBarButtonItem alloc] initWithCustomView: readLaterButton];
+    
+    UIBarButtonItem *leftSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemFixedSpace target: nil action: nil];
+    UIBarButtonItem *rightSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemFixedSpace target: nil action: nil];
+    
+    leftSpace.width = 40;
+    rightSpace.width = 40;
+    
+    self.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects: bookmarkItemBtn, leftSpace, searchItemBtn, nil];
+    self.navigationItem.leftBarButtonItems = [NSArray arrayWithObjects: menuItemBtn, rightSpace, postItemBtn, nil];
 }
 
 static const CGFloat kSlideMenuLeftAnchor = 320.0f;
@@ -543,6 +567,16 @@ static const CGFloat kSlideMenuRightAnchor = 240.0f;
 - (void)showMainScreenAction:(UIBarButtonItem *)sender
 {
     [self.slidingViewController resetTopView];
+}
+
+- (void)showPostScreenAction: (UIBarButtonItem*)sender
+{
+    [self performSegueWithIdentifier: @"GoToStatusScreenSegue" sender: nil];
+}
+
+- (void)showSearchScreenAction: (UIBarButtonItem*)sender
+{
+    [self performSegueWithIdentifier: @"GoToSearchScreenSegue" sender: nil];
 }
 
 #pragma mark - UIGestureRecognizer
@@ -627,7 +661,7 @@ static const CGFloat kSlideMenuRightAnchor = 240.0f;
         DLog(@"Update using pull to refresh started");
     }
     
-    double delayInSeconds = 0.1;
+    double delayInSeconds = 0.0;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         

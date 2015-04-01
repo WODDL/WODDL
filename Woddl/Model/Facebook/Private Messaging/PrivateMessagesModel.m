@@ -280,7 +280,7 @@
         
         for(NSDictionary *dict in [resp objectForKey : @"data"]) {
             
-            BOOL incom = ([[NSString stringWithFormat:@"%@",[dict valueForKey:@"author_id"]] isEqualToString:fid])?YES:NO;
+            BOOL incom = ([[NSString stringWithFormat: @"%@",[dict valueForKey:@"author_id"]] isEqualToString: fid])? YES : NO;
             
             PrivateMessageObject *message = [[PrivateMessageObject alloc] initWithXMPPClien:xmppClient from:xmppUser.jid messageText:[dict objectForKey:@"body"] incoming:incom];
             [messages addObject:message];
@@ -309,10 +309,9 @@
     
     NSInteger unreadMessagesCountForClient = 0;
     
-    
     NSString *query = [NSString stringWithFormat:@"SELECT thread_id, subject, originator, unread, unseen FROM thread WHERE folder_id = 0 and unread != 0"];
     
-    NSString *fql = [query stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];                                  // encode into ascii
+    NSString *fql = [query stringByAddingPercentEscapesUsingEncoding: NSASCIIStringEncoding];                                  // encode into ascii
     
     NSString *requestString = [NSString stringWithFormat:@"https://graph.facebook.com/fql?q=%@&access_token=%@", fql, xmppClient.socialNetworkItem.accessToken];
     
@@ -332,20 +331,21 @@
     NSDictionary *responseError = [deserializedData objectForKey:@"error"];// check if facebook returned error.
     
     if(error || responseError) {
+        
         DLog(@"Error from JSONDecoder: %@ , %@", error, responseError);
-    } else {
+    }
+    else {
         
         for (NSDictionary *dict in [deserializedData objectForKey:@"data"]) {
             
             NSInteger unreadMessagesInThreadCount = [[dict objectForKey:@"unread"] integerValue];
             
-            unreadMessagesCountForClient+=unreadMessagesInThreadCount;
+            unreadMessagesCountForClient += unreadMessagesInThreadCount;
             
             NSString *messageAuthorID = [dict objectForKey:@"originator"];
             NSString *jidString = [NSString stringWithFormat:@"-%@@chat.facebook.com", messageAuthorID];
             
-            [_unreadOfflineMessages setObject:[NSNumber numberWithInteger:unreadMessagesInThreadCount] forKey:jidString];
-            
+            [_unreadOfflineMessages setObject: [NSNumber numberWithInteger: unreadMessagesInThreadCount] forKey: jidString];
         }
     }
     return unreadMessagesCountForClient;
@@ -397,12 +397,12 @@
 {
     @synchronized(self.delegates)
     {
-        WDDWeakObject *weekObject = [WDDWeakObject weekObjectWithObject:delegate];
-        NSInteger index = [self.delegates indexOfObject:weekObject];
+        WDDWeakObject *weekObject = [WDDWeakObject weekObjectWithObject: delegate];
+        NSInteger index = [self.delegates indexOfObject: weekObject];
         
         if(index != NSNotFound)
         {
-            [self.delegates removeObjectAtIndex:index];
+            [self.delegates removeObjectAtIndex: index];
         }
     }
 }
@@ -415,7 +415,7 @@
     {
         if (client.connected)
         {
-            [self saveUnreadCountForClient:client];
+            [self saveUnreadCountForClient: client];
         }
     }
 }

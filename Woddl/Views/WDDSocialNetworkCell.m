@@ -211,12 +211,14 @@ const CGFloat kShowGroupsButtonHeight = 30.0f;
         [self.delegate expandGroupsForCell:self];
     }
 }
+
 -(IBAction)settingsPressed
 {
 
     [self settingsPressed1];
 
 }
+
 - (void)settingsPressed1
 {
     if ([self.delegate respondsToSelector:@selector(settingsButtonPressedForCell:)])

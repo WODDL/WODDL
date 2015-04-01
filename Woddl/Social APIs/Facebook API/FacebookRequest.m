@@ -78,6 +78,10 @@ static NSInteger const kMaxCountOfPostsInUpdate = 10;
 {
     NSMutableArray* resultArray = [[NSMutableArray alloc] init];
     
+    completionBlock (resultArray);
+    
+    return  YES;
+    
     if (!date)
     {
         date = [NSDate dateWithTimeIntervalSinceNow: -86400];
@@ -1393,7 +1397,7 @@ static NSInteger const kMaxCountOfPostsInUpdate = 10;
         
         NSMutableData *body = [NSMutableData data];
         
-        NSMutableURLRequest *photoUploadRequest = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:@"https://graph.facebook.com/me/photos"]];
+        NSMutableURLRequest *photoUploadRequest = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:@"https://graph.facebook.com/v2.2/me/photos"]];
         photoUploadRequest.HTTPMethod = @"POST";
         [photoUploadRequest addValue:contentType forHTTPHeaderField:@"Content-Type"];
         
@@ -1437,7 +1441,7 @@ static NSInteger const kMaxCountOfPostsInUpdate = 10;
     }
     else
     {
-        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat: @"https://graph.facebook.com/me/feed"]] cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kInternetIntervalTimeout];
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat: @"https://graph.facebook.com/v2.2/me/feed"]] cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval: kInternetIntervalTimeout];
         [request setHTTPMethod:@"POST"];
         [request setHTTPBody:[[self buildQueryFromDictionary:params] dataUsingEncoding:NSUTF8StringEncoding]];
         
@@ -1463,61 +1467,61 @@ static NSInteger const kMaxCountOfPostsInUpdate = 10;
     
     NSString *groupToken = nil;
     
-    if (groupId)
-    {
-        NSString *requestString = [[NSString stringWithFormat: @"https://graph.facebook.com/me/accounts?limit=5000&offset=0&access_token=%@", token] stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding];
-        NSURLRequest *request = [NSURLRequest requestWithURL: [NSURL URLWithString: requestString]];
-        
-        NSError *error = nil;
-        NSURLResponse *response = nil;
-        NSData *responseData = [NSURLConnection sendSynchronousRequest: request
-                                                     returningResponse: &response
-                                                                 error: &error];
-        if(responseData)
-        {
-            NSError* parserError = nil;
-            NSDictionary* json = [NSJSONSerialization JSONObjectWithData: responseData
-                                                                 options: kNilOptions
-                                                                   error: &parserError];
-            if(!parserError)
-            {
-                if (json[@"error"])
-                {
-                    NSDictionary *errorDescription = json[@"error"];
-                    DLog(@"Facebook response with error : %@", errorDescription);
-                    
-                    if ([errorDescription[@"code"] integerValue] == 190)
-                    {
-                        [self invalidateSocialNetworkWithToken: token];
-                    }
-                    
-                    return NO;
-                }
-                
-                NSArray *pages = json[@"data"];
-                if (pages && [pages isKindOfClass: [NSArray class]])
-                {
-                    for (NSDictionary *pageInfo in pages)
-                    {
-                        id pageId = pageInfo[@"id"];
-                        if ([pageId isKindOfClass:[NSNumber class]])
-                        {
-                            pageId = [pageId stringValue];
-                        }
-                        else if(![pageId isKindOfClass:[NSString class]])
-                        {
-                            continue;
-                        }
-                        
-                        if ([pageId isEqualToString: groupId])
-                        {
-                            groupToken = pageInfo[@"access_token"];
-                        }
-                    }
-                }
-            }
-        }
-    }
+//    if (groupId)
+//    {
+//        NSString *requestString = [[NSString stringWithFormat: @"https://graph.facebook.com/me/accounts?limit=5000&offset=0&access_token=%@", token] stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding];
+//        NSURLRequest *request = [NSURLRequest requestWithURL: [NSURL URLWithString: requestString]];
+//        
+//        NSError *error = nil;
+//        NSURLResponse *response = nil;
+//        NSData *responseData = [NSURLConnection sendSynchronousRequest: request
+//                                                     returningResponse: &response
+//                                                                 error: &error];
+//        if(responseData)
+//        {
+//            NSError* parserError = nil;
+//            NSDictionary* json = [NSJSONSerialization JSONObjectWithData: responseData
+//                                                                 options: kNilOptions
+//                                                                   error: &parserError];
+//            if(!parserError)
+//            {
+//                if (json[@"error"])
+//                {
+//                    NSDictionary *errorDescription = json[@"error"];
+//                    DLog(@"Facebook response with error : %@", errorDescription);
+//                    
+//                    if ([errorDescription[@"code"] integerValue] == 190)
+//                    {
+//                        [self invalidateSocialNetworkWithToken: token];
+//                    }
+//                    
+//                    return NO;
+//                }
+//                
+//                NSArray *pages = json[@"data"];
+//                if (pages && [pages isKindOfClass: [NSArray class]])
+//                {
+//                    for (NSDictionary *pageInfo in pages)
+//                    {
+//                        id pageId = pageInfo[@"id"];
+//                        if ([pageId isKindOfClass:[NSNumber class]])
+//                        {
+//                            pageId = [pageId stringValue];
+//                        }
+//                        else if(![pageId isKindOfClass:[NSString class]])
+//                        {
+//                            continue;
+//                        }
+//                        
+//                        if ([pageId isEqualToString: groupId])
+//                        {
+//                            groupToken = pageInfo[@"access_token"];
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
     
     if (groupId && groupToken)
     {
@@ -1555,7 +1559,7 @@ static NSInteger const kMaxCountOfPostsInUpdate = 10;
         
         NSMutableData *body = [NSMutableData data];
         
-        NSString *urlString = [[NSString stringWithFormat:@"https://graph.facebook.com/%@/photos", groupId] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        NSString *urlString = [[NSString stringWithFormat:@"https://graph.facebook.com/v2.2/%@/photos", groupId] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         NSMutableURLRequest *photoUploadRequest = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:urlString]];
         photoUploadRequest.HTTPMethod = @"POST";
         [photoUploadRequest addValue:contentType forHTTPHeaderField:@"Content-Type"];
@@ -1599,7 +1603,7 @@ static NSInteger const kMaxCountOfPostsInUpdate = 10;
     }
     else
     {
-        NSString *urlString = [[NSString stringWithFormat:@"https://graph.facebook.com/%@/feed", groupId] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        NSString *urlString = [[NSString stringWithFormat:@"https://graph.facebook.com/v2.2/%@/feed", groupId] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString: urlString] cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval: kInternetIntervalTimeout];
         [request setHTTPMethod: @"POST"];
         [request setHTTPBody: [[self buildQueryFromDictionary: params] dataUsingEncoding:NSUTF8StringEncoding]];

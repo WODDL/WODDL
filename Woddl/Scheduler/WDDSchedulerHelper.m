@@ -213,58 +213,58 @@
         
         if (![groupId isEqualToString: @""])
         {
-            NSString *requestString = [[NSString stringWithFormat: @"https://graph.facebook.com/me/accounts?limit=5000&offset=0&access_token=%@", token] stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding];
-            NSURLRequest *request = [NSURLRequest requestWithURL: [NSURL URLWithString: requestString]];
-            
-            NSError *error = nil;
-            NSURLResponse *response = nil;
-            NSData *responseData = [NSURLConnection sendSynchronousRequest: request
-                                                         returningResponse: &response
-                                                                     error: &error];
-            if(responseData)
-            {
-                NSError* parserError = nil;
-                NSDictionary* json = [NSJSONSerialization JSONObjectWithData: responseData
-                                                                     options: kNilOptions
-                                                                       error: &parserError];
-                if(!parserError)
-                {
-                    if (json[@"error"])
-                    {
-                        NSDictionary *errorDescription = json[@"error"];
-                        DLog(@"Facebook response with error : %@", errorDescription);
-                        
-                        if ([errorDescription[@"code"] integerValue] == 190)
-                        {
-//                            [self invalidateSocialNetworkWithToken: token];
-                        }
-                        
-                        return NO;
-                    }
-                    
-                    NSArray *pages = json[@"data"];
-                    if (pages && [pages isKindOfClass: [NSArray class]])
-                    {
-                        for (NSDictionary *pageInfo in pages)
-                        {
-                            id pageId = pageInfo[@"id"];
-                            if ([pageId isKindOfClass:[NSNumber class]])
-                            {
-                                pageId = [pageId stringValue];
-                            }
-                            else if(![pageId isKindOfClass:[NSString class]])
-                            {
-                                continue;
-                            }
-                            
-                            if ([pageId isEqualToString: groupId])
-                            {
-                                groupToken = pageInfo[@"access_token"];
-                            }
-                        }
-                    }
-                }
-            }
+//            NSString *requestString = [[NSString stringWithFormat: @"https://graph.facebook.com/me/accounts?limit=5000&offset=0&access_token=%@", token] stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding];
+//            NSURLRequest *request = [NSURLRequest requestWithURL: [NSURL URLWithString: requestString]];
+//            
+//            NSError *error = nil;
+//            NSURLResponse *response = nil;
+//            NSData *responseData = [NSURLConnection sendSynchronousRequest: request
+//                                                         returningResponse: &response
+//                                                                     error: &error];
+//            if(responseData)
+//            {
+//                NSError* parserError = nil;
+//                NSDictionary* json = [NSJSONSerialization JSONObjectWithData: responseData
+//                                                                     options: kNilOptions
+//                                                                       error: &parserError];
+//                if(!parserError)
+//                {
+//                    if (json[@"error"])
+//                    {
+//                        NSDictionary *errorDescription = json[@"error"];
+//                        DLog(@"Facebook response with error : %@", errorDescription);
+//                        
+//                        if ([errorDescription[@"code"] integerValue] == 190)
+//                        {
+////                            [self invalidateSocialNetworkWithToken: token];
+//                        }
+//                        
+//                        return NO;
+//                    }
+//                    
+//                    NSArray *pages = json[@"data"];
+//                    if (pages && [pages isKindOfClass: [NSArray class]])
+//                    {
+//                        for (NSDictionary *pageInfo in pages)
+//                        {
+//                            id pageId = pageInfo[@"id"];
+//                            if ([pageId isKindOfClass:[NSNumber class]])
+//                            {
+//                                pageId = [pageId stringValue];
+//                            }
+//                            else if(![pageId isKindOfClass:[NSString class]])
+//                            {
+//                                continue;
+//                            }
+//                            
+//                            if ([pageId isEqualToString: groupId])
+//                            {
+//                                groupToken = pageInfo[@"access_token"];
+//                            }
+//                        }
+//                    }
+//                }
+//            }
         }
         
         if (groupToken) {
@@ -277,8 +277,6 @@
         }
         
         [params s_setObject: groupId forKey: @"groupId"];
-        
-//        [params s_setObject: token forKey: @"token"];
         [params s_setObject: message forKey: @"post"];
     }
     else if([social isEqualToString:@"twitter"] || [social isEqualToString:@"linkedin"])

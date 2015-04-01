@@ -195,7 +195,6 @@ static SocialNetworkManager* mySocialNetworkManager = nil;
                         }
                         else
                         {
-
                             if (socNetwork.type.integerValue == kSocialNetworkGooglePlus)
                             {
                                 if (!--googleCount)

@@ -22,6 +22,7 @@
 #import "FacebookRequest.h"
 #import "FacebookGroupsInfo.h"
 #import "FBGraphAPIHelper.h"
+#import "WDDFacebookHelper.h"
 
 static NSInteger kSearchPostLimit = 10;
 
@@ -98,6 +99,8 @@ static NSInteger kSearchPostLimit = 10;
 
 - (void)fetchNotifications
 {
+    return;
+    
     dispatch_queue_t queue = [[self class] networkQueue];
     
     NSManagedObjectID *objectId = [self objectID];
@@ -186,13 +189,6 @@ static NSInteger kSearchPostLimit = 10;
     [self facebookLoadMoreGroupsPostDidFinishWithPosts:posts];
 }
 
-- (void)setAccessToken:(NSString *)accessToken
-{
-    super.accessToken = accessToken;
-    
-    [FBGraphAPIHelper setAccessToken: accessToken];
-}
-
 - (void)updateProfileInfo
 {
     NSString *request = [NSString stringWithFormat:@"https://graph.facebook.com/fql?q=SELECT name,pic_square,profile_url FROM user WHERE uid == me()&access_token=%@", self.accessToken];
@@ -261,20 +257,24 @@ static NSInteger kSearchPostLimit = 10;
     FacebookPostOperation* operation = [[FacebookPostOperation alloc] initFacebookPostOperationWithToken:self.accessToken andMessage:message andPost:post toGroup:group withDelegate:self];
     [bgQueue addOperation:operation];
 }
+
 - (void)addStatusWithMessage:(NSString*)message
                    andImages:(NSArray*)images
                  andLocation:(WDDLocation*)location
          withCompletionBlock:(completionAddStatusBlock)completionBlock
 {
-    self.addStatusCompletionBlock = completionBlock;
-    NSOperationQueue* bgQueue = [FaceBookPost operationQueue];
-    NSData* imageData = nil;
-    if(images)
-    {
-        imageData = [images lastObject];
-    }
-    FacebookAddStatusOperation* operation = [[FacebookAddStatusOperation alloc] initFacebookAddStatusOperationWithToken:self.accessToken andMessage:message andImage:imageData andLocation:location withDelegate:self];
-    [bgQueue addOperation:operation];
+    [[WDDFacebookHelper Helper] openSessionPublishPermissionsWithCompletion:^(NSError *error) {
+        
+        self.addStatusCompletionBlock = completionBlock;
+        NSOperationQueue* bgQueue = [FaceBookPost operationQueue];
+        NSData* imageData = nil;
+        
+        if(images)
+            imageData = [images lastObject];
+        
+        FacebookAddStatusOperation* operation = [[FacebookAddStatusOperation alloc] initFacebookAddStatusOperationWithToken:self.accessToken andMessage:message andImage:imageData andLocation:location withDelegate:self];
+        [bgQueue addOperation:operation];
+    }];
 }
 
 - (void)addStatusWithMessage:(NSString *)message andImages:(NSArray *)images andLocation:(WDDLocation *)location toGroup:(Group *)group withCompletionBlock:(completionAddStatusBlock)completionBlock;

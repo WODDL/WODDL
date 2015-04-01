@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="Oji-LO-KhG">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1514" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="Oji-LO-KhG">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -217,7 +217,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="42" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="sqv-uu-4Pg" customClass="PullTableView">
-                                <rect key="frame" x="0.0" y="232" width="320" height="472"/>
+                                <rect key="frame" x="0.0" y="65" width="320" height="472"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MainPostBlackCell" rowHeight="30" id="B2A-8F-6Ua">
@@ -248,7 +248,7 @@
                             <constraint firstItem="sqv-uu-4Pg" firstAttribute="trailing" secondItem="1XD-ee-ISz" secondAttribute="trailing" id="bkv-rI-1nz"/>
                             <constraint firstItem="1XD-ee-ISz" firstAttribute="top" secondItem="aoa-Uv-3oG" secondAttribute="bottom" id="hbj-eL-iGi"/>
                             <constraint firstItem="1XD-ee-ISz" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="jRc-uw-328"/>
-                            <constraint firstItem="sqv-uu-4Pg" firstAttribute="top" secondItem="1XD-ee-ISz" secondAttribute="bottom" id="lEC-RI-eQ4"/>
+                            <constraint firstItem="sqv-uu-4Pg" firstAttribute="top" secondItem="1XD-ee-ISz" secondAttribute="bottom" constant="-31" id="lEC-RI-eQ4"/>
                             <constraint firstItem="sqv-uu-4Pg" firstAttribute="leading" secondItem="1XD-ee-ISz" secondAttribute="leading" id="r4G-Io-ig6"/>
                             <constraint firstAttribute="bottom" secondItem="sqv-uu-4Pg" secondAttribute="bottom" id="t9m-hc-Wfq"/>
                             <constraint firstItem="1XD-ee-ISz" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="ve7-bm-RxY"/>
@@ -305,7 +305,7 @@
                                     <constraint firstAttribute="height" constant="34" id="UZg-yf-4Rn"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Account state:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PIy-TR-AHj">
@@ -700,7 +700,7 @@
                                                 <constraint firstAttribute="height" constant="18" id="Ell-8o-Oek"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="cell_fb_likes_icon" translatesAutoresizingMaskIntoConstraints="NO" id="gmw-9O-XuT">
@@ -1094,7 +1094,7 @@
                                                         <constraint firstAttribute="height" constant="18" id="BeK-W9-75H"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="time ago" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B1E-VL-cR0">
@@ -1336,7 +1336,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LBA-Ry-Fez" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4540" y="-886"/>
+            <point key="canvasLocation" x="4433" y="-886"/>
         </scene>
         <!--IM-->
         <scene sceneID="mcZ-DE-b66">
@@ -1456,7 +1456,7 @@
                                                         <constraint firstAttribute="width" constant="162" id="dcI-ep-BiF"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ContactOnlineIcon" translatesAutoresizingMaskIntoConstraints="NO" id="8Al-iU-0aZ" userLabel="statusImage">
@@ -1746,7 +1746,7 @@
                                             <constraint firstAttribute="height" constant="180" id="YdV-7g-QOq"/>
                                         </constraints>
                                         <attributedString key="attributedText"/>
-                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" spellCheckingType="yes"/>
                                         <dataDetectorType key="dataDetectorTypes" link="YES"/>
                                     </textView>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="status_counter_bg" translatesAutoresizingMaskIntoConstraints="NO" id="dsF-JT-Mah" userLabel="charCounterBG">
@@ -1801,7 +1801,7 @@
                                             <constraint firstAttribute="height" constant="25" id="vnn-BX-IAQ"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                        <state key="normal" image="44DCAE1F-88A8-43ED-B5CF-7BDA691C1088">
+                                        <state key="normal" image="254DD1CE-33DA-40F5-A155-41B86915D9BF">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
@@ -1840,7 +1840,7 @@
                                         <constraints>
                                             <constraint firstAttribute="width" constant="29" id="UyN-94-JIo"/>
                                         </constraints>
-                                        <state key="normal" image="B33B1A18-C100-4172-894D-58BF6746ACE7" backgroundImage="schedule-clock.png">
+                                        <state key="normal" image="C0F261AE-7776-444C-8438-CA563F606B26" backgroundImage="schedule-clock.png">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
@@ -2006,6 +2006,7 @@
                         <outlet property="schedulerView" destination="Wiz-FY-gQa" id="dZ4-OX-Za8"/>
                         <outlet property="sendButton" destination="Ope-bj-QUR" id="AV0-Pn-yOq"/>
                         <outlet property="twitterButton" destination="BZf-gj-BaQ" id="85o-QV-cxg"/>
+                        <segue destination="KaZ-ln-efO" kind="push" identifier="SegueToScheduledMessagesVC" id="xuL-zD-aIO"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Zch-kC-c41" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2049,7 +2050,7 @@
                                                         <constraint firstAttribute="width" constant="215" id="lDm-de-gwc"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="S9W-H8-p7O" userLabel="friendSNIcon">
@@ -2215,25 +2216,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FPe-KS-TyZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="4526" y="-2094"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="fsD-dy-arl">
-            <objects>
-                <navigationController id="d6B-18-jlO" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="ZJf-5E-hPg">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="Lou-Ne-yIp">
-                        <autoresizingMask key="autoresizingMask"/>
-                    </toolbar>
-                    <connections>
-                        <segue destination="KaZ-ln-efO" kind="relationship" relationship="rootViewController" id="Zmh-PN-B1e"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="efq-IT-X6A" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="5065" y="-871"/>
         </scene>
         <!--Who Liked View Controller-->
         <scene sceneID="enB-br-Z3v">
@@ -2631,11 +2613,11 @@
                                                 <view multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7RJ-E1-B0H" userLabel="mainCellView">
                                                     <rect key="frame" x="0.0" y="2" width="320" height="44"/>
                                                     <subviews>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Tf3-tN-VM8" userLabel="avatar image">
+                                                        <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Tf3-tN-VM8" userLabel="avatar image">
                                                             <rect key="frame" x="10" y="6" width="32" height="32"/>
                                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         </imageView>
-                                                        <label clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Name Lastname" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qvx-6B-Yjd">
+                                                        <label clipsSubviews="YES" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Name Lastname" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qvx-6B-Yjd">
                                                             <rect key="frame" x="54" y="8" width="152" height="28"/>
                                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="18"/>
@@ -2676,7 +2658,7 @@
                                                                             <constraint firstAttribute="height" constant="21" id="RN8-ld-24U"/>
                                                                         </constraints>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
                                                                     <button contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wET-Gd-DWO">
@@ -2716,7 +2698,7 @@
                                                                             <constraint firstAttribute="width" constant="215" id="cZI-NJ-8aw"/>
                                                                         </constraints>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
                                                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Iw-nU-yH4">
@@ -3262,17 +3244,17 @@
         <!--Scheduled Message View Controller-->
         <scene sceneID="6tH-DO-Hl9">
             <objects>
-                <viewController restorationIdentifier="ScheduledMessageListViewController" storyboardIdentifier="ScheduledMessageListViewController" autoresizesArchivedViewToFullSize="NO" automaticallyAdjustsScrollViewInsets="NO" id="KaZ-ln-efO" customClass="WDDScheduledMessageViewController" sceneMemberID="viewController">
+                <viewController restorationIdentifier="ScheduledMessageListViewController" storyboardIdentifier="ScheduledMessageListViewController" automaticallyAdjustsScrollViewInsets="NO" id="KaZ-ln-efO" customClass="WDDScheduledMessageViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Eph-Jw-srX"/>
                         <viewControllerLayoutGuide type="bottom" id="cz4-Cv-SAF"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Fyr-HY-hfo">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="111" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="qMe-jy-6wc">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="481"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="111" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="qMe-jy-6wc">
+                                <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="ScheduledMessageCell" rowHeight="111" id="uNg-9H-SsK" customClass="WDDScheduledMessageTableViewCell">
                                         <rect key="frame" x="0.0" y="22" width="300" height="38"/>
@@ -3294,7 +3276,7 @@
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="none" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Wd-ME-oWG">
                                                     <rect key="frame" x="30" y="2" width="260" height="65"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yNR-Aq-jfC">
@@ -3344,25 +3326,25 @@
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="qMe-jy-6wc" firstAttribute="leading" secondItem="Fyr-HY-hfo" secondAttribute="leading" id="KpP-Sc-MP1"/>
+                            <constraint firstItem="cz4-Cv-SAF" firstAttribute="top" secondItem="qMe-jy-6wc" secondAttribute="bottom" id="YDm-iw-JPC"/>
+                            <constraint firstItem="qMe-jy-6wc" firstAttribute="top" secondItem="Eph-Jw-srX" secondAttribute="bottom" id="l16-PP-u32"/>
+                            <constraint firstAttribute="trailing" secondItem="qMe-jy-6wc" secondAttribute="trailing" id="nfy-5x-3Wv"/>
+                        </constraints>
                     </view>
-                    <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" id="PrX-Zb-yAz"/>
-                    <nil key="simulatedStatusBarMetrics"/>
-                    <nil key="simulatedTopBarMetrics"/>
-                    <nil key="simulatedBottomBarMetrics"/>
-                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="320" height="568"/>
                     <connections>
                         <outlet property="messagesTableView" destination="qMe-jy-6wc" id="OsS-0o-iyC"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TPC-8A-USs" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5491" y="-886"/>
+            <point key="canvasLocation" x="4866" y="-886"/>
         </scene>
     </scenes>
     <resources>
-        <image name="44DCAE1F-88A8-43ED-B5CF-7BDA691C1088" width="35" height="25">
+        <image name="254DD1CE-33DA-40F5-A155-41B86915D9BF" width="35" height="25">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGOzxYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK0HCBEW
 GxwgISksLzU4VSRudWxs1AkKCwwNDg8QViRjbGFzc1xOU0ltYWdlRmxhZ3NWTlNSZXBzV05TQ29sb3KA
@@ -3495,7 +3477,7 @@ HDccOhw/HEccShxcHF8cZAAAAAAAAAIBAAAAAAAAAD8AAAAAAAAAAAAAAAAAABxmA
         <image name="ArrowRight" width="15" height="15"/>
         <image name="AvatarComment" width="32" height="33"/>
         <image name="AvatarMask" width="32" height="32"/>
-        <image name="B33B1A18-C100-4172-894D-58BF6746ACE7" width="9" height="9">
+        <image name="C0F261AE-7776-444C-8438-CA563F606B26" width="9" height="9">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGOzxYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK0HCBEW
 GxwgISksLzU4VSRudWxs1AkKCwwNDg8QViRjbGFzc1xOU0ltYWdlRmxhZ3NWTlNSZXBzV05TQ29sb3KA
@@ -3633,9 +3615,9 @@ D8IPxw/PD9IP1w/fD+IP9A/3D/wAAAAAAAACAQAAAAAAAAA/AAAAAAAAAAAAAAAAAAAP/g
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="4hP-Mq-qME"/>
-        <segue reference="tw7-vT-2Sj"/>
-        <segue reference="xkp-X2-xvr"/>
+        <segue reference="8Em-bo-OqV"/>
+        <segue reference="oMa-2X-FbS"/>
+        <segue reference="v4J-Yo-2UN"/>
         <segue reference="qzP-bh-suj"/>
     </inferredMetricsTieBreakers>
 </document>

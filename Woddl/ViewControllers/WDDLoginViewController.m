@@ -71,7 +71,6 @@ typedef NS_ENUM(NSUInteger, LoginFacebookActionSheetButton)
     {
         self.statusViewHeightConstraint.constant = 0.0f;
     }
-     
 }
 
 #pragma mark - user actions
@@ -94,6 +93,8 @@ typedef NS_ENUM(NSUInteger, LoginFacebookActionSheetButton)
 
 - (void)useFBAccountOnDeviceOrLoginWithCustom
 {
+//    @[@"public_profile", @"email", @"user_friends", @"user_photos", @"user_posts", @"user_groups"]
+    
     ACAccountStore *accountStore = [[ACAccountStore alloc] init];
     ACAccountType *accountType = [accountStore accountTypeWithAccountTypeIdentifier:ACAccountTypeIdentifierFacebook];
     NSArray *generalPermissions = @[@"email"];
@@ -106,7 +107,7 @@ typedef NS_ENUM(NSUInteger, LoginFacebookActionSheetButton)
         DLog(@"Step 3, Write permissions obtained: granted - %d, Error: %@, error code: %ld", granted, [error localizedDescription], (long)[error code]);
         if(granted && error == nil)
         {
-            NSArray *fbAccounts = [accountStore accountsWithAccountType:accountType];
+            NSArray *fbAccounts = [accountStore accountsWithAccountType: accountType];
             
             if (fbAccounts.count)
             {
@@ -154,12 +155,13 @@ typedef NS_ENUM(NSUInteger, LoginFacebookActionSheetButton)
         DLog(@"Step 2, Read permissions obtained: granted - %d, Error: %@, error code: %ld", granted, [error localizedDescription], (long)[error code]);
         if (granted && error == nil)
         {
-            NSArray *writePermissions = @[@"publish_actions", @"manage_pages", @"publish_stream"];
+//            NSArray *writePermissions = @[@"publish_actions", @"manage_pages", @"publish_stream"];
+            NSArray *writePermissions = @[@"publish_actions"];
             options[ACFacebookPermissionsKey] = writePermissions;
             
-            [accountStore requestAccessToAccountsWithType:accountType
-                                                  options:options
-                                               completion:step3WritePermissionsObtained];
+            [accountStore requestAccessToAccountsWithType: accountType
+                                                  options: options
+                                               completion: step3WritePermissionsObtained];
         }
         else
         {
@@ -175,7 +177,7 @@ typedef NS_ENUM(NSUInteger, LoginFacebookActionSheetButton)
         DLog(@"Step 1, General permissions obtained: granted - %d, Error: %@, error code: %ld", granted, [error localizedDescription], (long)[error code]);
         if (granted && error == nil)
         {
-            NSArray *readPermissions = @[@"user_photos", @"read_stream", @"read_mailbox", @"xmpp_login", @"user_subscriptions", @"user_work_history", @"user_groups", @"user_events", @"user_about_me", @"user_relationships"];
+            NSArray *readPermissions = @[@"public_profile", @"email", @"user_friends", @"user_photos", @"user_posts", @"user_groups"]; // @[@"user_photos", @"read_stream", @"read_mailbox", @"xmpp_login", @"user_subscriptions", @"user_work_history", @"user_groups", @"user_events", @"user_about_me", @"user_relationships"];
             options[ACFacebookPermissionsKey] = readPermissions;
             
             [accountStore requestAccessToAccountsWithType:accountType
@@ -236,7 +238,7 @@ typedef NS_ENUM(NSUInteger, LoginFacebookActionSheetButton)
                                                                                                    otherButtonTitles:nil];
                                                    for (NSString *title in accountNames)
                                                    {
-                                                       [actionSheet addButtonWithTitle:title];
+                                                       [actionSheet addButtonWithTitle: title];
                                                    }
                                                    [actionSheet addButtonWithTitle:NSLocalizedString(@"lskOther", @"")];
                                                    [actionSheet addButtonWithTitle:NSLocalizedString(@"lskCancel", @"")];
@@ -338,8 +340,8 @@ typedef NS_ENUM(NSUInteger, LoginFacebookActionSheetButton)
                    andProfileURL:(NSString *)profileURLString
                        andGroups:(NSArray *)groups
 {
-    if (!self.progressHUD)
-    {
+    if (!self.progressHUD) {
+        
         [self showLoginHUD];
     }
     
@@ -347,11 +349,11 @@ typedef NS_ENUM(NSUInteger, LoginFacebookActionSheetButton)
         //  Parse login
         [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
         
-        FBAccessTokenData *fbTokenData = [FBAccessTokenData createTokenFromString:accessToken
-                                                                      permissions:@[@"email", @"read_stream"]
-                                                                   expirationDate:expire
-                                                                        loginType:FBSessionLoginTypeWebView
-                                                                      refreshDate:[NSDate date]];
+        FBAccessTokenData *fbTokenData = [FBAccessTokenData createTokenFromString: accessToken
+                                                                      permissions: @[@"email", @"read_stream"]
+                                                                   expirationDate: expire
+                                                                        loginType: FBSessionLoginTypeWebView
+                                                                      refreshDate: [NSDate date]];
         
         [FBSession.activeSession closeAndClearTokenInformation];
         

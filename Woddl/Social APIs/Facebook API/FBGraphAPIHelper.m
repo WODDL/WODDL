@@ -43,14 +43,14 @@ const NSString *kGraphAPIBaseUrl = @"https://graph.facebook.com/v2.2";
 
 + (void)loadGroupsFromUser: (NSString*)userId completion: (void(^)(NSDictionary *groupsInfo))completion
 {
-    NSString * const kGroupsFields = @"id,name,email,link";
-    
-    NSString *apiUrl = [NSString stringWithFormat: @"%@/%@/events?fields=%@&access_token=%@", kGraphAPIBaseUrl, userId, kEventFields, access_token];
-    
-    [FBGraphAPIHelper callAPIWithUrl: apiUrl completion:^(NSDictionary *response) {
-        
-        completion (response);
-    }];
+//    NSString * const kGroupsFields = @"id,name,email,link";
+//    
+//    NSString *apiUrl = [NSString stringWithFormat: @"%@/%@/events?fields=%@&access_token=%@", kGraphAPIBaseUrl, userId, kEventFields, access_token];
+//    
+//    [FBGraphAPIHelper callAPIWithUrl: apiUrl completion:^(NSDictionary *response) {
+//        
+//        completion (response);
+//    }];
 }
 
 + (NSString*)GetProfilePictureUrlFromID: (NSString*)a_id

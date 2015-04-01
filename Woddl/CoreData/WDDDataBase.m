@@ -582,7 +582,7 @@ static BOOL _isSearchProduced = NO;
     return YES;
 }
 
--(void)save
+- (void)save
 {
     NSError *saveError = nil;
     [self saveChangesToContext:&saveError];

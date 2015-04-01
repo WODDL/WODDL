@@ -9,5 +9,8 @@
 #import <Foundation/Foundation.h>
 
 @interface NSString (Additions)
+
 - (BOOL)isEndsWithNewlineCharacter;
+- (NSString*)stringBetweenString:(NSString*)start andString:(NSString*)end;
+
 @end

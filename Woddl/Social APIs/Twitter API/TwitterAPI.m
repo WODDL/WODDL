@@ -295,7 +295,7 @@ static TwitterAPI * myTwitter = nil;
                 dispatch_async(self.notificationsQueue, ^()
                 {
                     [self processError:error forNetworkWithUserId:userId];
-                    [self fetchNotificationsForUserId:userId accessToken:accessToken];
+//                    [self fetchNotificationsForUserId:userId accessToken:accessToken];
                 });
             }];
             

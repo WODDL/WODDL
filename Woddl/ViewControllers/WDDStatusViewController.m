@@ -24,6 +24,8 @@
 #import "NSCharacterSet+Emoji.h"
 #import "WDDScheduledMessageViewController.h"
 #import "DDXML.h"
+#import "WDDTwitterHelper.h"
+
 #define POPOVER_COLOR [UIColor colorWithRed:51.0f/255.0f green:51.0f/255.0f blue:51.0f/255.0f alpha:1.0f]
 
 
@@ -95,92 +97,99 @@ static const NSInteger kSocialNetworkButtonTagBase = 2000;
 static const NSInteger kMaxCountOfCharactersInText = 140;
 static const NSInteger kTwitterImageLinkLength =  26;
 
+const NSInteger kStatusUpdateErrorAlertTag = 4321;
+
 @implementation WDDStatusViewController
 
 @synthesize statusesTaskCounter = _statusesTaskCounter;
 
-#pragma mark - lifecycle methods
-#pragma mark SCHEDULER
+#pragma mark - View Lifecycle
 
-- (void)showWithDetailsLabel
+- (void)viewDidLoad
 {
-    if (APP_DELEGATE.isInternetConnected)
-    {
-//        if(IS_IPHONE_4 && self.isNeededToUpdateSchedulerFrame)
-//        {
-//            self.isNeededToUpdateSchedulerFrame = NO;
-//            self.schedulerView.frame = CGRectMake(self.schedulerView.frame.origin.x,self.schedulerView.frame.origin.y-88 , self.schedulerView.frame.size.width, self.schedulerView.frame.size.height);
-//            
-//        }
-       
-        UIViewController *myController = [self.storyboard instantiateViewControllerWithIdentifier:@"ScheduledMessageListViewController"];
-        [self.navigationController pushViewController: myController animated:YES];
-    }
-    else
-    {
+    [super viewDidLoad];
+    
+    [self setupButtons];
+    self.twitterCharactersLeft = kMaxCountOfCharactersInText;
+    [self setupNavigationBarTitle];
+    [self setupPopoverAppearance];
+    self.isNeededToUpdateSchedulerFrame = YES;
+    UIImage* sendButtonImage = [UIImage imageNamed:@"SendIcon"];
+    UIButton *customButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    customButton.bounds = CGRectMake( 0, 0, sendButtonImage.size.width, sendButtonImage.size.height );
+    [customButton setImage:sendButtonImage forState:UIControlStateNormal];
+    [customButton addTarget:self action:@selector(saveStatusAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.sendButton setCustomView:customButton];
+    self.inputTextview.delegate = self;
+    [self customizeBackButton];
+    [self updateUI];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+    
+    [super viewDidAppear:animated];
+    
+    [WDDDataBase sharedDatabase].updatingStatus = YES;
+    [self.inputTextview becomeFirstResponder];
+    
+    NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
+    NSData *data = [def objectForKey:@"curEditingMessage"];
+    NSDictionary *retrievedDictionary = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    NSDictionary * dictionaryForEditingIem = [[NSDictionary alloc] initWithDictionary:retrievedDictionary];
+    
+    if(dictionaryForEditingIem.count>0) {
         
-        [UIAlertView showAlertWithMessage:@"Internet connection error"];
-        
+        [self updateUIWithMessageInfoDict: dictionaryForEditingIem];
     }
-
-    
-}
--(IBAction)displayScheduledMessages:(UIButton*)sender
-{
-//    HUD = [[MBProgressHUD alloc] initWithView:self.navigationController.view];
-//    [self.navigationController.view addSubview:HUD];
-//    
-//    HUD.delegate = self;
-//    HUD.labelText = @"Loading...";
-//    HUD.detailsLabelText = @"updating data";
-//    HUD.square = YES;
-//    
-//    //update main UI
-//    
-//    self.schedulerView.alpha=1;
-//    
-//    ///////////
-//    
-//    [HUD showWhileExecuting:@selector(showWithDetailsLabel) onTarget:self withObject:nil animated:YES];
-    [self showWithDetailsLabel];
-    
-    
-    
 }
 
--(void)presentMessagesListPopoverfromView:(UIView*)view
+- (void)viewWillDisappear:(BOOL)animated
 {
+    self.isNeededToUpdateSchedulerFrame = YES;
+    [self.inputTextview resignFirstResponder];
     
-    
-             
-             WDDScheduledMessageViewController *locationVC = [self.storyboard instantiateViewControllerWithIdentifier:WDDScheduledMessageViewControllerIdentifier];
-    
-             WYPopoverController *popover = [[WYPopoverController alloc] initWithContentViewController:locationVC];
-             popover.popoverContentSize = locationVC.view.frame.size;
-             
-             popover.delegate = self;
-             self.popoverVC = popover;
-             
-             [popover presentPopoverFromRect:[view bounds]
-                                      inView:view
-                    permittedArrowDirections:WYPopoverArrowDirectionDown
-                                    animated:YES];
-             
-    
-    
-    
-    
-    
-    
-    
+    [super viewWillDisappear:YES];
 }
-- (void)updateUIWithMessageInfo:(NSNotification *)notification
+
+#pragma mark - Button Events -
+
+- (IBAction)displayScheduledMessages:(UIButton*)sender
 {
-    
+    if (APP_DELEGATE.isInternetConnected) {
+        
+//        UIViewController *myController = [self.storyboard instantiateViewControllerWithIdentifier: @"ScheduledMessageListViewController"];
+//        [self.navigationController pushViewController: myController animated: YES];
+        
+        
+        [self performSegueWithIdentifier: @"SegueToScheduledMessagesVC" sender: nil];
+    }
+    else {
+        
+        [UIAlertView showAlertWithMessage: @"Internet connection error"];
+    }
 }
+
+- (IBAction)displaySchedulerDateTimePeaker:(UIButton*)sender
+{
+    [self.schedulerDataTimePeaker becomeFirstResponder];
+    [self.view endEditing:YES];
+    self.schedulerView.alpha=1.0f;
+    self.inputTextview.userInteractionEnabled = NO;
+}
+
+- (IBAction)schedulerDoneAction:(UIButton*)sender
+{
+    [self.inputTextview becomeFirstResponder];
+    self.inputTextview.userInteractionEnabled = YES;
+    self.isEditMode = YES;
+}
+
+#pragma mark - Private Methods -
+
 - (void)updateUIWithMessageInfoDict:(NSDictionary *)notification
 {
-    
     self.isEditMode = YES;
     self.editingPostId = [[NSString stringWithFormat:@"%@",[notification objectForKey:@"id"]] intValue];
     self.editingPostToken = [NSString stringWithFormat:@"%@",[notification objectForKey:@"token"]];
@@ -239,152 +248,19 @@ static const NSInteger kTwitterImageLinkLength =  26;
         
         
     }
-    else
-    {
-        
-        
-        
-        
-    }
+    
     [self updateCounter];
     [self updateCameraButton];
     [self updateLocationUI];
     [self.inputTextview becomeFirstResponder];
-    
-    
-}
-
--(IBAction)displaySchedulerDateTimePeaker:(UIButton*)sender
-{
-    
-//    if(IS_IPHONE_4)
-//    {
-//        self.isNeededToUpdateSchedulerFrame = NO;
-//        self.schedulerView.frame = CGRectMake(self.schedulerView.frame.origin.x,self.schedulerView.frame.origin.y-88 , self.schedulerView.frame.size.width, self.schedulerView.frame.size.height);
-//
-//    }
-    
-    [self.schedulerDataTimePeaker becomeFirstResponder];
-    [self.view endEditing:YES];
-    self.schedulerView.alpha=1.0f;
-    self.inputTextview.userInteractionEnabled = NO;
-    
-    
-}
--(NSString *)getTWToken:(NSString*)body
-{
-    
-    if (body.length > 0)
-    {
-        NSArray *pairs = [body componentsSeparatedByString:@"&"];
-        
-        for (NSString *pair in pairs)
-        {
-            
-            NSArray *elements = [pair componentsSeparatedByString:@"="];
-            
-            if (elements.count > 1)
-            {
-                NSString *field = elements[0];
-                NSString *value = elements[1];
-                
-                if ([field isEqualToString:@"oauth_token"])
-                {
-                    return [value stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-                    
-                }
-            }
-        }
-        
-        
-    }
-    
-    return @"";
-    
-    
-}
-- (id)getTWSecret:(NSString *)body {
-    
-    if (body.length > 0)
-    {
-        NSArray *pairs = [body componentsSeparatedByString:@"&"];
-        
-        for (NSString *pair in pairs)
-        {
-            
-            NSArray *elements = [pair componentsSeparatedByString:@"="];
-            
-            if (elements.count > 1)
-            {
-                NSString *field = elements[0];
-                NSString *value = elements[1];
-                
-                if ([field isEqualToString:@"oauth_token_secret"])
-                {
-                    return [value stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-                }
-            }
-        }
-    }
-    
-    return @"";
-    
-    
-}
-- (id)getTWUserId:(NSString *)body {
-    
-    if (body.length > 0)
-    {
-        NSArray *pairs = [body componentsSeparatedByString:@"&"];
-        
-        for (NSString *pair in pairs)
-        {
-            
-            NSArray *elements = [pair componentsSeparatedByString:@"="];
-            
-            if (elements.count > 1)
-            {
-                NSString *field = elements[0];
-                NSString *value = elements[1];
-                
-                if ([field isEqualToString:@"user_id"])
-                {
-                    return [value stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-                }
-            }
-        }
-    }
-    
-    return @"";
-    
-    
-}
-
--(NSString*)getUserInfoWithToken:(NSString*)token
-{
-    NSMutableURLRequest *userRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat: @"https://api.linkedin.com/v1/people/~:(first-name,last-name,picture-url,id)?oauth2_access_token=%@",token]]];
-    
-    NSError *error = nil; NSURLResponse *response = nil;
-    NSData *data = [NSURLConnection sendSynchronousRequest:userRequest returningResponse:&response error:&error];
-    
-    if(data)
-    {
-        DDXMLDocument *xmlDocument = [[DDXMLDocument alloc] initWithData:data options:0 error:&error];
-        DDXMLElement *rootElement = xmlDocument.rootElement;
-        DDXMLElement* userIDElement = [[rootElement elementsForName:@"id"] firstObject];
-        NSString* userID = [userIDElement stringValue];
-        if (userID)
-            return userID;
-   
-    }
-    
-    return @"";
 }
 
 - (void)displayProcessingMessages
 {
     [self showProcessHUDWithText:@""];
    
+    BOOL isSuccess = true;
+    
     if (APP_DELEGATE.isInternetConnected)
     {
          if(self.isEditMode)
@@ -426,20 +302,34 @@ static const NSInteger kTwitterImageLinkLength =  26;
                    ) {
                     
                     [self showProcessHUDWithText: @""];
+                } else {
+                    isSuccess = false;
                 }
             }
             else if(sn.type == [NSNumber numberWithInt: 2])
             {
                 NSString *accessTokenTmp = [sn accessToken];
                 
-                NSLog(@"TW token %@", [self getTWToken: accessTokenTmp]);
-                NSLog(@"TW secret %@", [self getTWSecret: accessTokenTmp]);
-                NSLog(@"TW userId %@", [self getTWUserId: accessTokenTmp]);
+                NSString *token, *secret, *userid;
+                [WDDTwitterHelper getToken: &token secret: &secret userid: &userid from: accessTokenTmp];
                 
-                if([[WDDSchedulerHelper sharedManager] scheduleMessage2:self.inputTextview.text token:[self getTWSecret:accessTokenTmp] secret:@""  userID:[self getTWToken:accessTokenTmp] picture:self.mediaAttachment sendDate:self.schedulerDataTimePeaker.date forSocial:@"twitter"  userName:sn.profile.name groupId: @""])
+                NSLog(@"TW token %@", token);
+                NSLog(@"TW secret %@", secret);
+                NSLog(@"TW userId %@", userid);
+                
+                if([[WDDSchedulerHelper sharedManager] scheduleMessage2: self.inputTextview.text
+                                                                  token: secret
+                                                                 secret: @""
+                                                                 userID: token
+                                                                picture: self.mediaAttachment
+                                                               sendDate: self.schedulerDataTimePeaker.date
+                                                              forSocial: @"twitter"
+                                                               userName: sn.profile.name
+                                                                groupId: @""])
                 {
                     [self showProcessHUDWithText:@""];
-                   
+                } else {
+                    isSuccess = false;
                 }
             }
             else if(sn.type == [NSNumber numberWithInt: 4])
@@ -451,7 +341,8 @@ static const NSInteger kTwitterImageLinkLength =  26;
                 {
                 
                     [self showProcessHUDWithText:@""];
-                    
+                }else {
+                    isSuccess = false;
                 }
             }
         }
@@ -478,6 +369,8 @@ static const NSInteger kTwitterImageLinkLength =  26;
                    ) {
                     
                     [self showProcessHUDWithText: @""];
+                }else {
+                    isSuccess = false;
                 }
             }
         }
@@ -487,51 +380,22 @@ static const NSInteger kTwitterImageLinkLength =  26;
         [UIAlertView showAlertWithMessage:@"Internet connection error"];
     }
     
-    [self removeProcessHUDWithText: @"Done."];
-    [self.inputTextview becomeFirstResponder];
-    dispatch_sync(dispatch_get_main_queue(), ^{
+    if (isSuccess) {
         
-        self.inputTextview.attributedText = [[NSAttributedString alloc] initWithString: @""];
-    });
-    [self updateUI];
-}
-         
-- (void)myMixedTask {
-    // Indeterminate mode
-    sleep(2);
-    // Switch to determinate mode
-    HUD.mode = MBProgressHUDModeDeterminate;
-    HUD.labelText = @"Progress";
-    float progress = 0.0f;
-    while (progress < 1.0f)
-    {
-        progress += 0.01f;
-        HUD.progress = progress;
-        usleep(50000);
+        [self removeProcessHUDWithText: @"Done."];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            self.inputTextview.attributedText = [[NSAttributedString alloc] initWithString: @""];
+        });
     }
-    // Back to indeterminate mode
-    HUD.mode = MBProgressHUDModeIndeterminate;
-    HUD.labelText = @"Cleaning up";
-    sleep(2);
-    // UIImageView is a UIKit class, we have to initialize it on the main thread
-    __block UIImageView *imageView;
-    dispatch_sync(dispatch_get_main_queue(), ^{
-        UIImage *image = [UIImage imageNamed:@"37x-Checkmark.png"];
-        imageView = [[UIImageView alloc] initWithImage:image];
-    });
-    HUD.customView = imageView;
-    HUD.mode = MBProgressHUDModeCustomView;
-    HUD.labelText = @"Completed";
-    sleep(2);
-}
-
-- (IBAction)schedulerDoneAction:(UIButton*)sender
-{
+    else {
+        
+        [self removeProcessHUDWithText: @"Failed."];
+        [UIAlertView showAlertWithMessage:@"Internet connection error"];
+    }
+    
     [self.inputTextview becomeFirstResponder];
-    self.inputTextview.userInteractionEnabled = YES;
-    self.isEditMode = YES;
-    
-    
+    [self updateUI];
 }
 
 - (void)showProcessHUDWithText:(NSString *)text
@@ -546,62 +410,13 @@ static const NSInteger kTwitterImageLinkLength =  26;
         self.progressHUD.textLabel.text = text;
     }
 }
+
 - (void)removeProcessHUDWithText:(NSString *)text
 {
     if (self.progressHUD)
     {
         [self.progressHUD completeAndDismissWithTitle:text];
         self.progressHUD = nil;
-    }
-}
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    [self setupButtons];
-    self.twitterCharactersLeft = kMaxCountOfCharactersInText;
-    [self setupNavigationBarTitle];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateUIWithMessageInfo:) name:@"kNotificationMessageChoosenIdentifyer" object:nil];
-    [self setupPopoverAppearance];
-    self.isNeededToUpdateSchedulerFrame = YES;
-    UIImage* sendButtonImage = [UIImage imageNamed:@"SendIcon"];
-    UIButton *customButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    customButton.bounds = CGRectMake( 0, 0, sendButtonImage.size.width, sendButtonImage.size.height );
-    [customButton setImage:sendButtonImage forState:UIControlStateNormal];
-    [customButton addTarget:self action:@selector(saveStatusAction:) forControlEvents:UIControlEventTouchUpInside];
-    [self.sendButton setCustomView:customButton];
-    self.inputTextview.delegate = self;
-    [self customizeBackButton];
-    [self updateUI];
-   
-    
-}
-
--(void)viewWillDisappear:(BOOL)animated
-{
-    self.isNeededToUpdateSchedulerFrame = YES;
-    [self.inputTextview resignFirstResponder];
-    [super viewWillDisappear:YES];
-
-}
-- (void)viewDidAppear:(BOOL)animated
-{
-    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
-    
-    [super viewDidAppear:animated];
-   // [Heatmaps trackScreenWithKey:@"503395516a70d21a-087c22d3"];
-    
-    [WDDDataBase sharedDatabase].updatingStatus = YES;
-    [self.inputTextview becomeFirstResponder];
-    
-    NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
-    NSData *data = [def objectForKey:@"curEditingMessage"];
-    NSDictionary *retrievedDictionary = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-    NSDictionary * dictionaryForEditingIem = [[NSDictionary alloc] initWithDictionary:retrievedDictionary];
-    if(dictionaryForEditingIem.count>0)
-    {
-        
-        [self updateUIWithMessageInfoDict:dictionaryForEditingIem];
-        
     }
 }
 
@@ -617,12 +432,10 @@ static const NSInteger kTwitterImageLinkLength =  26;
 
 - (void)setupSocialNetworkButtonsTag
 {
-    
     self.facebookButton.tag = kSocialNetworkButtonTagBase + kSocialNetworkFacebook;
     self.twitterButton.tag = kSocialNetworkButtonTagBase + kSocialNetworkTwitter;
     self.linkedInButton.tag = kSocialNetworkButtonTagBase + kSocialNetworkLinkedIN;
     self.foursquareButton.tag = kSocialNetworkButtonTagBase + kSocialNetworkFoursquare;
-    
 }
 
 - (void)setupButtonForSocialNetwork:(SocialNetworkType)type
@@ -703,11 +516,22 @@ static const NSInteger kTwitterImageLinkLength =  26;
 }
 
 #pragma mark - Bar items action
-//ROMA - Запостить пост )
 
 - (IBAction)saveStatusAction:(UIBarButtonItem *)sender
 {
-    //ROMA: TODO:Зделать отсрочку отсылки поста
+    NSLog(@"%ld", (long)[self datesComparator: self.schedulerDataTimePeaker.date]);
+    
+    if (![APP_DELEGATE isInternetConnected])
+    {
+        [[[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"lskConnectInternet", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"lskOK", @"") otherButtonTitles:nil] show];
+        return ;
+    }
+    
+    if ((long)[self datesComparator: self.schedulerDataTimePeaker.date] > 0) {
+        
+        self.isEditMode = YES;
+    }
+    
     if(self.isEditMode)
     {
         HUD = [[MBProgressHUD alloc] initWithView:self.navigationController.view];
@@ -717,21 +541,12 @@ static const NSInteger kTwitterImageLinkLength =  26;
         HUD.labelText = @"Scheduling...";
         HUD.detailsLabelText = @"please wait";
         HUD.square = YES;
-       // [self updateUI];
         [self.schedulerButton setEnabled:YES];
         [self.inputTextview resignFirstResponder];
         [HUD showWhileExecuting: @selector(displayProcessingMessages) onTarget: self withObject: nil animated: YES];
-        
     }
     else
     {
-
-        if (![APP_DELEGATE isInternetConnected])
-        {
-            [[[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"lskConnectInternet", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"lskOK", @"") otherButtonTitles:nil] show];
-           return ;
-        }
-        
         NSArray *allAvailableSelectedAccounts = [self formAllAvailableSelectedAccountsList];
         NSArray *allAvailableSelectedGruops = [self fromAllAvailableSelectedGroupsList];
         
@@ -831,7 +646,13 @@ static const NSInteger kTwitterImageLinkLength =  26;
     [def synchronize];
 }
 
-const NSInteger kStatusUpdateErrorAlertTag = 4321;
+- (NSInteger)datesComparator: (NSDate*)postsDate {
+    
+    NSDate * startTime = [NSDate date];
+    NSTimeInterval secs = [postsDate timeIntervalSinceDate: startTime];
+    
+    return secs;
+}
 
 - (void)showStatusErrorForAcccountWithID:(NSManagedObjectID *)profileID
 {
@@ -861,7 +682,7 @@ const NSInteger kStatusUpdateErrorAlertTag = 4321;
     
     if (self.facebookSelectedGroups.count)
     {
-        [allSelectedGroups addObjectsFromArray:self.facebookSelectedGroups];
+        [allSelectedGroups addObjectsFromArray: self.facebookSelectedGroups];
     }
     
     return [allSelectedGroups copy];
@@ -1024,7 +845,6 @@ const NSInteger kStatusUpdateErrorAlertTag = 4321;
                              DLog(@"error");
                          }
                      });
-                     
                  }];
 
 #ifdef DEBUG
@@ -1392,13 +1212,12 @@ static const NSInteger kActionSheetLibraryCameraButton = 1;
         }
         else if(_statusesTaskCounter == 1 && statusesTaskCounter == 0)
         {
-            [self removeProcessHUDOnSuccessLoginHUDWithText: NSLocalizedString(@"lskComplete", @"")];
-           // [self dismiss];
-            
-            dispatch_sync(dispatch_get_main_queue(), ^{
+            dispatch_async(dispatch_get_main_queue(), ^{
                 
                 self.inputTextview.attributedText = [[NSAttributedString alloc] initWithString: @""];
             });
+            
+            [self removeProcessHUDOnSuccessLoginHUDWithText: NSLocalizedString(@"lskComplete", @"")];
         }
         _statusesTaskCounter = statusesTaskCounter;
     }
@@ -1569,6 +1388,29 @@ static const NSInteger kActionSheetLibraryCameraButton = 1;
     [self.mainView addSubview:preViewImageView];
     
     //self.textViewHeightConstraint.constant = textView.contentSize.height
+}
+
+#pragma mark - LinkedIn -
+
+- (NSString*)getUserInfoWithToken: (NSString*)token
+{
+    NSMutableURLRequest *userRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat: @"https://api.linkedin.com/v1/people/~:(first-name,last-name,picture-url,id)?oauth2_access_token=%@",token]]];
+    
+    NSError *error = nil; NSURLResponse *response = nil;
+    NSData *data = [NSURLConnection sendSynchronousRequest:userRequest returningResponse:&response error:&error];
+    
+    if(data)
+    {
+        DDXMLDocument *xmlDocument = [[DDXMLDocument alloc] initWithData:data options:0 error:&error];
+        DDXMLElement *rootElement = xmlDocument.rootElement;
+        DDXMLElement* userIDElement = [[rootElement elementsForName:@"id"] firstObject];
+        NSString* userID = [userIDElement stringValue];
+        if (userID)
+            return userID;
+        
+    }
+    
+    return @"";
 }
 
 

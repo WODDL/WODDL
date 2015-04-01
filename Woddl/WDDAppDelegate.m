@@ -19,9 +19,10 @@
 #import "SAMHUDView.h"
 #import <FlurrySDK/Flurry.h>
 //#import <Heatmaps/Heatmaps.h>
-
+#import <FacebookSDK/FacebookSDK.h>
 #import "AvatarManager.h"
 #import "WDDConstants.h"
+#import "WDDFacebookHelper.h"
 
 
 BOOL isDeviceJailbroken()
@@ -421,6 +422,8 @@ BOOL isDeviceJailbroken()
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     [self observeKeyboard:YES];
     [self startKeyboardDismissOnSwipe];
+    
+    [FBAppCall handleDidBecomeActive];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
@@ -440,14 +443,31 @@ void uncaughtExceptionHandler(NSException *exception) {
   sourceApplication: (NSString *)sourceApplication
          annotation: (id)annotation
 {
-    if (url)
-    {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"HandleURL" object:nil];
-    }
+    NSLog(@"%@", url.absoluteString);
     
-    return [GPPURLHandler handleURL:url
-                  sourceApplication:sourceApplication
-                         annotation:annotation];
+    if ([url.absoluteString containsString: @"facebook"]) {
+        
+        [[WDDFacebookHelper Helper] setAuthResponse: url.absoluteString];
+        
+        [FBSession.activeSession setStateChangeHandler:
+         ^(FBSession *session, FBSessionState state, NSError *error) {
+             
+             [[WDDFacebookHelper Helper] sessionStateChanged: session state: state error: error];
+         }];
+        
+        return [FBAppCall handleOpenURL: url sourceApplication: sourceApplication];
+    }
+    else {
+        
+        if (url)
+        {
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"HandleURL" object:nil];
+        }
+        
+        return [GPPURLHandler handleURL:url
+                      sourceApplication:sourceApplication
+                             annotation:annotation];
+    }
 }
 
 - (BOOL)isFirstStart
@@ -470,7 +490,7 @@ void uncaughtExceptionHandler(NSException *exception) {
 
 - (void)showHUDWithTitle:(NSString *)title
 {
-    hud = [[SAMHUDView alloc] initWithTitle:title loading:YES];
+    hud = [[SAMHUDView alloc] initWithTitle: title loading: YES];
     [hud show];
 }
 

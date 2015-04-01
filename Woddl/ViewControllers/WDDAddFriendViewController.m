@@ -28,7 +28,7 @@
 
 //  Model
 @property (strong, nonatomic) NSArray *friendsProfiles;
-@property (strong, nonatomic) NSArray *searchResults;
+@property (strong, nonatomic) NSMutableArray *searchResults;
 @property (strong, nonatomic) NSMutableArray *searchResultsTwitter;
 
 @end
@@ -56,15 +56,14 @@
                 }
             }
         }
-        else
-        {
+        else {
+            
             [allFriends addObjectsFromArray:[[WDDDataBase sharedDatabase] fetchAllFriends]];
         }
         allFriends = [[self removeDublicatedFriendsInArray:allFriends] mutableCopy];
         
-        
         NSSortDescriptor *sortDesctiptor = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
-        [allFriends sortUsingDescriptors:@[sortDesctiptor]];
+        [allFriends sortUsingDescriptors: @[sortDesctiptor]];
         _friendsProfiles = [allFriends copy];
     }
     return _friendsProfiles;
@@ -91,26 +90,32 @@
 
 - (void)viewDidLoad
 {
-    self.searchResultsTwitter = [[NSMutableArray alloc] init];
     [super viewDidLoad];
+    
+    self.searchResultsTwitter = [[NSMutableArray alloc] init];
+    
     [self customizeBackButton];
     [self setupNavigationBarTitle];
     
-    self.searchResults = self.friendsProfiles;
+    self.searchResults = [[NSMutableArray alloc] initWithArray: self.friendsProfiles];
 }
 
 #pragma mark - UISearchBarDelegate
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
+    [self.searchResults removeAllObjects];
+    
     if (!searchText.length)
     {
-        self.searchResults = self.friendsProfiles;
+        [self.searchResults addObjectsFromArray: self.friendsProfiles];
     }
     else
     {
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.name BEGINSWITH[cd] %@",searchText];
-        self.searchResults = [self.friendsProfiles filteredArrayUsingPredicate:predicate];
+//        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.name BEGINSWITH[cd] %@",searchText];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.name contains[c] %@",searchText];
+//        NSPredicate *predicate = [NSPredicate predicateWithFormat: @"%k like %@", @"name", searchText];
+        [self.searchResults addObjectsFromArray: [self.friendsProfiles filteredArrayUsingPredicate: predicate]];
     }
     [self.friendsTable reloadData];
 }
@@ -125,7 +130,9 @@
     searchBar.text = nil;
     [searchBar resignFirstResponder];
     
-    self.searchResults = self.friendsProfiles;
+    [self.searchResults removeAllObjects];
+    [self.searchResults addObjectsFromArray: self.friendsProfiles];
+    
     [self.friendsTable reloadData];
 }
 
@@ -142,12 +149,9 @@ static NSString * kAddFriendCellIdentifier = @"AddFriendCell";
     
     UserProfile *profile = self.searchResultsTwitter[indexPath.row];
     
-    if ([profile isKindOfClass:[TwitterProfile class]])
-    {
+    if ([profile isKindOfClass:[TwitterProfile class]]) {
         
         [self configureCell:cell forSocialNetwork:profile];
-        
-        
     }
     
     return cell;
@@ -156,21 +160,21 @@ static NSString * kAddFriendCellIdentifier = @"AddFriendCell";
 
 -(int)calculateTwitterFriendsInTheButch
 {
+    [self.searchResultsTwitter removeAllObjects];
+    
     int counter = 0;
     
-    for(int i=0;i<self.searchResults.count;i++)
+    for(int i = 0; i < self.searchResults.count; i++)
     {
          UserProfile *profile = self.searchResults[i];
-        if ([profile isKindOfClass:[TwitterProfile class]])
+        if ([profile isKindOfClass: [TwitterProfile class]])
         {
             counter++;
             [self.searchResultsTwitter addObject:profile];
         }
-        
     }
     
     return counter;
-
 }
 
 - (NSInteger)tableView:(UITableView *)tableView
@@ -205,21 +209,19 @@ static NSString * kAddFriendCellIdentifier = @"AddFriendCell";
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
-    
-    UserProfile *profile = self.searchResults[indexPath.row];
+    UserProfile *profile = self.searchResultsTwitter[indexPath.row];
     NSString *userName = profile.name;
-    if ([profile isKindOfClass:[TwitterProfile class]])
-    {
+    if ([profile isKindOfClass:[TwitterProfile class]]) {
+        
         NSLog(@"profile.profileURL = %@",profile.profileURL);
         userName = [NSString stringWithFormat:@"@%@",profile.profileURL];
     }
     
-   
     if ([self.delegate respondsToSelector:@selector(didAddFriendWithName:)])
     {
         [self.delegate didAddFriendWithName:userName];
     }
+    
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -229,9 +231,9 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
 - (void)configureCell:(WDDAddFriendCell *)cell forSocialNetwork:(UserProfile *)profile
 {
     cell.usernameLabel.text = profile.name;
-    cell.snIconImageView.image = [UIImage imageNamed:[profile socialNetworkIconName]];
-    [self setupAvatarImageInCell:cell
-                      forProfile:profile];
+    cell.snIconImageView.image = [UIImage imageNamed: [profile socialNetworkIconName]];
+    [self setupAvatarImageInCell: cell
+                      forProfile: profile];
 }
 
 - (void)setupAvatarImageInCell:(WDDAddFriendCell *)cell forProfile:(UserProfile *)profile
@@ -241,8 +243,8 @@ static CGFloat const kAvatarCornerRadious = 2.0f;
 //                                                                               transparentBorder:1.0f
 //                                                                                    cornerRadius:kAvatarCornerRadious
 //                                                                            interpolationQuality:kCGInterpolationDefault];
-    NSURL *avatarURL = [NSURL URLWithString:profile.avatarRemoteURL];
-    [cell.avatarImageView setAvatarWithURL:avatarURL];
+    NSURL *avatarURL = [NSURL URLWithString: profile.avatarRemoteURL];
+    [cell.avatarImageView setAvatarWithURL: avatarURL];
     
 //    SDWebImageCompletedBlock completion = ^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
 //        if (!error)

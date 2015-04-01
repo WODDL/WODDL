@@ -14,9 +14,8 @@
 #import "SAMHUDView.h"
 #import "ECSlidingViewController.h"
 #import "MBProgressHUD.h"
-NSString * const WDDScheduledMessageViewControllerIdentifier = @"ScheduledMessageListViewController";
 
-@interface WDDScheduledMessageViewController ()
+@interface WDDScheduledMessageViewController () <MBProgressHUDDelegate>
 @property(weak, nonatomic) NSArray *sns;
 @property(retain, nonatomic) NSMutableArray *allMessages;
 @property(retain, nonatomic)NSDictionary *dictMessage;
@@ -28,18 +27,44 @@ NSString * const WDDScheduledMessageViewControllerIdentifier = @"ScheduledMessag
 
     MBProgressHUD *HUD;
 }
-//- (IBAction)showMainScreenAction:(UIBarButtonItem *)sender
-//{
-//    WDDStatusViewController *searchVC = [self.storyboard instantiateViewControllerWithIdentifier:kStoryboardIDStatusScreen];
-//    [self.navigationController pushViewController:searchVC animated:YES];
-//}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    [self setupNavigationBarTitle];
+    [self customizeBackButton];
+    
+    [WDDDataBase sharedDatabase].updatingStatus = YES;
+    self.messagesTableView.delegate=self;
+    self.messagesTableView.dataSource=self;
+    [self customizeEditButton];
+}
 
 -(void)viewWillAppear:(BOOL)animated
 {
-    [super viewWillAppear:YES];
+    [super viewWillAppear: YES];
     
-
 }
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear: animated];
+    
+    HUD = [[MBProgressHUD alloc] initWithView: self.navigationController.view];
+    [self.navigationController.view addSubview: HUD];
+    
+    HUD.delegate = self;
+    HUD.labelText = @"Loading...";
+    HUD.detailsLabelText = @"please wait";
+    [HUD showWhileExecuting:@selector(loading) onTarget:self withObject:nil animated:YES];
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
 - (void)customizeEditButton
 {
     SEL backActionSelector = ([self.navigationController.viewControllers indexOfObject:self] ? @selector(popBackViewController) : @selector(dismissViewController) );
@@ -55,12 +80,6 @@ NSString * const WDDScheduledMessageViewControllerIdentifier = @"ScheduledMessag
 - (void)dismissViewController
 {
     [self dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void)setupBackButton
-{
-    [self customizeBackButton];
-    
 }
 
 -(NSString *)getTWToken:(NSString*)body
@@ -87,14 +106,11 @@ NSString * const WDDScheduledMessageViewControllerIdentifier = @"ScheduledMessag
                 }
             }
         }
-        
-        
     }
     
     return @"";
-    
-    
 }
+
 - (id)getTWSecret:(NSString *)body {
     
     if (body.length > 0)
@@ -103,7 +119,6 @@ NSString * const WDDScheduledMessageViewControllerIdentifier = @"ScheduledMessag
         
         for (NSString *pair in pairs)
         {
-            
             NSArray *elements = [pair componentsSeparatedByString:@"="];
             
             if (elements.count > 1)
@@ -154,17 +169,6 @@ NSString * const WDDScheduledMessageViewControllerIdentifier = @"ScheduledMessag
 
 -(void)loading
 {
-
-   
-    [self setupNavigationBarTitle];
-    [self setupBackButton];
-    self.statusViewController = self;
-    [WDDDataBase sharedDatabase].updatingStatus = YES;
-    self.messagesTableView.delegate=self;
-    self.messagesTableView.dataSource=self;
-    [self customizeEditButton];
-    
-    
     self.allMessages = [[NSMutableArray alloc] init];
     
     
@@ -203,8 +207,6 @@ NSString * const WDDScheduledMessageViewControllerIdentifier = @"ScheduledMessag
                 {
                     [self.allMessages addObjectsFromArray:arr];
                 }
-
-                
             }
             
         }
@@ -221,36 +223,12 @@ NSString * const WDDScheduledMessageViewControllerIdentifier = @"ScheduledMessag
                     [self.allMessages addObjectsFromArray:arr];
                 }
             }
-            
-            
         }
-        
     }
     
     [self.messagesTableView reloadData];
-    
-
-}
-- (void)viewDidLoad
-{
-    
-    [super viewDidLoad];
-    HUD = [[MBProgressHUD alloc] initWithView:self.navigationController.view];
-    [self.navigationController.view addSubview:HUD];
-    
-    HUD.delegate = self;
-    HUD.labelText = @"Loading...";
-    HUD.detailsLabelText = @"please wait";
-    [HUD showWhileExecuting:@selector(loading) onTarget:self withObject:nil animated:YES];
-    
-    
-    
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return self.allMessages.count;

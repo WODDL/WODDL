@@ -442,6 +442,8 @@
 		BF0E04CC1A7A8A4400C5C0E8 /* UITextView+Autolayout.m in Sources */ = {isa = PBXBuildFile; fileRef = BF0E04CB1A7A8A4400C5C0E8 /* UITextView+Autolayout.m */; };
 		BF25BE451A80635E00D3CB9C /* WDDTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = BF25BE441A80635E00D3CB9C /* WDDTextView.m */; };
 		BFD3D79E1A7FA17800AA2C87 /* UITextView+DisableCopyPaste.m in Sources */ = {isa = PBXBuildFile; fileRef = BFD3D79D1A7FA17800AA2C87 /* UITextView+DisableCopyPaste.m */; };
+		BFD6F7A81AB702240050998A /* WDDFacebookHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = BFD6F7A71AB702240050998A /* WDDFacebookHelper.m */; };
+		BFE2C5EA1AB277DA00060438 /* WDDTwitterHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = BFE2C5E91AB277DA00060438 /* WDDTwitterHelper.m */; };
 		BFF016561AAA31D300F042BC /* FBGraphAPIHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = BFF016551AAA31D300F042BC /* FBGraphAPIHelper.m */; };
 		D80E5FBA19AFA058009478D7 /* Guide Screen 1.png in Resources */ = {isa = PBXBuildFile; fileRef = D860B0EF19AF8C8F00BD98EB /* Guide Screen 1.png */; };
 		D80E5FBB19AFA058009478D7 /* Guide Screen 1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D860B0F219AF8C9400BD98EB /* Guide Screen 1@2x.png */; };
@@ -1319,6 +1321,10 @@
 		BF25BE441A80635E00D3CB9C /* WDDTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WDDTextView.m; sourceTree = "<group>"; };
 		BFD3D79C1A7FA17800AA2C87 /* UITextView+DisableCopyPaste.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UITextView+DisableCopyPaste.h"; path = "Categories/UITextView/UITextView+DisableCopyPaste.h"; sourceTree = "<group>"; };
 		BFD3D79D1A7FA17800AA2C87 /* UITextView+DisableCopyPaste.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UITextView+DisableCopyPaste.m"; path = "Categories/UITextView/UITextView+DisableCopyPaste.m"; sourceTree = "<group>"; };
+		BFD6F7A61AB702240050998A /* WDDFacebookHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WDDFacebookHelper.h; sourceTree = "<group>"; };
+		BFD6F7A71AB702240050998A /* WDDFacebookHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WDDFacebookHelper.m; sourceTree = "<group>"; };
+		BFE2C5E81AB277DA00060438 /* WDDTwitterHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WDDTwitterHelper.h; sourceTree = "<group>"; };
+		BFE2C5E91AB277DA00060438 /* WDDTwitterHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WDDTwitterHelper.m; sourceTree = "<group>"; };
 		BFF016541AAA31D300F042BC /* FBGraphAPIHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBGraphAPIHelper.h; sourceTree = "<group>"; };
 		BFF016551AAA31D300F042BC /* FBGraphAPIHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBGraphAPIHelper.m; sourceTree = "<group>"; };
 		D81182DC18C1BC5C00B36D26 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
@@ -1775,6 +1781,7 @@
 				9D86AE6D181EA55C00158720 /* Social APIs */,
 				972C5A8F1816C53F009AAE50 /* Supporting Files */,
 				D85E6E7418B3CBCE0004F220 /* URLShorter */,
+				BFE2C5E71AB277BD00060438 /* Helpers */,
 				9732462F1821523E00C79C52 /* Views */,
 				972C5AC01816C8B6009AAE50 /* ViewControllers */,
 				972C5A971816C53F009AAE50 /* WDDAppDelegate.h */,
@@ -3715,6 +3722,17 @@
 			path = Views/TextView;
 			sourceTree = "<group>";
 		};
+		BFE2C5E71AB277BD00060438 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				BFE2C5E81AB277DA00060438 /* WDDTwitterHelper.h */,
+				BFE2C5E91AB277DA00060438 /* WDDTwitterHelper.m */,
+				BFD6F7A61AB702240050998A /* WDDFacebookHelper.h */,
+				BFD6F7A71AB702240050998A /* WDDFacebookHelper.m */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 		D85E6E7418B3CBCE0004F220 /* URLShorter */ = {
 			isa = PBXGroup;
 			children = (
@@ -4088,6 +4106,7 @@
 				97A3C06A1836747D006ADD06 /* WDDGooglePlusEllipseMenu.m in Sources */,
 				9DA8F173185611950092FFCE /* GooglePlusLoadMoreCommentOperation.m in Sources */,
 				7C86696D196C318000D2E5E4 /* KeychainItemWrapper.m in Sources */,
+				BFE2C5EA1AB277DA00060438 /* WDDTwitterHelper.m in Sources */,
 				975B8D7C1872E2C40066F390 /* XMPPIQ+LastActivity.m in Sources */,
 				975B8D9F1872E2C40066F390 /* XMPPIQ+XEP_0066.m in Sources */,
 				4B41010A184F40A100BD4309 /* WDDXMPPChatNotifier.m in Sources */,
@@ -4253,6 +4272,7 @@
 				9D471DF718367E8300914845 /* TwitterLikeOperation.m in Sources */,
 				B6A3AFE71A0A299500F898C7 /* SBJsonBase.m in Sources */,
 				B6A3AFE81A0A299500F898C7 /* SBJsonParser.m in Sources */,
+				BFD6F7A81AB702240050998A /* WDDFacebookHelper.m in Sources */,
 				9DCBE02F183CC89D0098B7ED /* LinkedinPostOperation.m in Sources */,
 				975B8DBD1872E2C40066F390 /* XMPPMessage+XEP_0224.m in Sources */,
 				9D0E5E32184E188700B7C5FA /* GoogleLoginViewController.m in Sources */,
@@ -4562,8 +4582,8 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Woddl ApS (6JUT93LALV)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Woddl ApS (6JUT93LALV)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Louis Hinault (ZGXUR8U2NJ)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Louis Hinault (ZGXUR8U2NJ)";
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -4584,7 +4604,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-lxml2";
-				PROVISIONING_PROFILE = "9d000498-dee4-4d20-b664-01e3b17ddb2d";
+				PROVISIONING_PROFILE = "e1a53c9c-7835-40db-bf9f-10b8e9f734ef";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -4622,7 +4642,7 @@
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				OTHER_LDFLAGS = "-lxml2";
-				PROVISIONING_PROFILE = "9d000498-dee4-4d20-b664-01e3b17ddb2d";
+				PROVISIONING_PROFILE = "a1835206-35d7-41ef-9c28-a7b5a415ccbe";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -4634,8 +4654,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Woddl ApS (6JUT93LALV)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Woddl ApS (6JUT93LALV)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Louis Hinault (ZGXUR8U2NJ)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Louis Hinault (ZGXUR8U2NJ)";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Woddl/Woddl-Prefix.pch";
@@ -4648,7 +4668,7 @@
 					"Woddl/Social\\ APIs/GoogleAPI/GoogleAnalytics",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "9d000498-dee4-4d20-b664-01e3b17ddb2d";
+				PROVISIONING_PROFILE = "e1a53c9c-7835-40db-bf9f-10b8e9f734ef";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -4673,7 +4693,7 @@
 					"Woddl/Social\\ APIs/GoogleAPI/GoogleAnalytics",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "9d000498-dee4-4d20-b664-01e3b17ddb2d";
+				PROVISIONING_PROFILE = "a1835206-35d7-41ef-9c28-a7b5a415ccbe";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "arm64 armv7 armv7s";
